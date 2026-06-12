@@ -41,15 +41,12 @@ export default function Home() {
     gsap.registerPlugin(ScrollTrigger);
 
     let ctx = gsap.context(() => {
-      // Center all elements securely
-    gsap.set([text1Ref.current, text2Ref.current, text3Ref.current, featureRef.current, featureRef2.current, featureRef3.current, featureRef4.current, featureRef5.current, featureRef6.current, featureRef7.current], {
-      xPercent: -50,
-      yPercent: -50,
-      left: "50%",
-      top: "50%",
-      position: "absolute",
-      willChange: "transform, opacity, filter"
-    });
+      const isMobile = window.innerWidth <= 768;
+      const topPos = isMobile ? "56%" : "50%";
+      // Base reset
+      gsap.set([text1Ref.current, text2Ref.current, text3Ref.current, featureRef.current, featureRef2.current, featureRef3.current, featureRef4.current, featureRef5.current, featureRef6.current, featureRef7.current], {
+        xPercent: -50, yPercent: -50, left: "50%", top: topPos, position: "absolute", willChange: "transform, opacity, filter"
+      });
 
     const tl = gsap.timeline({
       scrollTrigger: {

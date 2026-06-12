@@ -19,9 +19,11 @@ export default function Collection() {
     gsap.registerPlugin(ScrollTrigger);
 
     let ctx = gsap.context(() => {
+      const isMobile = window.innerWidth <= 768;
+      const topPos = isMobile ? "56%" : "50%";
       // Base reset
       gsap.set([text1Ref.current, text2Ref.current, featureRef1.current, featureRef2.current, featureRef3.current, featureRef4.current, featureRef5.current], {
-        xPercent: -50, yPercent: -50, left: "50%", top: "50%", position: "absolute", willChange: "transform, opacity, filter"
+        xPercent: -50, yPercent: -50, left: "50%", top: topPos, position: "absolute", willChange: "transform, opacity, filter"
       });
 
       const tl = gsap.timeline({

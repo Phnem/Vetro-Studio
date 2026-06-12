@@ -77,14 +77,14 @@ export default function Home() {
 
         // Base reset
         gsap.set([text1Ref.current, text2Ref.current, featureRef1.current, featureRef2.current, finalTextRef.current, finalMobileCardsRef.current], {
-          xPercent: -50, yPercent: -50, left: "50%", top: "50%", position: "absolute", willChange: "transform, opacity, filter"
+          xPercent: -50, yPercent: -50, left: "50%", top: isMobile ? "56%" : "50%", position: "absolute", willChange: "transform, opacity, filter"
         });
 
         if (isDesktop) {
           gsap.set(featureRef3_echoic.current, { xPercent: -50, yPercent: -50, left: "calc(50% - 270px)", top: "50%", position: "absolute", willChange: "transform, opacity, filter" });
           gsap.set(featureRef3_collection.current, { xPercent: -50, yPercent: -50, left: "calc(50% + 270px)", top: "50%", position: "absolute", willChange: "transform, opacity, filter" });
         } else {
-          gsap.set([featureRef3_echoic.current, featureRef3_collection.current], { xPercent: -50, yPercent: -50, left: "50%", top: "50%", position: "absolute", willChange: "transform, opacity, filter" });
+          gsap.set([featureRef3_echoic.current, featureRef3_collection.current], { xPercent: -50, yPercent: -50, left: "50%", top: "56%", position: "absolute", willChange: "transform, opacity, filter" });
         }
 
         const tl = gsap.timeline({
@@ -181,11 +181,11 @@ export default function Home() {
           <div ref={featureRef2} className="feature-section wide-section">
             <div className="mockup-container dual-mockup">
               <div className="mockup-card stat-block">
-                <div className="stat-row"><span className="stat-value">1</span> <span className="stat-label">Developer</span></div>
-                <div className="stat-row"><span className="stat-value">0</span> <span className="stat-label">Investors</span></div>
-                <div className="stat-row"><span className="stat-value">0</span> <span className="stat-label">Employees</span></div>
-                <div className="stat-row"><span className="stat-value">2</span> <span className="stat-label">Applications</span></div>
-                <div className="stat-row"><span className="stat-value">∞</span> <span className="stat-label">Ideas</span></div>
+                <div className="stat-row"><span className="stat-value">1</span> <span className="stat-label"><span className="desktop-text">Developer</span><span className="mobile-text">Dev</span></span></div>
+                <div className="stat-row"><span className="stat-value">0</span> <span className="stat-label"><span className="desktop-text">Investors</span><span className="mobile-text">Inv</span></span></div>
+                <div className="stat-row"><span className="stat-value">0</span> <span className="stat-label"><span className="desktop-text">Employees</span><span className="mobile-text">Emp</span></span></div>
+                <div className="stat-row"><span className="stat-value">2</span> <span className="stat-label"><span className="desktop-text">Applications</span><span className="mobile-text">Apps</span></span></div>
+                <div className="stat-row"><span className="stat-value" style={{ transform: 'translateY(-2px)' }}>∞</span> <span className="stat-label"><span className="desktop-text">Ideas</span><span className="mobile-text">Ideas</span></span></div>
               </div>
               <div className="mockup-card rpg-block">
                 <h3 className="rpg-title">Developer Stats</h3>
