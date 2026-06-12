@@ -477,7 +477,7 @@ export default function Home() {
             <div className="ai-cards-grid">
               <div className="ai-card gemini-pro">
                 <div className="ai-card-icon">
-                  <img src="/aicon/gemini.svg" alt="Gemini Pro" />
+                  <img src="/Vetro-Studio/aicon/gemini.svg" alt="Gemini Pro" />
                 </div>
                 <h4 className="ai-card-title">Gemini Pro</h4>
                 <span className="ai-card-badge">Google</span>
@@ -489,7 +489,7 @@ export default function Home() {
 
               <div className="ai-card claude">
                 <div className="ai-card-icon">
-                  <img src="/aicon/claude.svg" alt="Claude" />
+                  <img src="/Vetro-Studio/aicon/claude.svg" alt="Claude" />
                 </div>
                 <h4 className="ai-card-title">Claude</h4>
                 <span className="ai-card-badge">Anthropic</span>
@@ -501,7 +501,7 @@ export default function Home() {
 
               <div className="ai-card chatgpt">
                 <div className="ai-card-icon">
-                  <img src="/aicon/openai.svg" alt="ChatGPT" />
+                  <img src="/Vetro-Studio/aicon/openai.svg" alt="ChatGPT" />
                 </div>
                 <h4 className="ai-card-title">ChatGPT</h4>
                 <span className="ai-card-badge">OpenAI</span>
@@ -513,7 +513,7 @@ export default function Home() {
 
               <div className="ai-card deepseek">
                 <div className="ai-card-icon">
-                  <img src="/aicon/deepseek.svg" alt="DeepSeek" />
+                  <img src="/Vetro-Studio/aicon/deepseek.svg" alt="DeepSeek" />
                 </div>
                 <h4 className="ai-card-title">DeepSeek</h4>
                 <span className="ai-card-badge">New</span>
@@ -525,7 +525,7 @@ export default function Home() {
 
               <div className="ai-card openrouter">
                 <div className="ai-card-icon">
-                  <img src="/aicon/openrouter.svg" alt="OpenRouter" />
+                  <img src="/Vetro-Studio/aicon/openrouter.svg" alt="OpenRouter" />
                 </div>
                 <h4 className="ai-card-title">OpenRouter</h4>
                 <span className="ai-card-badge">OpenRouter</span>
@@ -537,7 +537,7 @@ export default function Home() {
 
               <div className="ai-card groq">
                 <div className="ai-card-icon">
-                  <img src="/aicon/groq.svg" alt="Groq" />
+                  <img src="/Vetro-Studio/aicon/groq.svg" alt="Groq" />
                 </div>
                 <h4 className="ai-card-title">Groq</h4>
                 <span className="ai-card-badge">Groq</span>
@@ -549,7 +549,7 @@ export default function Home() {
 
               <div className="ai-card cohere">
                 <div className="ai-card-icon">
-                  <img src="/aicon/cohere.svg" alt="Cohere" />
+                  <img src="/Vetro-Studio/aicon/cohere.svg" alt="Cohere" />
                 </div>
                 <h4 className="ai-card-title">Cohere</h4>
                 <span className="ai-card-badge">Cohere</span>
@@ -561,7 +561,7 @@ export default function Home() {
 
               <div className="ai-card gemini">
                 <div className="ai-card-icon">
-                  <img src="/aicon/gemini.svg" alt="Gemini" />
+                  <img src="/Vetro-Studio/aicon/gemini.svg" alt="Gemini" />
                 </div>
                 <h4 className="ai-card-title">Gemini</h4>
                 <span className="ai-card-badge">Google</span>
