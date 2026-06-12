@@ -3,8 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   output: 'export',
-  basePath: '/Vetro-Studio',
-  assetPrefix: '/Vetro-Studio',
+  basePath: '/Vetro',
+  assetPrefix: '/Vetro',
   images: {
     unoptimized: true,
   },
