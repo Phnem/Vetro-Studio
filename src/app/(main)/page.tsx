@@ -73,7 +73,7 @@ export default function Home() {
         isDesktop: "(min-width: 769px)",
         isMobile: "(max-width: 768px)"
       }, (context) => {
-        let { isDesktop } = context.conditions as { isDesktop: boolean; isMobile: boolean };
+        let { isDesktop, isMobile } = context.conditions as { isDesktop: boolean; isMobile: boolean };
 
         // Base reset
         gsap.set([text1Ref.current, text2Ref.current, featureRef1.current, featureRef2.current, finalTextRef.current, finalMobileCardsRef.current], {
