@@ -47,7 +47,7 @@ export default function Navigation() {
             <a href="https://github.com/Phnem" target="_blank" rel="noopener noreferrer" className="popin-item">
               GitHub profile
             </a>
-            <a href="https://t.me/H415base" target="_blank" rel="noopener noreferrer" className="popin-item">
+            <a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer" className="popin-item">
               Contact me
             </a>
             {issuesLink && (
@@ -103,7 +103,7 @@ export default function Navigation() {
               <h3>Contact</h3>
               <p>For questions regarding privacy or data handling, please contact:</p>
               <ul>
-                <li>Telegram: <a href="https://t.me/H415base" target="_blank" rel="noopener noreferrer">@H415base</a></li>
+                <li>Telegram: <a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">@Vetro_chat</a></li>
                 <li>GitHub: <a href="https://github.com/Phnem" target="_blank" rel="noopener noreferrer">https://github.com/Phnem</a></li>
               </ul>
             </div>
