@@ -9,20 +9,20 @@ import { useRouter } from "next/navigation";
 const EchoicSVG = () => (
   <svg viewBox="0 0 100 100" fill="none" className="app-icon">
     <path d="M45 20 H75 C80.5 20 85 24.5 85 30 V70 C85 75.5 80.5 80 75 80 H60 L45 90 L48 80 H45 Z" fill="#f8fafc" />
-    <text x="50" y="38" fontSize="24" fontFamily="serif" fontWeight="bold" fill="#3b82f6">“</text>
-    <text x="62" y="38" fontSize="24" fontFamily="serif" fontWeight="bold" fill="#3b82f6">”</text>
+    <text x="50" y="38" fontSize="24" fontFamily="serif" fontWeight="bold" fill="#646464">“</text>
+    <text x="62" y="38" fontSize="24" fontFamily="serif" fontWeight="bold" fill="#646464">”</text>
     <rect x="50" y="44" width="25" height="3" rx="1.5" fill="#0f172a" />
     <rect x="50" y="51" width="25" height="3" rx="1.5" fill="#0f172a" />
-    <rect x="50" y="58" width="18" height="3" rx="1.5" fill="#3b82f6" />
+    <rect x="50" y="58" width="18" height="3" rx="1.5" fill="#646464" />
     
-    <rect x="51" y="68" width="2" height="6" rx="1" fill="#3b82f6" />
-    <rect x="55" y="65" width="2" height="12" rx="1" fill="#3b82f6" />
-    <rect x="59" y="62" width="2" height="18" rx="1" fill="#3b82f6" />
-    <rect x="63" y="65" width="2" height="12" rx="1" fill="#3b82f6" />
-    <rect x="67" y="68" width="2" height="6" rx="1" fill="#3b82f6" />
+    <rect x="51" y="68" width="2" height="6" rx="1" fill="#646464" />
+    <rect x="55" y="65" width="2" height="12" rx="1" fill="#646464" />
+    <rect x="59" y="62" width="2" height="18" rx="1" fill="#646464" />
+    <rect x="63" y="65" width="2" height="12" rx="1" fill="#646464" />
+    <rect x="67" y="68" width="2" height="6" rx="1" fill="#646464" />
 
-    <path d="M48 85 C30 65, 20 40, 25 25 C25 25, 45 40, 48 85 Z" fill="#3b82f6" />
-    <path d="M44 70 C35 60, 25 45, 20 50 C25 55, 35 65, 44 70 Z" fill="#2563eb" />
+    <path d="M48 85 C30 65, 20 40, 25 25 C25 25, 45 40, 48 85 Z" fill="#646464" />
+    <path d="M44 70 C35 60, 25 45, 20 50 C25 55, 35 65, 44 70 Z" fill="#A7A7A7" />
   </svg>
 );
 
@@ -30,16 +30,16 @@ const CollectionSVG = () => (
   <svg viewBox="0 0 100 100" fill="none" className="app-icon">
     <rect x="25" y="25" width="40" height="50" rx="4" fill="#e2e8f0" />
     <rect x="28" y="28" width="40" height="50" rx="4" fill="#ffffff" />
-    <path d="M33 40 L38 45 L48 35" stroke="#06b6d4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M33 40 L38 45 L48 35" stroke="#E85002" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
     <rect x="52" y="38" width="10" height="3" rx="1.5" fill="#0f172a" />
 
-    <path d="M33 55 L38 60 L48 50" stroke="#06b6d4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M33 55 L38 60 L48 50" stroke="#E85002" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
     <rect x="52" y="53" width="10" height="3" rx="1.5" fill="#0f172a" />
     
     <circle cx="35" cy="70" r="2" fill="#0f172a" />
     <rect x="42" y="68" width="10" height="3" rx="1.5" fill="#0f172a" />
 
-    <path d="M55 45 L85 60 L55 75 Z" fill="#06b6d4" />
+    <path d="M55 45 L85 60 L55 75 Z" fill="#E85002" />
   </svg>
 );
 
@@ -253,7 +253,7 @@ export default function Home() {
               </div>
             </div>
             <div className="roadmap-badge badge-blue">
-              <span className="dot"></span> Active Development
+              <span className="dot"></span> Discontinued
             </div>
             
             <hr className="roadmap-divider" />
