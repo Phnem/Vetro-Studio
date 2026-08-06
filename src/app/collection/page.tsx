@@ -107,7 +107,7 @@ export default function Collection() {
             style={{ justifyContent: "flex-start", marginTop: "2rem" }}
           >
             <a
-              href="https://github.com/Phnem/Vetro-Collection/releases"
+              href="https://github.com/Phnem/Vetro/releases"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-accent"
@@ -115,7 +115,7 @@ export default function Collection() {
               Download
             </a>
             <a
-              href="https://github.com/Phnem/Vetro-Collection"
+              href="https://github.com/Phnem/Vetro"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-ghost"
@@ -182,7 +182,7 @@ export default function Collection() {
           </p>
           <div className="cta-actions" data-stagger>
             <a
-              href="https://github.com/Phnem/Vetro-Collection/releases"
+              href="https://github.com/Phnem/Vetro/releases"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-accent"
@@ -198,7 +198,7 @@ export default function Collection() {
               F-Droid
             </a>
             <a
-              href="https://github-store.org/app?repo=Phnem/Vetro-Collection"
+              href="https://github-store.org/app?repo=Phnem/Vetro"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-ghost"
@@ -206,7 +206,7 @@ export default function Collection() {
               Komi Store
             </a>
             <a
-              href="obtainium://app/add?url=https://github.com/Phnem/Vetro-Collection"
+              href="obtainium://app/add?url=https://github.com/Phnem/Vetro"
               className="btn btn-ghost"
             >
               Obtainium
@@ -229,7 +229,7 @@ export default function Collection() {
           <div className="footer-links">
             <Link href="/">Home</Link>
             <a
-              href="https://github.com/Phnem/Vetro-Collection"
+              href="https://github.com/Phnem/Vetro"
               target="_blank"
               rel="noopener noreferrer"
             >

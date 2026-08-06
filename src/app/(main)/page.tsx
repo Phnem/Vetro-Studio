@@ -313,7 +313,7 @@ export default function Home() {
               </p>
               <div className="hero-actions">
                 <a
-                  href="https://github.com/Phnem/Vetro-Collection/releases"
+                  href="https://github.com/Phnem/Vetro/releases"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-primary"
@@ -667,7 +667,7 @@ export default function Home() {
           </p>
           <div className="cta-actions" data-stagger>
             <a
-              href="https://github.com/Phnem/Vetro-Collection/releases"
+              href="https://github.com/Phnem/Vetro/releases"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-accent"
@@ -683,7 +683,7 @@ export default function Home() {
               F-Droid
             </a>
             <a
-              href="https://github-store.org/app?repo=Phnem/Vetro-Collection"
+              href="https://github-store.org/app?repo=Phnem/Vetro"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-ghost"
@@ -691,7 +691,7 @@ export default function Home() {
               Komi Store
             </a>
             <a
-              href="obtainium://app/add?url=https://github.com/Phnem/Vetro-Collection"
+              href="obtainium://app/add?url=https://github.com/Phnem/Vetro"
               className="btn btn-ghost"
             >
               Obtainium
@@ -715,14 +715,14 @@ export default function Home() {
           <div className="footer-links">
             <Link href="/collection">Collection</Link>
             <a
-              href="https://github.com/Phnem/Vetro-Collection"
+              href="https://github.com/Phnem/Vetro"
               target="_blank"
               rel="noopener noreferrer"
             >
               GitHub
             </a>
             <a
-              href="https://github.com/Phnem/Vetro-Collection/discussions"
+              href="https://github.com/Phnem/Vetro/discussions"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -12,7 +12,7 @@ export default function Navigation() {
 
   const issuesLink =
     pathname === "/collection" || pathname === "/"
-      ? "https://github.com/Phnem/Vetro-Collection/discussions"
+      ? "https://github.com/Phnem/Vetro/discussions"
       : pathname === "/echoic"
         ? "https://github.com/Phnem/Vetro-Echoic/discussions/1"
         : null;
@@ -54,7 +54,7 @@ export default function Navigation() {
 
           <div className="top-bar-right">
             <a
-              href="https://github.com/Phnem/Vetro-Collection/releases"
+              href="https://github.com/Phnem/Vetro/releases"
               target="_blank"
               rel="noopener noreferrer"
               className="top-cta"
@@ -87,7 +87,7 @@ export default function Navigation() {
           </Link>
           <div className="menu-divider" />
           <a
-            href="https://github.com/Phnem/Vetro-Collection"
+            href="https://github.com/Phnem/Vetro"
             target="_blank"
             rel="noopener noreferrer"
             className="menu-link"
@@ -171,11 +171,11 @@ export default function Navigation() {
                 <li>
                   GitHub:{" "}
                   <a
-                    href="https://github.com/Phnem/Vetro-Collection"
+                    href="https://github.com/Phnem/Vetro"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Vetro-Collection
+                    Vetro
                   </a>
                 </li>
               </ul>
