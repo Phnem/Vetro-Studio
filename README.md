@@ -5,6 +5,8 @@ The landing page for [Vetro](https://github.com/Phnem/Vetro) — an Android app 
 This site introduces the app's key features and links out to install and download.
 
 <p align="center">
+  <a href="https://phnem.github.io/Vetro-Studio/"><img src="https://img.shields.io/badge/Website-Live-E85002?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live site" /></a>
+  <a href="https://phnem.github.io/Vetro-Studio/"><img src="https://github.com/Phnem/Vetro-Studio/actions/workflows/nextjs.yml/badge.svg" alt="Deploy status" /></a>
   <a href="https://github.com/Phnem/Vetro"><img src="https://img.shields.io/badge/GitHub-Vetro-181717?style=for-the-badge&logo=github&logoColor=white" alt="Vetro on GitHub" /></a>
   <a href="https://github.com/Phnem/Vetro/releases"><img src="https://img.shields.io/badge/Download-Releases-E85002?style=for-the-badge&logo=android&logoColor=white" alt="Download releases" /></a>
   <a href="https://t.me/Vetro_chat"><img src="https://img.shields.io/badge/Telegram-Vetro__chat-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram" /></a>
