@@ -11,7 +11,8 @@ import {
   SortFragment,
   SyncFragment,
 } from "@/components/Fragments";
-import Screen from "@/components/Screens";
+import Shot from "@/components/Shot";
+import MockupGallery from "@/components/MockupGallery";
 import { useActiveIndex, useReveal } from "@/lib/useReveal";
 
 /* ------------------------------------------------------------------ data */
@@ -58,6 +59,59 @@ const STEPS = [
     title: "Picks that come from your library.",
     body: "Suggestions are derived from what you have already rated and finished, shown as a deck with the title it was matched against. One tap adds it to the collection.",
     tags: ["Similar titles", "One-tap add", "Swipe deck"],
+  },
+];
+
+const GALLERY_SCREENS = [
+  {
+    shot: "collection",
+    title: "Collection",
+    body: "The home surface: recommendations strip, favourites, genre tags, scores and a progress bar on every card.",
+  },
+  {
+    shot: "details",
+    title: "Title details",
+    body: "Rating, episode count, genres and the sources carrying the title. Watch or queue a download from the same row.",
+  },
+  {
+    shot: "seasons",
+    title: "Seasons",
+    body: "Grouped by how the show actually shipped, with a quality picker and per-season download buttons.",
+  },
+  {
+    shot: "manga",
+    title: "Volumes & chapters",
+    body: "Filter by unread or downloaded, expand a volume to its chapters, and pull chapters down for offline reading.",
+  },
+  {
+    shot: "stats",
+    title: "Watch stats",
+    body: "Genre quality across the library — average score and title count per genre, as a swipeable card deck.",
+  },
+  {
+    shot: "recommend",
+    title: "Recommendations",
+    body: "A deck of picks derived from your collection, each labelled with the title it was matched against.",
+  },
+  {
+    shot: "rating",
+    title: "Rating",
+    body: "Normal to Masterpiece on a single drag. The screen reacts as the score changes, then stores a 0.0–10.0 value.",
+  },
+  {
+    shot: "sort",
+    title: "Sorting",
+    body: "Highest rated, longest series, alphabetical or grouped by genre — applied across every media type.",
+  },
+  {
+    shot: "sync",
+    title: "Sync services",
+    body: "MyAnimeList, AniList and Shikimori, each with pull, push or automatic two-way sync.",
+  },
+  {
+    shot: "settings",
+    title: "Settings",
+    body: "Language, theme, default content type, account, collection enrichment, BYOK AI, auto-skip and auto-next.",
   },
 ];
 
@@ -320,7 +374,7 @@ export default function Home() {
                 >
                   Download the APK
                 </a>
-                <Link href="/collection" className="btn btn-ghost">
+                <Link href="/#gallery" className="btn btn-ghost">
                   See every screen
                 </Link>
               </div>
@@ -417,10 +471,12 @@ export default function Home() {
               <Words text="Six screens that do the work." />
             </h2>
             <p className="lede" data-fx="up">
-              Every screen here is rebuilt in markup, not a screenshot — so it
-              stays sharp at any size. Scroll through and the phone keeps up.
+              Real screenshots from the current build. Scroll through and the
+              phone keeps up.
             </p>
           </div>
+
+          <MockupGallery />
 
           <div className="showcase-grid">
             <div className="showcase-steps">
@@ -456,7 +512,7 @@ export default function Home() {
                         className={`shot-layer${i === active ? " is-active" : ""}`}
                         aria-hidden={i !== active}
                       >
-                        <Screen name={step.shot} />
+                        <Shot name={step.shot} />
                       </div>
                     ))}
                     <span className="device-glare" aria-hidden />
@@ -597,6 +653,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============================ GALLERY ============================= */}
+      <section id="gallery" className="section" style={{ paddingTop: 0 }}>
+        <div className="shell">
+          <div className="section-head">
+            <p className="eyebrow">Every screen</p>
+            <h2 className="h2 words">
+              <Words text="Ten screens, as they actually look." />
+            </h2>
+            <p className="lede" data-fx="up">
+              Straight from the current build — collection, playback, reading,
+              statistics and settings. Each mockup below is a real
+              screenshot.
+            </p>
+          </div>
+
+          <div className="gallery" data-stagger>
+            {GALLERY_SCREENS.map((s) => (
+              <figure key={s.shot}>
+                <Device src={s.shot} />
+                <figcaption>
+                  <b>{s.title}</b>
+                  {s.body}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* =========================== CHANGELOG =========================== */}
       <section id="whats-new" className="section" style={{ paddingTop: 0 }}>
         <div className="shell">
@@ -713,7 +798,7 @@ export default function Home() {
             </p>
           </div>
           <div className="footer-links">
-            <Link href="/collection">Collection</Link>
+            <Link href="/#gallery">Gallery</Link>
             <a
               href="https://github.com/Phnem/Vetro"
               target="_blank"

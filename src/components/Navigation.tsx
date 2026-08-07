@@ -11,7 +11,7 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
 
   const issuesLink =
-    pathname === "/collection" || pathname === "/"
+    pathname === "/"
       ? "https://github.com/Phnem/Vetro/discussions"
       : pathname === "/echoic"
         ? "https://github.com/Phnem/Vetro-Echoic/discussions/1"
@@ -79,11 +79,8 @@ export default function Navigation() {
           <Link href="/" className={`menu-link ${pathname === "/" ? "active" : ""}`}>
             Home
           </Link>
-          <Link
-            href="/collection"
-            className={`menu-link ${pathname === "/collection" ? "active" : ""}`}
-          >
-            Collection
+          <Link href="/#gallery" className="menu-link">
+            Gallery
           </Link>
           <div className="menu-divider" />
           <a

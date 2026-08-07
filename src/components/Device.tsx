@@ -1,17 +1,17 @@
-import Screen from "@/components/Screens";
+import Shot from "@/components/Shot";
 
 type Props = {
-  /** Screen slug — see the index at the foot of Screens.tsx. */
+  /** Screenshot slug — matches a file in public/screens/. */
   src: string;
   className?: string;
 };
 
-/** Phone bezel wrapping a rebuilt app screen. */
+/** Titanium phone bezel wrapping a real app screenshot. */
 export default function Device({ src, className }: Props) {
   return (
     <div className={`device${className ? ` ${className}` : ""}`}>
       <div className="device-screen">
-        <Screen name={src} />
+        <Shot name={src} />
         <span className="device-glare" aria-hidden />
       </div>
     </div>
