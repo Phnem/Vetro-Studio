@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ContactConfirm from "@/components/ContactConfirm";
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -91,14 +92,13 @@ export default function Navigation() {
           >
             GitHub
           </a>
-          <a
+          <ContactConfirm
             href="https://t.me/Vetro_chat"
-            target="_blank"
-            rel="noopener noreferrer"
             className="menu-link"
+            onClick={() => setMenuOpen(false)}
           >
             Contact
-          </a>
+          </ContactConfirm>
           {issuesLink && (
             <a
               href={issuesLink}

@@ -11,6 +11,7 @@ import {
   SortFragment,
   SyncFragment,
 } from "@/components/Fragments";
+import ContactConfirm from "@/components/ContactConfirm";
 import Shot from "@/components/Shot";
 import MockupGallery from "@/components/MockupGallery";
 import { useActiveIndex, useReveal } from "@/lib/useReveal";
@@ -813,13 +814,9 @@ export default function Home() {
             >
               Discussions
             </a>
-            <a
-              href="https://t.me/Vetro_chat"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <ContactConfirm href="https://t.me/Vetro_chat">
               Telegram
-            </a>
+            </ContactConfirm>
             <a
               href="https://web.tribute.tg/e/Tb"
               target="_blank"
