@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import ContactConfirm from "@/components/ContactConfirm";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default function Navigation() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   const issuesLink =
     pathname === "/"
@@ -34,16 +35,17 @@ export default function Navigation() {
   }, []);
 
   useEffect(() => {
-    if (!menuOpen && !privacyOpen) return;
+    if (!menuOpen && !privacyOpen && !contactOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMenuOpen(false);
         setPrivacyOpen(false);
+        setContactOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [menuOpen, privacyOpen]);
+  }, [menuOpen, privacyOpen, contactOpen]);
 
   return (
     <>
@@ -80,9 +82,13 @@ export default function Navigation() {
           <Link href="/" className={`menu-link ${pathname === "/" ? "active" : ""}`}>
             Home
           </Link>
-          <Link href="/#gallery" className="menu-link">
+          <a
+            href="#gallery"
+            className="menu-link"
+            onClick={() => setMenuOpen(false)}
+          >
             Gallery
-          </Link>
+          </a>
           <div className="menu-divider" />
           <a
             href="https://github.com/Phnem/Vetro"
@@ -92,13 +98,17 @@ export default function Navigation() {
           >
             GitHub
           </a>
-          <ContactConfirm
+          <a
             href="https://t.me/Vetro_chat"
             className="menu-link"
-            onClick={() => setMenuOpen(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              setMenuOpen(false);
+              setContactOpen(true);
+            }}
           >
             Contact
-          </ContactConfirm>
+          </a>
           {issuesLink && (
             <a
               href={issuesLink}
@@ -180,6 +190,12 @@ export default function Navigation() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={contactOpen}
+        href="https://t.me/Vetro_chat"
+        onClose={() => setContactOpen(false)}
+      />
     </>
   );
 }

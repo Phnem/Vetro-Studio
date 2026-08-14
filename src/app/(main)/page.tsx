@@ -375,9 +375,9 @@ export default function Home() {
                 >
                   Download the APK
                 </a>
-                <Link href="/#gallery" className="btn btn-ghost">
-                  See every screen
-                </Link>
+<a href="#gallery" className="btn btn-ghost">
+  See every screen
+</a>
               </div>
             </div>
           </div>
@@ -799,7 +799,7 @@ export default function Home() {
             </p>
           </div>
           <div className="footer-links">
-            <Link href="/#gallery">Gallery</Link>
+            <a href="#gallery">Gallery</a>
             <a
               href="https://github.com/Phnem/Vetro"
               target="_blank"
