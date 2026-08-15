@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09090d">
+  <title>Vetro Collection — your media library</title>
+  <meta name="description" content="Vetro brings anime, manga, manhwa, films and series together in your personal collection.">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="guidebook-overrides.css">
+</head>
+<body>
+  <!-- Page Preloader (UIverse fresh-lizard-20 animated text) -->
+  <div class="page-preloader" id="pagePreloader" aria-hidden="false">
+    <div class="preloader-content">
+      <div class="preloader-logo-wrap">
+        <img src="logo.png" alt="Vetro" class="preloader-logo">
+      </div>
+      <div class="preloader-card">
+        <div class="preloader-loader">
+          <p class="preloader-static">Loading</p>
+          <div class="preloader-words">
+            <span class="preloader-word">collection</span>
+            <span class="preloader-word">anime</span>
+            <span class="preloader-word">manga</span>
+            <span class="preloader-word">manhwa</span>
+            <span class="preloader-word">films</span>
+            <span class="preloader-word">series</span>
+            <span class="preloader-word">collection</span>
+          </div>
+        </div>
+      </div>
+      <div class="preloader-line-track">
+        <div class="preloader-line-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Vetro Collection">
+      <img src="logo.png" alt="Vetro" class="brand-logo">
+      VETRO<span>™</span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#collection">Collection</a>
+      <a href="#experience">Experience</a>
+      <a href="#sync">Sync</a>
+      <a href="https://github.com/Phnem/Vetro/discussions" target="_blank" rel="noopener noreferrer">Discussions</a>
+      <a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a>
+    </nav>
+    <a class="header-download" href="#download">Download <span>↗</span></a>
+    <button class="menu-button sm-toggle-btn" type="button" id="menuButton" aria-expanded="false" aria-controls="mobileNav" aria-label="Toggle menu">
+      <svg class="sm-toggle-svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <line class="svg-line svg-line-1" x1="5" y1="8" x2="19" y2="8"></line>
+        <line class="svg-line svg-line-2" x1="5" y1="16" x2="19" y2="16"></line>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Staggered Mobile Menu Overlay & Drawer -->
+  <div class="staggered-menu-overlay" id="mobileNavOverlay" aria-hidden="true">
+    <div class="sm-prelayer sm-layer-1" aria-hidden="true"></div>
+    <div class="sm-prelayer sm-layer-2" aria-hidden="true"></div>
+    <nav class="mobile-nav staggered-panel" id="mobileNav" aria-label="Mobile navigation">
+      <div class="sm-panel-header">
+        <span class="sm-panel-tag">NAVIGATION</span>
+        <span class="sm-panel-status"><span class="pulse"></span> VETRO APP</span>
+      </div>
+      <ul class="sm-panel-list" data-numbering="true">
+        <li class="sm-item" style="--item-index: 0;">
+          <a href="#collection" class="sm-panel-item">
+            <span class="sm-num">01</span>
+            <span class="sm-panel-itemLabelWrap"><span class="sm-panel-itemLabel">Collection</span></span>
+            <span class="sm-arrow">↗</span>
+          </a>
+        </li>
+        <li class="sm-item" style="--item-index: 1;">
+          <a href="#experience" class="sm-panel-item">
+            <span class="sm-num">02</span>
+            <span class="sm-panel-itemLabelWrap"><span class="sm-panel-itemLabel">Experience</span></span>
+            <span class="sm-arrow">↗</span>
+          </a>
+        </li>
+        <li class="sm-item" style="--item-index: 2;">
+          <a href="#sync" class="sm-panel-item">
+            <span class="sm-num">03</span>
+            <span class="sm-panel-itemLabelWrap"><span class="sm-panel-itemLabel">Sync &amp; Data</span></span>
+            <span class="sm-arrow">↗</span>
+          </a>
+        </li>
+        <li class="sm-item" style="--item-index: 3;">
+          <a href="#download" class="sm-panel-item sm-item-download">
+            <span class="sm-num">04</span>
+            <span class="sm-panel-itemLabelWrap"><span class="sm-panel-itemLabel">Download App</span></span>
+            <span class="sm-arrow">↓</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sm-socials">
+        <p class="sm-socials-title">COMMUNITY &amp; SOURCE</p>
+        <div class="sm-socials-grid">
+          <a href="https://github.com/Phnem/Vetro/discussions" target="_blank" rel="noopener noreferrer" class="sm-socials-link">
+            <span>Discussions</span> <b>↗</b>
+          </a>
+          <a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer" class="sm-socials-link">
+            <span>Telegram Chat</span> <b>↗</b>
+          </a>
+          <a href="https://github.com/Phnem/Vetro" target="_blank" rel="noopener noreferrer" class="sm-socials-link">
+            <span>GitHub Repository</span> <b>↗</b>
+          </a>
+          <a href="https://ko-fi.com/phnem" target="_blank" rel="noopener noreferrer" class="sm-socials-link sm-socials-coffee">
+            <span>Ko-fi Support</span> <b>☕</b>
+          </a>
+          <button type="button" class="sm-socials-link sm-privacy-btn" id="mobilePrivacyBtn" style="grid-column: 1 / -1;">
+            <span>Privacy Policy</span> <b>⚙</b>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <main id="top">
+    <section class="hero section-shell">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="pulse"></span> Personal media library / Android</p>
+        <h1>everything<br>you <em>love,</em><br><span>one place.</span></h1>
+        <p class="hero-description">Anime, manga, manhwa, films and series — all in your collection. Watch, read, track and save without anyone else’s rules.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#download">Download Vetro <b>↓</b></a>
+          <a class="text-link" href="#experience">Explore collection <span>↘</span></a>
+        </div>
+      </div>
+
+      <div class="hero-stage" aria-label="Vetro app interface">
+        <div class="orb orb-violet"></div><div class="orb orb-lime"></div>
+        <div class="archive-stamp">MY<br>COLLECT<br>ION <strong>001</strong></div>
+        <div class="phone phone-main mockup-wrap">
+          <img src="mainmock1.png" alt="Vetro Library Screen" class="mockup-img">
+        </div>
+        <div class="phone phone-back mockup-wrap">
+          <img src="mainmock2.png" alt="Vetro Details Screen" class="mockup-img">
+        </div>
+        <div class="hero-note note-left"><span>01</span> your taste<br>is the algorithm</div>
+        <div class="hero-note note-right"><span>∞</span> no ads.<br>no noise.</div>
+      </div>
+      <div class="hero-footer"><p>COLLECT. WATCH. READ. REMEMBER.</p><span>SCROLL TO EXPLORE <b>↓</b></span></div>
+    </section>
+
+    <section class="collection section-shell" id="collection">
+      <div class="section-heading-wrap"><p class="eyebrow">01 / ONE SPACE, EVERY FORMAT</p><h2>Your collection<br>shouldn’t live in<br><em>five different apps.</em></h2></div>
+      <div class="collection-cards">
+        <article class="format-card card-anime"><span>01 / WATCH</span><h3>Anime<br>&amp; series</h3><p>Pick up from your last episode and collect every season and story.</p><div class="format-symbol">▶</div></article>
+        <article class="format-card card-manga"><span>02 / READ</span><h3>Manga<br>&amp; manhwa</h3><p>Chapters, bookmarks and volumes — exactly where they belong.</p><div class="format-symbol">頁</div></article>
+        <article class="format-card card-film"><span>03 / REMEMBER</span><h3>Films<br>for later</h3><p>Don’t lose the one you meant to watch in an endless list.</p><div class="format-symbol">◉</div></article>
+      </div>
+      <p class="collection-caption">Not a catalogue. <i>A home for your interests.</i></p>
+    </section>
+
+    <section class="experience section-shell" id="experience">
+      <div class="experience-top"><p class="eyebrow">02 / WATCH, READ, KEEP GOING</p><p>Vetro remembers where you stopped and brings you back to that exact moment.</p></div>
+      <div class="experience-canvas">
+        <div class="big-word">KEEP<br><span>GOING.</span></div>
+        <div class="reader-device mockup-wrap">
+          <img src="mainmock3.png" alt="Vetro Episodes & Seasons Screen" class="mockup-img">
+        </div>
+        <div class="progress-chip chip-watch"><small>WATCHING</small><b>12h 46m</b><span>this month</span></div>
+        <div class="progress-chip chip-read"><small>READING</small><b>386</b><span>chapters saved</span></div>
+        <div class="cursor-word">YOUR<br>PACE <b>↘</b></div>
+      </div>
+    </section>
+
+    <section class="features section-shell">
+      <p class="eyebrow">03 / SMALL THINGS THAT MATTER</p>
+      <div class="feature-list">
+        <article><span>01</span><h3>Watch and read offline</h3><p>Download titles and open them without a connection — on a train, a plane or anywhere else.</p><b>↓</b></article>
+        <article><span>02</span><h3>Track progress without effort</h3><p>Episodes, chapters, seasons and collection status sync at your own pace.</p><b>↗</b></article>
+        <article><span>03</span><h3>Find your next favourite</h3><p>Recommendations grow from your collection, not from an advertising budget.</p><b>✦</b></article>
+      </div>
+    </section>
+
+    <section class="sync section-shell" id="sync">
+      <div class="sync-copy"><p class="eyebrow">04 / LOCAL FIRST. YOUR DATA.</p><h2>Your collection<br>belongs to<br><em>you.</em></h2><p>Vetro keeps your library local, works without a connection and syncs it between your devices whenever you want.</p><a href="#download" class="text-link">How Sync works <span>→</span></a></div>
+      <div class="sync-visual"><div class="sync-ring ring-one"></div><div class="sync-ring ring-two"></div><div class="sync-core"><img src="logo.png" alt="Vetro" class="sync-core-logo"></div><div class="sync-node node-one">PHONE<br><b>SYNCED</b></div><div class="sync-node node-two">TABLET<br><b>SYNCED</b></div><div class="sync-node node-three">YOUR DATA<br><b>PRIVATE</b></div></div>
+    </section>
+
+    <section class="open-source section-shell">
+      <div class="oss-mark">/</div>
+      <div>
+        <p class="eyebrow">05 / BUILT IN THE OPEN</p>
+        <h2>An independent project<br>for independent<br>collections.</h2>
+      </div>
+      <div>
+        <p>Vetro is built in the open. Browse the source, share an idea, join discussions or reach out in our community chat.</p>
+        <div class="contact-links-inline">
+          <a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer" class="contact-pill">
+            <span>Telegram</span> <b>@Vetro_chat ↗</b>
+          </a>
+          <a href="https://github.com/Phnem/Vetro/discussions" target="_blank" rel="noopener noreferrer" class="contact-pill">
+            <span>Discussions</span> <b>GitHub ↗</b>
+          </a>
+        </div>
+      </div>
+      <div class="oss-buttons">
+        <a href="https://github.com/Phnem/Vetro" target="_blank" rel="noopener noreferrer" class="button button-ghost">GitHub <b>↗</b></a>
+        <a href="https://ko-fi.com/phnem" target="_blank" rel="noopener noreferrer" class="button button-coffee" id="coffeeBtn" title="Support Vetro on Ko-fi">Buy me a coffee <b>☕</b></a>
+      </div>
+    </section>
+
+    <section class="download" id="download">
+      <div class="download-grid"></div>
+      <p class="eyebrow" id="downloadEyebrow">ANDROID / LATEST RELEASE</p>
+      <h2>start<br>collecting<br><span>yours.</span></h2>
+      <p>Vetro Collection is available for Android through multiple channels.</p>
+      
+      <div class="download-options">
+        <a class="download-card card-featured" id="directApkDownload" href="https://github.com/Phnem/Vetro/releases/latest" target="_blank" rel="noopener noreferrer" download>
+          <div class="download-card-icon" id="directDownloadIcon"><img src="logo.png" alt="Vetro" class="download-card-logo-img"></div>
+          <div class="download-card-text">
+            <small id="apkVersionLabel">Direct APK · Latest Release</small>
+            <strong id="apkActionLabel">Download APK</strong>
+          </div>
+          <span class="download-card-arrow">↓</span>
+        </a>
+        <a class="download-card" href="https://f-droid.org/packages/com.phnem.vetro" target="_blank" rel="noopener noreferrer">
+          <div class="download-card-icon">◈</div>
+          <div class="download-card-text">
+            <small>F-Droid Store</small>
+            <strong>F-Droid</strong>
+          </div>
+          <span>↗</span>
+        </a>
+        <a class="download-card" href="https://github-store.org/app?repo=Phnem/Vetro" target="_blank" rel="noopener noreferrer">
+          <div class="download-card-icon">❖</div>
+          <div class="download-card-text">
+            <small>Web Installer</small>
+            <strong>GitHub Store</strong>
+          </div>
+          <span>↗</span>
+        </a>
+      </div>
+
+      <footer>
+        <div class="footer-top">
+          <div class="footer-brand">
+            <img src="logo.png" alt="Vetro" class="footer-logo">
+            <span>VETRO COLLECTION™</span>
+          </div>
+          <div class="footer-links">
+            <button type="button" class="footer-link-btn" id="openPrivacyBtn">Privacy Policy</button>
+            <a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a>
+            <a href="https://github.com/Phnem/Vetro/discussions" target="_blank" rel="noopener noreferrer">Discussions</a>
+            <a href="https://github.com/Phnem/Vetro" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://ko-fi.com/phnem" target="_blank" rel="noopener noreferrer" class="coffee-link" id="footerCoffeeBtn">Buy me a coffee ☕</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>COLLECT / WATCH / READ / REMEMBER</span>
+          <span>MADE FOR PEOPLE WITH TOO MANY TABS OPEN</span>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Privacy Policy Modal -->
+  <div class="modal-backdrop" id="privacyModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-badge"><img src="logo.png" alt="" class="modal-logo"> Vetro Legal</div>
+        <button type="button" class="modal-close" id="closePrivacyModal" aria-label="Close Privacy Policy">✕</button>
+      </div>
+      <div class="modal-body">
+        <h2 id="privacyTitle">Privacy Policy</h2>
+        <p class="modal-meta">Last updated: June 2026</p>
+        
+        <h3>Overview</h3>
+        <p>Vetro respects your privacy.</p>
+        <p>Vetro is local-first: your collection is stored on the device. A Vetro account enables sync and backup. Network requests occur when you use online search, media sources, sync/backup, updates or an optional AI provider.</p>
+        
+        <h3>Local Data</h3>
+        <p>Most application data is stored locally on the user's device and remains under the user's control.</p>
+        
+        <h3>Contact</h3>
+        <ul class="modal-contact-list">
+          <li><strong>Telegram:</strong> <a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">@Vetro_chat ↗</a></li>
+          <li><strong>GitHub:</strong> <a href="https://github.com/Phnem/Vetro" target="_blank" rel="noopener noreferrer">Vetro ↗</a></li>
+          <li><strong>Discussions:</strong> <a href="https://github.com/Phnem/Vetro/discussions" target="_blank" rel="noopener noreferrer">GitHub Discussions ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-notice" id="toastNotice" role="status" aria-live="polite">
+    <span>☕ Support link coming soon! Thank you for supporting Vetro.</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
