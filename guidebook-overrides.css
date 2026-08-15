@@ -28,7 +28,24 @@
 .mini-grid i:nth-child(2) { background: #5a5a59; }
 .mini-grid i:nth-child(4) { background: #f1f1ef; }
 .section-heading-wrap em, .sync h2 em { color: #5b5b5a; }
-.format-card { border-radius: 0; }
+.collection-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 60px;
+  align-items: stretch;
+}
+.format-card {
+  border-radius: 28px;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
 .card-manga { background: #303030; }
 .card-film { background: #121212; }
 .collection-caption i { color: #575756; }
