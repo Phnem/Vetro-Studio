@@ -37,3 +37,12 @@
 .download-primary.is-unavailable{pointer-events:none;cursor:not-allowed;opacity:.62;filter:saturate(.72)}
 @media(max-width:900px){.look-preview{grid-template-columns:1fr;gap:42px}}
 @media(max-width:680px){.brand-logo-studio{width:32px;height:32px;border-radius:9px}.look-preview{padding-top:72px;padding-bottom:72px}.look-preview h2{font-size:2.5rem}}
+
+/* Studio's front page is a typographic entry point, not a third product visual. */
+.ecosystem-hero{display:flex;align-items:center;min-height:min(800px,100dvh)}
+.ecosystem-hero-copy{max-width:min(1140px,100%)}
+.ecosystem-hero h1{max-width:none;margin:20px 0 14px;font-size:clamp(4rem,10.8vw,11.5rem);line-height:.86;letter-spacing:-.105em;white-space:nowrap}
+.ecosystem-hero h2{max-width:720px;font:700 clamp(2.8rem,5vw,5.8rem)/1.01 var(--display);letter-spacing:-.09em;text-transform:uppercase}
+.ecosystem-hero h2 em{color:var(--acid);font-style:normal}
+.ecosystem-hero h2+p{margin-top:24px}
+@media(max-width:680px){.ecosystem-hero{display:block;min-height:auto}.ecosystem-hero h1{font-size:clamp(3.25rem,16.2vw,5.4rem);line-height:.9;white-space:normal}.ecosystem-hero h2{margin-top:18px;font-size:clamp(2.45rem,12.5vw,4rem)}.ecosystem-hero .hero-index{position:static;margin-top:26px}}
