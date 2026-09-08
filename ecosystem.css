@@ -46,3 +46,10 @@
 .ecosystem-hero h2 em{color:var(--acid);font-style:normal}
 .ecosystem-hero h2+p{margin-top:24px}
 @media(max-width:680px){.ecosystem-hero{display:block;min-height:auto}.ecosystem-hero h1{font-size:clamp(3.25rem,16.2vw,5.4rem);line-height:.9;white-space:normal}.ecosystem-hero h2{margin-top:18px;font-size:clamp(2.45rem,12.5vw,4rem)}.ecosystem-hero .hero-index{position:static;margin-top:26px}}
+
+.ecosystem-hero-copy{width:100%;max-width:none;text-align:center}
+.ecosystem-hero h1{margin:20px auto 24px;font-size:clamp(5.4rem,14.2vw,15rem);line-height:.82}
+.ecosystem-hero h2{margin-inline:auto}
+.ecosystem-hero h2+p{margin-inline:auto}
+.ecosystem-hero .button{margin-top:31px}
+@media(max-width:680px){.ecosystem-hero h1{margin-bottom:20px;font-size:clamp(4.15rem,19vw,6.4rem)}.ecosystem-hero .hero-index{text-align:left}}
