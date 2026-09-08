@@ -1,78 +1,66 @@
 <p align="center">
-  <img src="logo.png" alt="Vetro" width="72" height="auto" />
+  <img src="vetro-studio-icon.png" alt="Vetro Studio" width="112" />
 </p>
 
 <h1 align="center">Vetro Studio</h1>
 
 <p align="center">
-  The official landing page for <strong><a href="https://github.com/Phnem/Vetro">Vetro</a></strong> — an Android app for anyone who wants to keep anime, manga, manhwa, films and series in one unified collection. Local-first, private, and account-free.
+  The home of the Vetro ecosystem: local-first software for the media and photos you keep.
 </p>
 
 <p align="center">
-  <a href="https://phnem.github.io/Vetro-Studio/"><img src="https://img.shields.io/badge/Website-Live-FF3D00?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live site" /></a>
-  <a href="https://github.com/Phnem/Vetro"><img src="https://img.shields.io/badge/GitHub-Vetro-181717?style=for-the-badge&logo=github&logoColor=white" alt="Vetro on GitHub" /></a>
-  <a href="https://github.com/Phnem/Vetro/releases"><img src="https://img.shields.io/badge/Download-Releases-FF3D00?style=for-the-badge&logo=android&logoColor=white" alt="Download releases" /></a>
-  <a href="https://t.me/Vetro_chat"><img src="https://img.shields.io/badge/Telegram-Vetro__chat-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram" /></a>
+  <a href="https://phnem.github.io/Vetro-Studio/"><img src="https://img.shields.io/badge/Website-Live-FF3D00?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live website" /></a>
+  <a href="https://github.com/Phnem/Vetro-Studio"><img src="https://img.shields.io/badge/Source-Vetro%20Studio-181717?style=for-the-badge&logo=github&logoColor=white" alt="Vetro Studio source" /></a>
+  <a href="https://t.me/Vetro_chat"><img src="https://img.shields.io/badge/Telegram-Vetro__chat-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Vetro Telegram chat" /></a>
   <a href="https://ko-fi.com/phnem"><img src="https://img.shields.io/badge/Support-Ko--fi-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white" alt="Support on Ko-fi" /></a>
 </p>
 
-<p align="center">
-  🌐 <strong>Live URL:</strong> <a href="https://phnem.github.io/Vetro-Studio/">https://phnem.github.io/Vetro-Studio/</a>
-</p>
+## The ecosystem
 
----
+| Product | Platform | What it does |
+| --- | --- | --- |
+| [Vetro Collection](https://github.com/Phnem/Vetro) | Android | A personal media library for anime, manga, manhwa, films and series. |
+| [VetroLook](https://github.com/Phnem/VetroLook) | Windows 10/11 | A native image viewer and local photo library with Quick Look, RAW support and local indexing. |
 
-## ✨ Features
+## This website
 
-- **⚡ Direct APK Download via GitHub Releases API**: Automatically fetches latest release tag, `.apk` asset file, and file size for instant one-click downloading.
-- **📦 Multi-Channel App Distribution**: Support for Direct APK, [F-Droid](https://f-droid.org/packages/com.phnem.vetro), and [GitHub Store](https://github-store.org/app?repo=Phnem/Vetro).
-- **📱 Smooth Staggered Mobile Menu**: Interactive sliding drawer navigation with cascaded pre-layers, item skew entrances, and SVG cross morphing toggle.
-- **🌀 Animated Text Rotator Preloader**: Smooth intro loading animation cycling through media categories (*Anime, Manga, Manhwa, Films, Series*).
-- **📜 Integrated Privacy Policy Modal**: Accessible glassmorphic dialog with overview, local data policy, and community contacts.
-- **☕ Creator Support Integration**: Direct links to [Ko-fi](https://ko-fi.com/phnem) across hero, open source, mobile nav, and footer sections.
-- **🎨 Glassmorphism & Parallax Scroll**: Responsive micro-interactions, floating glowing orbs, scroll progress indicator, and dark tactile surfaces.
+Vetro Studio is a static product hub with three pages:
 
----
+- `index.html`: the Vetro Studio entry point and route to both products.
+- `collection.html`: the Vetro Collection landing page, preserved from the original site.
+- `look.html`: VetroLook's product page with a video preview, supported formats, native-performance details, privacy commitment and the MSI download area.
 
-## 🛠️ Tech Stack
+### Highlights
 
-- **HTML5** (Semantic, Accessible)
-- **CSS3** (Custom Properties, Flexbox / CSS Grid, CSS Animations, Backdrop Filters, Glassmorphism)
-- **Vanilla JavaScript (ES6+)** (Native GitHub REST API Integration, IntersectionObserver Scroll Reveals, Window Lifecycle Handlers)
-- **Typography**: [Manrope](https://fonts.google.com/specimen/Manrope) & [DM Mono](https://fonts.google.com/specimen/DM+Mono)
+- Vetro Studio identity and favicon built around the new ecosystem icon.
+- Local-first product positioning: no forced cloud, account or upload requirement.
+- Direct downloads through GitHub Releases APIs. VetroLook selects an `.msi` installer when it is published.
+- Responsive UI with reduced-motion support and IntersectionObserver-powered reveal transitions.
+- VetroLook preview video uses the original uploaded MP4 with native browser controls and audio enabled by default.
 
----
+## Technology
 
-## 🚀 Local Development
+- Semantic HTML5
+- CSS3 with custom properties, Grid, Flexbox, media queries and reduced-motion fallbacks
+- Vanilla JavaScript for GitHub Releases API integration and reveal choreography
+- [Manrope](https://fonts.google.com/specimen/Manrope) and [DM Mono](https://fonts.google.com/specimen/DM+Mono)
 
-No build steps, bundlers, or package installations required. You can serve the static site using any local server:
+## Run locally
 
-### Option 1: Python
+No build process or dependencies are required.
+
 ```bash
 python -m http.server 3000
 ```
 
-### Option 2: Node / npx
-```bash
-npx serve .
-```
+Then open [http://localhost:3000](http://localhost:3000).
 
-### Option 3: VS Code Live Server
-Right-click `index.html` and select **"Open with Live Server"**.
+## Deployment
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+The repository is ready for static hosting. GitHub Pages serves it at [phnem.github.io/Vetro-Studio](https://phnem.github.io/Vetro-Studio/); Vercel, Cloudflare Pages and Netlify can also deploy it without a build command.
 
----
+## Community
 
-## 🌐 Deployment
-
-The site is built as pure static files and can be hosted directly on **GitHub Pages**, **Vercel**, **Cloudflare Pages**, or **Netlify** with root directory `/` configuration without any build commands.
-
----
-
-## 💬 Community & Support
-
-- **Telegram Chat**: [@Vetro_chat](https://t.me/Vetro_chat)
-- **GitHub Discussions**: [Phnem/Vetro Discussions](https://github.com/Phnem/Vetro/discussions)
-- **Main App Repository**: [Phnem/Vetro](https://github.com/Phnem/Vetro)
-- **Donations & Support**: [ko-fi.com/phnem](https://ko-fi.com/phnem)
+- [Telegram chat](https://t.me/Vetro_chat)
+- [Vetro Collection discussions](https://github.com/Phnem/Vetro/discussions)
+- [Support the project on Ko-fi](https://ko-fi.com/phnem)

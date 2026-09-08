@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111111">
+  <title>VetroLook - your photos, instantly</title>
+  <meta name="description" content="VetroLook is a fast native image viewer and photo library for Windows. Your folders stay on your PC, with no cloud required.">
+  <link rel="icon" type="image/png" href="vetrolk-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ecosystem.css">
+</head>
+<body class="look-page">
+  <div class="noise" aria-hidden="true"></div>
+  <header class="site-header ecosystem-header">
+    <a class="look-brand" href="look.html" aria-label="VetroLook home"><img src="vetrolk-icon.png" alt="VetroLook"> <span>VETROLOOK</span></a>
+    <nav class="main-nav" aria-label="Main navigation"><a href="index.html">Vetro</a><a href="collection.html">Collection</a><a href="#downloads">Downloads</a><a href="https://github.com/Phnem/VetroLook" target="_blank" rel="noopener noreferrer">GitHub</a></nav>
+    <a class="header-download" href="#downloads">Download <span>↓</span></a>
+    <details class="mobile-menu"><summary aria-label="Open navigation"><span></span><span></span></summary><nav aria-label="Mobile navigation"><a href="index.html">Vetro home</a><a href="collection.html">Collection</a><a href="#downloads">Downloads</a><a href="https://github.com/Phnem/VetroLook" target="_blank" rel="noopener noreferrer">GitHub</a></nav></details>
+  </header>
+
+  <main>
+    <section class="look-hero section-shell">
+      <div class="look-hero-copy reveal" data-reveal-origin="left"><p class="eyebrow"><span class="pulse"></span> Native Windows photo viewer</p><h1>your photos.<br><em>instantly.</em></h1><p>Fast viewing, a calm photo library, and your real folders. No import. No cloud required.</p><div class="hero-actions"><a class="button button-primary" href="#downloads">Get VetroLook <b>↓</b></a><a class="text-link" href="https://github.com/Phnem/VetroLook" target="_blank" rel="noopener noreferrer">View source <span>↗</span></a></div></div>
+      <div class="look-hero-shot reveal" data-reveal-origin="right"><img src="vetrolk-viewer.png" alt="VetroLook displaying a photograph with floating controls" width="2560" height="1392" fetchpriority="high"></div>
+    </section>
+
+    <section class="look-preview section-shell" aria-labelledby="preview-title">
+      <div class="look-preview-copy reveal"><p class="eyebrow">Preview</p><h2 id="preview-title">See VetroLook<br>in <em>motion.</em></h2><p>A short look at browsing, viewing and moving through images without leaving your flow.</p></div>
+      <div class="look-preview-media reveal"><video controls playsinline preload="auto" poster="vetrolk-preview-cover.png" data-audio-default aria-describedby="preview-title"><source src="vetrolk-preview.mp4" type="video/mp4">Your browser does not support the preview video.</video></div>
+    </section>
+
+    <section class="look-statement section-shell reveal"><p class="eyebrow">Built around the image</p><h2>Open, look,<br>keep <em>moving.</em></h2><p>VetroLook uses native Windows graphics and image libraries so the interface gets out of the way of the picture.</p></section>
+
+    <section class="quick-look section-shell reveal" aria-labelledby="quick-look-title">
+      <div><p class="eyebrow">Quick Look for Explorer</p><h2 id="quick-look-title">Select a file.<br>Press <em>Space.</em></h2><p>Preview an image right where you are, then keep its folder context when you open it.</p></div>
+      <div class="quick-flow" aria-label="Select a file, press Space, open VetroLook"><span class="quick-node">Select file</span><span class="quick-arrow">→</span><kbd class="space-key">Space</kbd><span class="quick-arrow">→</span><span class="quick-node quick-node-active">VetroLook</span></div>
+    </section>
+
+    <section class="formats section-shell reveal" aria-labelledby="formats-title">
+      <p class="eyebrow">Supported formats</p><h2 id="formats-title">Your files,<br><em>without exceptions.</em></h2>
+      <div class="format-groups"><article><h3>Common</h3><p>JPEG · PNG · GIF · BMP · TIFF · ICO · WebP · AVIF · HEIC</p></article><article><h3>RAW</h3><p>NEF · DNG · CR2 · CR3 · ARW · RAF · RW2 · ORF · PEF</p></article><article><h3>Professional</h3><p>OpenEXR for HDR work, tone-mapped for display.</p></article></div>
+    </section>
+
+    <section class="native-proof section-shell reveal" aria-labelledby="native-title">
+      <div><p class="eyebrow">Native performance</p><h2 id="native-title">Built for the<br><em>first frame.</em></h2><p>VetroLook stays close to Windows so opening, navigating and inspecting images does not need a browser runtime.</p></div>
+      <div class="native-details"><div class="native-stack"><span>Native C++</span><span>Direct2D / DirectComposition</span><span>No Electron</span><span>Local indexing</span><span>Screen-ready cache / RAW preview</span></div><div class="benchmark-note"><strong>Benchmarks in progress</strong><p>Cold open, RAW preview and library indexing will be published here after stable measurements are available.</p></div></div>
+    </section>
+
+    <section class="privacy-panel section-shell reveal" id="privacy" aria-labelledby="privacy-title"><div class="privacy-mark"><img src="vetrolk-icon.png" alt=""></div><div><p class="eyebrow">Local-first by design</p><h2 id="privacy-title">Your library stays<br>on your <em>PC.</em></h2><p>No account. No upload. No analytics. Files remain in the folders you already use.</p></div></section>
+
+    <section class="look-features section-shell" aria-label="VetroLook features"><article class="look-feature reveal"><span>01</span><h3>View without waiting</h3><p>Open images quickly, zoom and pan smoothly, then move through a folder without losing context.</p></article><article class="look-feature reveal"><span>02</span><h3>Your folders stay yours</h3><p>Build a searchable library directly from files already on your computer. Nothing needs to be imported or uploaded.</p></article><article class="look-feature reveal"><span>03</span><h3>More than a preview</h3><p>Browse photo stacks, inspect EXIF and histograms, work with RAW and modern formats, and drag real files out.</p></article></section>
+
+    <section class="downloads section-shell reveal" id="downloads" aria-labelledby="downloads-title">
+      <div class="downloads-copy"><p class="eyebrow">Windows 10 and 11</p><h2 id="downloads-title">Ready when<br>you <em>are.</em></h2><p>Windows 10 1809+ or Windows 11. x64 architecture.</p></div>
+      <div class="download-panel">
+        <div class="download-actions">
+          <a class="button button-primary download-primary is-unavailable" id="lookPrimaryDownload" href="#download-status" aria-disabled="true"><span id="lookDownloadAction">MSI coming soon</span><b>↓</b></a>
+          <a class="button button-coffee" href="https://ko-fi.com/phnem" target="_blank" rel="noopener noreferrer" title="Support Vetro on Ko-fi">Buy me a coffee <b>☕</b></a>
+        </div>
+        <p class="download-version" id="lookDownloadVersion" aria-live="polite">Checking latest release</p>
+        <div class="download-meta" id="download-status"><span id="lookDownloadFormat">Looking for the latest MSI</span><span>Windows 10/11 · x64</span></div>
+        <p class="download-other">Other formats: EXE · MSIX · Portable</p>
+        <div class="download-links"><a id="lookReleaseLink" href="https://github.com/Phnem/VetroLook/releases" target="_blank" rel="noopener noreferrer">GitHub Release ↗</a><a id="lookChecksumLink" href="https://github.com/Phnem/VetroLook/releases" target="_blank" rel="noopener noreferrer">SHA-256 ↗</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="look-footer section-shell"><div class="look-footer-brand"><a class="look-brand" href="look.html"><img src="vetrolk-icon.png" alt="VetroLook"> <span>VETROLOOK</span></a><p>A native image viewer and photo library for Windows.</p></div><div><h3>Vetro</h3><a href="index.html">Vetro home</a><a href="collection.html">Vetro Collection</a><a href="look.html">VetroLook</a></div><div><h3>Project</h3><a href="https://github.com/Phnem/VetroLook" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://github.com/Phnem/VetroLook/releases" target="_blank" rel="noopener noreferrer">Releases</a><a href="https://github.com/Phnem/VetroLook/issues" target="_blank" rel="noopener noreferrer">Issues</a></div><div><h3>Legal</h3><a href="#privacy">Privacy</a><a href="https://github.com/Phnem/VetroLook/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GPL-3.0 License</a></div></footer>
+  <script src="ecosystem.js"></script>
+</body>
+</html>
