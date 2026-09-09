@@ -118,6 +118,28 @@ if (methodologyDialog) {
   methodologyDialog.addEventListener('close', () => methodologyDialog.classList.remove('is-open'));
 }
 
+const privacyDialog = document.querySelector('.privacy-dialog');
+
+if (privacyDialog) {
+  const closePrivacyDialog = () => {
+    privacyDialog.classList.remove('is-open');
+    window.setTimeout(() => privacyDialog.close(), 180);
+  };
+
+  document.querySelectorAll('[data-open-privacy]').forEach((button) => {
+    button.addEventListener('click', () => {
+      closeMobileMenu();
+      privacyDialog.showModal();
+      window.requestAnimationFrame(() => privacyDialog.classList.add('is-open'));
+    });
+  });
+  document.querySelector('[data-close-privacy]')?.addEventListener('click', closePrivacyDialog);
+  privacyDialog.addEventListener('click', (event) => {
+    if (event.target === privacyDialog) closePrivacyDialog();
+  });
+  privacyDialog.addEventListener('close', () => privacyDialog.classList.remove('is-open'));
+}
+
 const lookPrimaryDownload = document.getElementById('lookPrimaryDownload');
 
 if (lookPrimaryDownload) {
