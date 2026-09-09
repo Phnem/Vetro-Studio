@@ -1,5 +1,39 @@
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+const menuButton = document.getElementById('menuButton');
+const mobileNav = document.getElementById('mobileNav');
+const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+
+const closeMobileMenu = () => {
+  mobileNavOverlay?.classList.remove('is-open');
+  mobileNav?.classList.remove('is-open');
+  menuButton?.classList.remove('is-open');
+  mobileNavOverlay?.setAttribute('aria-hidden', 'true');
+  menuButton?.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+};
+
+const openMobileMenu = () => {
+  mobileNavOverlay?.classList.add('is-open');
+  mobileNav?.classList.add('is-open');
+  menuButton?.classList.add('is-open');
+  mobileNavOverlay?.setAttribute('aria-hidden', 'false');
+  menuButton?.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+};
+
+menuButton?.addEventListener('click', () => {
+  if (mobileNav?.classList.contains('is-open')) closeMobileMenu();
+  else openMobileMenu();
+});
+mobileNavOverlay?.addEventListener('click', (event) => {
+  if (event.target === mobileNavOverlay) closeMobileMenu();
+});
+mobileNav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMobileMenu));
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && mobileNav?.classList.contains('is-open')) closeMobileMenu();
+});
+
 const revealConfigurations = [
   { selector: '.ecosystem-hero .reveal', animation: 'reveal-scale-up', stagger: 90 },
   { selector: '.products .reveal', animation: 'reveal-from-left', stagger: 110 },
