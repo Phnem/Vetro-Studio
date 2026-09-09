@@ -14,6 +14,7 @@ const revealConfigurations = [
   { selector: '.native-proof > div', animation: 'reveal-from-left', stagger: 120 },
   { selector: '.native-stack span', animation: 'reveal-scale-up', stagger: 55 },
   { selector: '.benchmark-note', animation: 'reveal-fade', delay: 180 },
+  { selector: '.benchmarks-intro, .benchmark-footnote', animation: 'reveal-from-left' },
   { selector: '.privacy-panel > div', animation: 'reveal-scale-up', stagger: 120 },
   { selector: '.look-feature', animation: 'reveal-from-left', stagger: 110 },
   { selector: '.downloads > div', animation: 'reveal-scale-up', stagger: 120 },
@@ -48,6 +49,40 @@ document.querySelectorAll('video[data-audio-default]').forEach((video) => {
   video.defaultMuted = false;
   video.volume = 1;
 });
+
+const benchmarkCharts = document.querySelectorAll('[data-benchmark-chart]');
+
+if (!reduceMotion && 'IntersectionObserver' in window) {
+  const benchmarkObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-chart-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.22, rootMargin: '0px 0px -35px 0px' });
+  benchmarkCharts.forEach((chart) => benchmarkObserver.observe(chart));
+} else {
+  benchmarkCharts.forEach((chart) => chart.classList.add('is-chart-visible'));
+}
+
+const methodologyDialog = document.querySelector('.methodology-dialog');
+
+if (methodologyDialog) {
+  const closeMethodology = () => {
+    methodologyDialog.classList.remove('is-open');
+    window.setTimeout(() => methodologyDialog.close(), 180);
+  };
+
+  document.querySelector('[data-open-methodology]')?.addEventListener('click', () => {
+    methodologyDialog.showModal();
+    window.requestAnimationFrame(() => methodologyDialog.classList.add('is-open'));
+  });
+  document.querySelector('[data-close-methodology]')?.addEventListener('click', closeMethodology);
+  methodologyDialog.addEventListener('click', (event) => {
+    if (event.target === methodologyDialog) closeMethodology();
+  });
+  methodologyDialog.addEventListener('close', () => methodologyDialog.classList.remove('is-open'));
+}
 
 const lookPrimaryDownload = document.getElementById('lookPrimaryDownload');
 
