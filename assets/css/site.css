@@ -159,7 +159,7 @@ h1 em, h2 em, .hero-tagline em { background: linear-gradient(var(--em-bg), var(-
 .screen-layer.is-active { opacity: 1; transform: none; }
 .screen { position: absolute; left: 0; top: 0; width: 360px; height: 780px; overflow: hidden; transform-origin: 0 0; transform: scale(var(--k, .5)); color: #fff; font-family: Roboto, 'Manrope', system-ui, sans-serif; line-height: 1.2; background: #0d0807; }
 .screen *, .screen *::before, .screen *::after { box-sizing: border-box; }
-.island { position: absolute; z-index: 8; top: 2.1%; left: 50%; width: 27%; height: 3%; transform: translateX(-50%); border-radius: 99px; background: #000; }
+.island { position: absolute; z-index: 8; top: 1.7%; left: 50%; width: 31%; aspect-ratio: 126 / 37; transform: translateX(-50%); border-radius: 99px; background: #000; }
 .glare { position: absolute; inset: 0; z-index: 7; pointer-events: none; background: linear-gradient(118deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, 0) 30%); }
 .phone:not(.is-live) .screen *, .phone:not(.is-live) .screen *::before, .phone:not(.is-live) .screen *::after { animation-play-state: paused !important; }
 .phone-video .phone-screen { aspect-ratio: 9 / 17; }
@@ -467,7 +467,7 @@ dialog.modal::backdrop { background: rgba(12, 4, 3, .6); -webkit-backdrop-filter
 .petal { position: absolute; top: -20px; width: 11px; height: 6px; border-radius: 50%; background: #ffd0dc; opacity: .9; animation: fall 7s linear infinite; }
 .p1 { left: 8%; animation-delay: -1s; } .p2 { left: 24%; animation-delay: -3.5s; animation-duration: 8s; } .p3 { left: 45%; animation-delay: -5s; } .p4 { left: 63%; animation-delay: -2s; animation-duration: 6.5s; } .p5 { left: 80%; animation-delay: -4.2s; } .p6 { left: 92%; animation-delay: -6s; animation-duration: 8.5s; }
 @keyframes fall { from { transform: translate(0, -20px) rotate(0); } to { transform: translate(-70px, 470px) rotate(320deg); } }
-.s-sheet { position: absolute; z-index: 3; left: 0; right: 0; top: 322px; bottom: 0; padding: 14px 20px; border-radius: 34px 34px 0 0; overflow: hidden; background: linear-gradient(180deg, #7a263b, #4c1825 34%, #12060a); }
+.s-sheet { position: absolute; z-index: 3; left: 0; right: 0; top: 322px; bottom: -200px; animation: s-det 14s ease-in-out infinite; padding: 14px 20px; border-radius: 34px 34px 0 0; overflow: hidden; background: linear-gradient(180deg, #7a263b, #4c1825 34%, #12060a); }
 .s-handle { display: block; width: 46px; height: 5px; margin: 0 auto 14px; border-radius: 9px; background: rgba(255, 255, 255, .38); }
 .s-sheet h4 { font: 700 27px Roboto, sans-serif; margin: 0 0 14px; }
 .s-actrow { display: flex; gap: 10px; align-items: center; }
@@ -477,9 +477,8 @@ dialog.modal::backdrop { background: rgba(12, 4, 3, .6); -webkit-backdrop-filter
 .s-watch .ic, .s-dl .ic { width: 20px; height: 20px; }
 .s-trailer { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 9px 16px; border-radius: 99px; background: rgba(255, 255, 255, .12); font: 500 14px Roboto, sans-serif; }
 .s-trailer .ic { width: 16px; height: 16px; color: #ff6a1a; }
-.s-scroll-clip { position: absolute; left: 20px; right: 20px; top: 206px; bottom: 0; overflow: hidden; }
-.s-scroll-in { padding-bottom: 60px; animation: s-det 14s ease-in-out infinite; }
-@keyframes s-det { 0%, 14% { transform: none; } 48%, 64% { transform: translateY(-120px); } 94%, 100% { transform: none; } }
+.s-scroll-clip { margin-top: 16px; }
+@keyframes s-det { 0%, 14% { transform: none; } 46%, 66% { transform: translateY(-190px); } 94%, 100% { transform: none; } }
 .s-next span { display: block; color: #d8c4c9; font-size: 13px; margin-bottom: 4px; }
 .s-next b { font: 700 22px Roboto, sans-serif; }
 .s-scroll-in h5 { display: flex; align-items: center; gap: 10px; font: 700 18px Roboto, sans-serif; margin: 20px 0 10px; }
