@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://phnem.github.io/Vetro-Studio/"><img src="https://img.shields.io/badge/Website-Live-FF3D00?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live website" /></a>
+  <a href="https://phnem.github.io/Vetro-Studio/"><img src="https://img.shields.io/badge/Website-Live-E1251B?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live website" /></a>
   <a href="https://github.com/Phnem/Vetro-Studio"><img src="https://img.shields.io/badge/Source-Vetro%20Studio-181717?style=for-the-badge&logo=github&logoColor=white" alt="Vetro Studio source" /></a>
   <a href="https://t.me/Vetro_chat"><img src="https://img.shields.io/badge/Telegram-Vetro__chat-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Vetro Telegram chat" /></a>
   <a href="https://ko-fi.com/phnem"><img src="https://img.shields.io/badge/Support-Ko--fi-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white" alt="Support on Ko-fi" /></a>
@@ -19,35 +19,46 @@
 
 | Product | Platform | What it does |
 | --- | --- | --- |
-| [Vetro Collection](https://github.com/Phnem/Vetro) | Android | A personal media library for anime, manga, manhwa, films and series. |
+| [Vetro Collection](https://github.com/Phnem/Vetro) | Android | A personal library for anime, movies, series, manga and audiobooks. |
 | [VetroLook](https://github.com/Phnem/VetroLook) | Windows 10/11 | A native image viewer and local photo library with Quick Look, RAW support and local indexing. |
 
 ## This website
 
-Vetro Studio is a static product hub with three pages:
+A static product hub with three pages, in **English and Russian** (the language is detected from the browser and can be switched in the header; `?lang=ru` / `?lang=en` forces one).
 
-- `index.html`: the Vetro Studio entry point and route to both products.
-- `collection.html`: the Vetro Collection landing page, preserved from the original site.
-- `look.html`: VetroLook's product page with a video preview, supported formats, native-performance details, privacy commitment and the MSI download area.
+- `index.html` — Vetro Studio: the entry point and route to both products.
+- `collection.html` — Vetro Collection: animated phone mockups, a scroll-driven app tour, the trailer, features, sync, downloads (latest APK from GitHub Releases).
+- `look.html` — VetroLook: a 3D window mockup, preview video, supported formats, native-performance notes, animated benchmarks, privacy dialog and the MSI download.
 
-### Highlights
+### Design
 
-- Vetro Studio identity and favicon built around the new ecosystem icon.
-- Local-first product positioning: no forced cloud, account or upload requirement.
-- Direct downloads through GitHub Releases APIs. VetroLook selects an `.msi` installer when it is published.
-- Responsive UI with reduced-motion support and IntersectionObserver-powered reveal transitions.
-- VetroLook preview video uses the original uploaded MP4 with native browser controls and audio enabled by default.
+- Poster palette — signal red, cream and ink — with big wide display type, sticker highlights and a ticker.
+- **Frosted (matte) glass** surfaces: backdrop blur + fine grain on the header, cards, buttons and the glass "sun" in the hero.
+- **Animated mockups.** The app screens are *generated UI* (HTML/SVG, no screenshots): library, episode details, audiobook player, manga reader, Books shelves, the reacting rating face and Settings. They live inside phone frames with a live countdown, auto-scrolling lists, a ticking player and cross-fading carousels. The Collection page pins a phone and swaps its screen as you scroll.
+- The trailer (`assets/video/vetro-trailer.mp4`) plays inside a phone mockup, muted by default with a sound toggle.
+- Responsive from 320 px to ultra-wide, `prefers-reduced-motion` support, keyboard-accessible menu and dialogs.
+
+### Structure
+
+```
+index.html · collection.html · look.html
+assets/css/site.css      design system, mockups, app screens, responsive rules
+assets/js/i18n.js        English (authored in HTML) + Russian dictionary, language switch
+assets/js/screens.js     generated app screens and their live behaviours
+assets/js/site.js        navigation, reveal, parallax, showcase, dialogs, GitHub release lookups
+assets/video/            trailer + poster
+assets/img/og-cover.jpg  social preview
+```
+
+To add or change a string, put the English text in the HTML with a `data-i18n="key"` (or `data-i18n-html`, `data-i18n-attr`) attribute and add the Russian translation under the same key in `assets/js/i18n.js`.
 
 ## Technology
 
-- Semantic HTML5
-- CSS3 with custom properties, Grid, Flexbox, media queries and reduced-motion fallbacks
-- Vanilla JavaScript for GitHub Releases API integration and reveal choreography
-- [Manrope](https://fonts.google.com/specimen/Manrope) and [DM Mono](https://fonts.google.com/specimen/DM+Mono)
+- Semantic HTML5, CSS custom properties, Grid/Flexbox, container query units, `backdrop-filter`
+- Vanilla JavaScript — no build step, no dependencies
+- [Unbounded](https://fonts.google.com/specimen/Unbounded), [Manrope](https://fonts.google.com/specimen/Manrope), [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) and Roboto (inside the app mockups)
 
 ## Run locally
-
-No build process or dependencies are required.
 
 ```bash
 python -m http.server 3000

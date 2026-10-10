@@ -3,45 +3,164 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111111">
-  <title>Vetro Studio - tools that keep what matters close</title>
-  <meta name="description" content="Vetro builds local-first tools for the things you choose to keep: media collections and photo libraries.">
+  <meta name="theme-color" content="#e1251b">
+  <title data-i18n="index.title">Vetro Studio — tools that keep what matters close</title>
+  <meta name="description" content="Vetro builds local-first tools for the things you choose to keep: media collections and photo libraries." data-i18n-attr="content:index.desc">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vetro Studio">
+  <meta property="og:description" content="Local-first tools for your media collection and your photo library.">
+  <meta property="og:image" content="https://phnem.github.io/Vetro-Studio/assets/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="vetro-studio-icon.png">
   <link rel="apple-touch-icon" href="vetro-studio-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="ecosystem.css">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Roboto:wght@400;500;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
 </head>
-<body class="ecosystem-page">
-  <div class="noise" aria-hidden="true"></div>
-  <header class="site-header ecosystem-header">
-    <a class="brand" href="index.html" aria-label="Vetro Studio home"><img src="vetro-studio-icon.png" alt="" class="brand-logo brand-logo-studio"> VETRO STUDIO</a>
-    <nav class="main-nav" aria-label="Main navigation">
-      <a href="collection.html">Collection</a><a href="look.html">VetroLook</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a>
-    </nav>
-    <a class="header-download" href="#products">Choose a product <span>↓</span></a>
-    <details class="mobile-menu"><summary aria-label="Open navigation"><span></span><span></span></summary><nav aria-label="Mobile navigation"><a href="collection.html">Collection</a><a href="look.html">VetroLook</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></nav></details>
+<body class="page-studio">
+  <div class="bg-field" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-pill glass">
+      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>STUDIO</b></span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="collection.html" data-i18n="nav.collection">Collection</a>
+        <a href="look.html">VetroLook</a>
+        <a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button></div>
+        <a class="pill-cta" href="#products"><span data-i18n="index.nav.cta">Choose a product</span> <i>↓</i></a>
+        <button class="burger" type="button" aria-expanded="false" aria-controls="mobileSheet" aria-label="Menu" data-i18n-attr="aria-label:nav.menu"><span></span><span></span></button>
+      </div>
+    </div>
   </header>
-  <main>
-    <section class="ecosystem-hero">
-      <div class="ecosystem-hero-copy reveal"><p class="eyebrow"><span class="pulse"></span> Local-first software</p><h1>VETRO STUDIO</h1><h2>keep your<br><em>world</em> close.</h2><p>Vetro makes quiet, personal tools for the collections and photos that are already yours.</p><a class="button button-primary" href="#products">Meet the products <b>↓</b></a></div>
-      <p class="hero-index">COLLECT / LOOK / KEEP</p>
+
+  <div class="mobile-sheet" id="mobileSheet" aria-hidden="true">
+    <div class="mobile-sheet-panel glass">
+      <p class="sheet-tag" data-i18n="nav.navigation">Navigation</p>
+      <nav aria-label="Mobile navigation">
+        <a href="collection.html"><span>01</span><b data-i18n="nav.collection">Collection</b><i>↗</i></a>
+        <a href="look.html"><span>02</span><b>VetroLook</b><i>↗</i></a>
+        <a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer"><span>03</span><b>GitHub</b><i>↗</i></a>
+        <a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer"><span>04</span><b>Telegram</b><i>↗</i></a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button></div>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="studio-hero theme-red">
+      <div class="hero-wordmark">
+        <h1><span class="wm-line wm-1">VETRO</span><span class="wm-line wm-2">STUDIO</span></h1>
+        <div class="glass-sun" aria-hidden="true"><span></span></div>
+      </div>
+      <div class="hero-lower">
+        <div class="hero-copy">
+          <p class="eyebrow"><i class="pulse"></i><span data-i18n="index.eyebrow">Local-first software</span></p>
+          <p class="hero-tagline" data-i18n-html="index.tagline">Keep your <em>world</em> close.</p>
+          <p class="hero-lede" data-i18n="index.lede">Vetro makes quiet, personal tools for the collections and photos that are already yours.</p>
+          <div class="hero-actions">
+            <a class="btn btn-cream" href="#products"><span data-i18n="index.cta">Meet the products</span> <b>↓</b></a>
+            <span class="hero-index" data-i18n="index.heroindex">COLLECT / LOOK / KEEP</span>
+          </div>
+        </div>
+        <div class="stamp" aria-hidden="true"><span>V</span><span>E</span><span>T</span><span>R</span><span>O</span></div>
+      </div>
     </section>
-    <section class="products section-shell" id="products" aria-labelledby="products-title">
-      <div class="products-heading reveal"><p class="eyebrow">Two products, one principle</p><h2 id="products-title">Your files, your<br>taste, <em>your pace.</em></h2></div>
-      <article class="product-row product-row-collection reveal">
-        <div class="product-intro"><p class="product-platform">Android</p><h3>Vetro<br>Collection</h3><p>A personal media library for anime, manga, manhwa, films and series.</p><a class="text-link" href="collection.html">Open Collection <span>↗</span></a></div>
-        <div class="collection-product-visual" aria-label="Vetro Collection app screens"><img class="collection-shot-back" src="mainmock2.webp" alt="Vetro collection detail screen" width="1000" height="1834" loading="lazy"><img class="collection-shot-front" src="mainmock1.webp" alt="Vetro collection library screen" width="1000" height="1834" loading="lazy"></div>
-      </article>
-      <article class="product-row product-row-look reveal">
-        <div class="look-product-visual"><img src="vetrolk-viewer.png" alt="VetroLook image viewer on Windows" width="2560" height="1392" loading="lazy"></div>
-        <div class="product-intro"><p class="product-platform">Windows 10 and 11</p><h3>VetroLook</h3><p>A fast native image viewer and photo library that works directly with your folders.</p><a class="text-link" href="look.html">Discover VetroLook <span>↗</span></a></div>
-      </article>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span data-i18n="ticker.1">COLLECT</span><i>●</i><span data-i18n="ticker.2">LOOK</span><i>●</i><span data-i18n="ticker.3">KEEP</span><i>●</i><span>LOCAL-FIRST</span><i>●</i><span data-i18n="ticker.4">NO ADS</span><i>●</i><span data-i18n="ticker.5">OPEN SOURCE</span><i>●</i>
+        <span data-i18n="ticker.1">COLLECT</span><i>●</i><span data-i18n="ticker.2">LOOK</span><i>●</i><span data-i18n="ticker.3">KEEP</span><i>●</i><span>LOCAL-FIRST</span><i>●</i><span data-i18n="ticker.4">NO ADS</span><i>●</i><span data-i18n="ticker.5">OPEN SOURCE</span><i>●</i>
+      </div>
+    </div>
+
+    <section class="products theme-cream section" id="products" aria-labelledby="products-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="index.products.eyebrow">Two products, one principle</p>
+          <h2 id="products-title" data-i18n-html="index.products.title">Your files, your taste, <em>your pace.</em></h2>
+        </div>
+
+        <article class="product product-collection glass-card reveal">
+          <div class="product-copy">
+            <p class="product-platform"><i></i><span data-i18n="index.col.platform">Android</span></p>
+            <h3>Vetro<br>Collection</h3>
+            <p data-i18n="index.col.text">One library for anime, movies, series, manga and audiobooks — it works offline.</p>
+            <ul class="chips" aria-label="Formats" data-i18n-attr="aria-label:index.col.formats">
+              <li data-i18n="fmt.anime">Anime</li><li data-i18n="fmt.movies">Movies</li><li data-i18n="fmt.series">Series</li><li data-i18n="fmt.manga">Manga</li><li data-i18n="fmt.audio">Audiobooks</li>
+            </ul>
+            <a class="btn btn-ink" href="collection.html"><span data-i18n="index.col.cta">Open Collection</span> <b>↗</b></a>
+          </div>
+          <div class="product-visual">
+            <div class="cluster cluster-mini" role="img" aria-label="Vetro Collection app screens" data-i18n-attr="aria-label:index.col.alt">
+              <div class="phone phone-l" data-screen="detail" style="--w:34cqw"></div>
+              <div class="phone phone-c" data-screens="library,books,rate" data-cycle="3800" style="--w:44cqw"></div>
+              <div class="phone phone-r" data-screen="player" style="--w:34cqw"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="product product-look glass-card reveal">
+          <div class="product-visual">
+            <div class="win-wrap">
+              <div class="win">
+                <div class="win-bar"><i></i><i></i><i></i><span>VetroLook</span></div>
+                <img src="vetrolk-viewer.png" alt="VetroLook image viewer on Windows" data-i18n-attr="alt:index.look.alt" width="2560" height="1392" loading="lazy">
+              </div>
+              <span class="float-chip chip-a">RAW · NEF</span>
+              <span class="float-chip chip-b">641 ms</span>
+            </div>
+          </div>
+          <div class="product-copy">
+            <p class="product-platform"><i></i><span data-i18n="index.look.platform">Windows 10 and 11</span></p>
+            <h3>VetroLook</h3>
+            <p data-i18n="index.look.text">A fast native image viewer and photo library that works directly with your folders.</p>
+            <ul class="chips" aria-label="Highlights" data-i18n-attr="aria-label:index.look.chips">
+              <li>RAW</li><li>Quick Look</li><li data-i18n="index.look.chip.native">Native C++</li><li data-i18n="index.look.chip.nocloud">No cloud</li>
+            </ul>
+            <a class="btn btn-ink" href="look.html"><span data-i18n="index.look.cta">Discover VetroLook</span> <b>↗</b></a>
+          </div>
+        </article>
+      </div>
     </section>
-    <section class="principle section-shell reveal" aria-labelledby="principle-title"><div class="principle-mark">/</div><div><h2 id="principle-title">Private by default.<br>Useful <em>by design.</em></h2><p>No attention economy, forced cloud, or invented categories. Vetro products start with what is already on your device.</p></div><a class="button button-quiet" href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">Browse the source <b>↗</b></a></section>
+
+    <section class="principle theme-ink section" aria-labelledby="principle-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="index.principle.eyebrow">How we build</p>
+          <h2 id="principle-title" data-i18n-html="index.principle.title">Private by default. <em>Useful by design.</em></h2>
+          <p class="section-lede" data-i18n="index.principle.lede">No attention economy, forced cloud or invented categories. Vetro products start with what is already on your device.</p>
+        </div>
+        <div class="trio">
+          <article class="glass-card reveal"><span class="num">01</span><h3 data-i18n="index.p1.t">Local-first</h3><p data-i18n="index.p1.d">Your library lives on your device. Cloud sync is a choice, never a requirement.</p></article>
+          <article class="glass-card reveal"><span class="num">02</span><h3 data-i18n="index.p2.t">No noise</h3><p data-i18n="index.p2.d">No ads, no tracking profile, no forced accounts. Just the thing you came to do.</p></article>
+          <article class="glass-card reveal"><span class="num">03</span><h3 data-i18n="index.p3.t">Open source</h3><p data-i18n="index.p3.d">Built in the open. Read the code, share an idea or report a problem.</p></article>
+        </div>
+        <div class="center-actions reveal">
+          <a class="btn btn-cream" href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer"><span data-i18n="index.source">Browse the source</span> <b>↗</b></a>
+          <a class="btn btn-glass" href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer"><span data-i18n="index.chat">Join the Telegram chat</span> <b>↗</b></a>
+        </div>
+      </div>
+    </section>
   </main>
-  <footer class="ecosystem-footer section-shell"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" class="brand-logo brand-logo-studio"> VETRO STUDIO</a><p>Made for people who want to keep their own things.</p><div><a href="collection.html">Collection</a><a href="look.html">VetroLook</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a></div></footer>
-  <script src="ecosystem.js"></script>
+
+  <footer class="site-footer theme-red">
+    <div class="wrap footer-grid">
+      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>STUDIO</b></span></a><p data-i18n="footer.studio">Made for people who want to keep their own things.</p></div>
+      <div><h4>Vetro</h4><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a></div>
+      <div><h4 data-i18n="footer.project">Project</h4><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a><a href="https://ko-fi.com/phnem" target="_blank" rel="noopener noreferrer">Ko-fi</a></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/screens.js"></script>
+  <script src="assets/js/site.js"></script>
 </body>
 </html>
