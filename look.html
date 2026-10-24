@@ -28,6 +28,7 @@
       <nav class="main-nav" aria-label="Main navigation">
         <a href="index.html">Studio</a>
         <a href="collection.html" data-i18n="nav.collection">Collection</a>
+        <a href="vap.html">VAP</a>
         <a href="#benchmarks" data-i18n="look.nav.bench">Benchmarks</a>
         <a href="#privacy" data-i18n="look.nav.privacy">Privacy</a>
       </nav>
@@ -45,9 +46,10 @@
       <nav aria-label="Mobile navigation">
         <a href="index.html"><span>01</span><b>Vetro Studio</b><i>↗</i></a>
         <a href="collection.html"><span>02</span><b data-i18n="nav.collection">Collection</b><i>↗</i></a>
-        <a href="#benchmarks"><span>03</span><b data-i18n="look.nav.bench">Benchmarks</b><i>↓</i></a>
-        <a href="#privacy"><span>04</span><b data-i18n="look.nav.privacy">Privacy</b><i>↓</i></a>
-        <a href="#downloads" class="is-accent"><span>05</span><b data-i18n="look.nav.download">Download</b><i>↓</i></a>
+        <a href="vap.html"><span>03</span><b>VAP</b><i>↗</i></a>
+        <a href="#benchmarks"><span>04</span><b data-i18n="look.nav.bench">Benchmarks</b><i>↓</i></a>
+        <a href="#privacy"><span>05</span><b data-i18n="look.nav.privacy">Privacy</b><i>↓</i></a>
+        <a href="#downloads" class="is-accent"><span>06</span><b data-i18n="look.nav.download">Download</b><i>↓</i></a>
       </nav>
       <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button></div>
     </div>
@@ -98,6 +100,35 @@
         </div>
         <div class="video-frame glass-card reveal">
           <video controls playsinline preload="metadata" poster="vetrolk-preview-cover.png" data-audio-default aria-describedby="preview-title"><source src="vetrolk-preview.mp4" type="video/mp4"></video>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREENSHOTS -->
+    <section class="look-shots theme-red section" aria-labelledby="shots-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="look.sh.eyebrow">Screenshots</p>
+          <h2 id="shots-title" data-i18n-html="look.sh.title">A calm interface,<br>built <em>around photos.</em></h2>
+        </div>
+        <div class="shots-grid">
+          <figure class="shot glass-card reveal">
+            <img src="assets/img/look-info.webp" alt="VetroLook information panel with EXIF data and a histogram" data-i18n-attr="alt:look.sh.a1" width="1500" height="940" loading="lazy" decoding="async">
+            <figcaption><b data-i18n="look.sh.c1">Info and histogram</b><span data-i18n="look.sh.d1">EXIF, color profile and a live histogram next to the photo.</span></figcaption>
+          </figure>
+          <figure class="shot glass-card reveal">
+            <img src="assets/img/look-edit.webp" alt="VetroLook editing tools: crop, rotate, draw, arrow, select" data-i18n-attr="alt:look.sh.a2" width="1500" height="940" loading="lazy" decoding="async">
+            <figcaption><b data-i18n="look.sh.c2">Quick edits</b><span data-i18n="look.sh.d2">Crop, rotate, draw and annotate without leaving the viewer.</span></figcaption>
+          </figure>
+          <figure class="shot glass-card reveal">
+            <img src="assets/img/look-gallery.webp" alt="VetroLook photo library showing a folder of landscape photos" data-i18n-attr="alt:look.sh.a3" width="1500" height="760" loading="lazy" decoding="async">
+            <figcaption><b data-i18n="look.sh.c3">Your library</b><span data-i18n="look.sh.d3">Folders and photos with search, sorting and filters.</span></figcaption>
+          </figure>
+          <figure class="shot glass-card reveal">
+            <img src="assets/img/look-menu-light.webp" alt="VetroLook in the light theme with the menu open" data-i18n-attr="alt:look.sh.a4" width="1500" height="1080" loading="lazy" decoding="async">
+            <figcaption><b data-i18n="look.sh.c4">Light and dark</b><span data-i18n="look.sh.d4">Switch the theme to match your desktop.</span></figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -315,7 +346,7 @@
   <footer class="site-footer theme-red">
     <div class="wrap footer-grid">
       <div class="footer-brand"><a class="brand" href="look.html"><img src="vetrolk-icon.png?v=2" alt="" width="36" height="36"><span>VETRO<b>LOOK</b></span></a><p data-i18n="footer.look">A native image viewer and photo library for Windows.</p></div>
-      <div><h4>Vetro</h4><a href="index.html">Studio</a><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a></div>
+      <div><h4>Vetro</h4><a href="index.html">Studio</a><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a><a href="vap.html">VAP</a></div>
       <div><h4 data-i18n="footer.project">Project</h4><a href="https://github.com/Phnem/VetroLook" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://github.com/Phnem/VetroLook/releases" target="_blank" rel="noopener noreferrer">Releases</a><a href="https://github.com/Phnem/VetroLook/issues" target="_blank" rel="noopener noreferrer">Issues</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></div>
       <div><h4 data-i18n="footer.legal">Legal</h4><button type="button" class="link-btn" data-open-dialog="privacyDialog" data-i18n="footer.privacy">Privacy Policy</button><a href="https://github.com/Phnem/VetroLook/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" data-i18n="footer.license">GPL-3.0 License</a></div>
     </div>

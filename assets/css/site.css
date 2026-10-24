@@ -317,6 +317,12 @@ h1 em, h2 em, .hero-tagline em { background: linear-gradient(var(--em-bg), var(-
 .win-stage .chip-a { top: 14%; left: -1%; } .win-stage .chip-b { top: -4%; right: 8%; } .win-stage .chip-c { bottom: 8%; right: 3%; }
 .preview-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(24px, 5vw, 72px); align-items: center; }
 .preview-grid > div:first-child { display: grid; gap: 18px; }
+.shots-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
+.shot { margin: 0; padding: 10px; border-radius: 30px; display: grid; gap: 14px; }
+.shot img { display: block; width: 100%; height: auto; border-radius: 22px; }
+.shot figcaption { display: grid; gap: 4px; padding: 0 12px 10px; }
+.shot figcaption b { font: 700 1.05rem var(--font-display); }
+.shot figcaption span { color: var(--muted); font-size: .95rem; }
 .video-frame { padding: 10px; border-radius: 34px; }
 .video-frame video { display: block; width: 100%; border-radius: 24px; background: #000; }
 .statement-block { display: grid; gap: 18px; margin-bottom: clamp(32px, 5vw, 56px); max-width: 880px; }
@@ -598,6 +604,25 @@ dialog.modal::backdrop { background: rgba(12, 4, 3, .6); -webkit-backdrop-filter
 @keyframes tog-bg { 0%, 40% { background: #3b3535; } 50%, 85% { background: #e85002; } 95%, 100% { background: #3b3535; } }
 
 /* ==========================================================================
+   VAP
+   ========================================================================== */
+.shot-slot { background: radial-gradient(110% 60% at 50% 0, #3a120a, #0d0807 62%); }
+.shot-slot > img { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; object-fit: cover; display: block; }
+.slot-ph { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; color: rgba(255, 241, 214, .72); text-align: center; }
+.slot-ph::before { content: ''; width: 46%; aspect-ratio: 68 / 64; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='20 22 68 64'%3E%3Cpath fill='%23fff1d6' fill-rule='evenodd' d='M38.12,29.64 L36.17,29.82 L34.29,30.37 L32.55,31.26 L31.01,32.47 L29.72,33.94 L28.73,35.63 L28.08,37.48 L27.79,39.41 L27.87,41.37 L28.32,43.27 L29.12,45.06 L45,73.16 L46.14,74.79 L47.56,76.16 L49.22,77.24 L51.06,77.99 L53.01,78.36 L54.99,78.36 L56.94,77.99 L58.78,77.24 L60.44,76.16 L61.86,74.79 L63,73.16 L78.88,45.06 L79.68,43.27 L80.13,41.37 L80.21,39.41 L79.92,37.48 L79.27,35.63 L78.28,33.94 L76.99,32.47 L75.45,31.26 L73.71,30.37 L71.83,29.82 L69.88,29.64Z'/%3E%3Cpath fill='%23ff5a1f' fill-rule='evenodd' d='M51.3,40.29 L50.81,40.03 L50.27,39.87 L49.72,39.82 L49.17,39.88 L48.64,40.04 L48.15,40.31 L47.72,40.66 L47.37,41.09 L47.11,41.58 L46.95,42.11 L46.89,42.66 L46.89,58.58 L46.95,59.13 L47.11,59.67 L47.37,60.16 L47.72,60.59 L48.15,60.94 L48.64,61.21 L49.18,61.37 L49.73,61.42 L50.28,61.37 L50.82,61.21 L51.31,60.95 L63.34,52.95 L63.78,52.6 L64.13,52.16 L64.4,51.67 L64.56,51.13 L64.61,50.58 L64.56,50.02 L64.39,49.48 L64.13,48.99 L63.77,48.56 L63.33,48.21Z'/%3E%3C/svg%3E") center / contain no-repeat; }
+.slot-ph b { font: 600 11px var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }
+.vap-shots-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); align-items: start; }
+.vap-shot { margin: 0; display: grid; gap: 20px; container-type: inline-size; }
+.vap-shot .phone { margin-inline: auto; }
+.vap-shot figcaption { display: grid; gap: 4px; text-align: center; }
+.vap-shot figcaption b { font: 700 1.05rem var(--font-display); }
+.vap-shot figcaption span { color: var(--muted); font-size: .95rem; }
+.ai-flow { margin-bottom: clamp(24px, 4vw, 44px); }
+.vap-ai .q-node { background: rgba(255, 241, 214, .14); border-color: rgba(255, 241, 214, .32); }
+.vap-ai .q-node.is-active { background: var(--cream); color: var(--red); }
+.vap-know .trio b { font-weight: 800; color: var(--ink); }
+
+/* ==========================================================================
    Responsive
    ========================================================================== */
 @media (max-width: 1100px) {
@@ -610,6 +635,8 @@ dialog.modal::backdrop { background: rgba(12, 4, 3, .6); -webkit-backdrop-filter
   .main-nav { display: none; }
   .burger { display: block; }
   .header-actions { margin-left: auto; }
+  .shots-grid { grid-template-columns: minmax(0, 1fr); }
+  .vap-shots-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
   .bench-intro, .preview-grid, .native-grid, .dl-grid, .sync-grid, .trailer-grid, .oss-card, .quick { grid-template-columns: minmax(0, 1fr); }
   .product { grid-template-columns: minmax(0, 1fr); }
   .product-look .product-visual { order: 2; }

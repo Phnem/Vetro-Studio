@@ -235,6 +235,48 @@
     document.addEventListener('langchange', render);
   }
 
+  /* ---------- VAP: screenshot slots keep their placeholder until the image exists ---------- */
+  const dropMissing = (img) => { if (img.closest('.shot-slot')) img.remove(); };
+  document.addEventListener('error', (e) => { if (e.target instanceof HTMLImageElement) dropMissing(e.target); }, true);
+  $$('.shot-slot > img').forEach((img) => { if (img.complete && !img.naturalWidth) dropMissing(img); });
+
+  /* ---------- releases: VAP APKs ---------- */
+  const vapFoss = $('#vapFossDownload');
+  if (vapFoss) {
+    const eyebrow = $('#vapEyebrow');
+    const builds = [
+      { link: vapFoss, small: $('#vapFossVersion'), action: $('#vapFossAction'), re: /foss.*\.apk$/i, ver: ['vap.dl.foss.version', 'Main build · {tag}'], mb: ['vap.dl.foss.mb', 'Download APK ({mb} MB)'], plain: ['col.dl.apk.t', 'Download APK'] },
+      { link: $('#vapCastDownload'), small: $('#vapCastVersion'), action: $('#vapCastAction'), re: /cast.*\.apk$/i, ver: ['vap.dl.cast.version', 'With Google Cast · {tag}'], mb: ['vap.dl.cast.mb', 'Download Cast APK ({mb} MB)'], plain: ['vap.dl.cast.t', 'Cast APK'] }
+    ];
+    let rel = null;
+    const renderVap = () => {
+      if (!rel) return;
+      eyebrow.removeAttribute('data-i18n');
+      eyebrow.textContent = T('col.dl.eyebrow.v', 'Android · version {v}').replace('{v}', rel.tag.replace(/^v/i, ''));
+      builds.forEach((b, i) => {
+        [b.small, b.action].forEach((el) => el.removeAttribute('data-i18n'));
+        b.small.textContent = T(b.ver[0], b.ver[1]).replace('{tag}', rel.tag);
+        const mb = rel.mb[i];
+        b.action.textContent = mb ? T(b.mb[0], b.mb[1]).replace('{mb}', mb) : T(b.plain[0], b.plain[1]);
+      });
+    };
+    fetch('https://api.github.com/repos/Phnem/VAP/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
+      .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then((data) => {
+        const assets = Array.isArray(data.assets) ? data.assets : [];
+        const tag = data.tag_name || data.name;
+        const mb = builds.map((b) => {
+          const apk = assets.find((a) => b.re.test(a.name || ''));
+          if (!apk || !apk.browser_download_url) return '';
+          b.link.href = apk.browser_download_url; b.link.setAttribute('download', apk.name); b.link.removeAttribute('target');
+          return apk.size ? (apk.size / 1048576).toFixed(1) : '';
+        });
+        if (tag) { rel = { tag, mb }; renderVap(); }
+      })
+      .catch(() => { /* keeps the GitHub releases links */ });
+    document.addEventListener('langchange', renderVap);
+  }
+
   /* ---------- init ---------- */
   document.documentElement.classList.add('js');
   onScroll();

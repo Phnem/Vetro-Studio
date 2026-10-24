@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e1251b">
+  <title data-i18n="vap.title">VAP — the Vetro video player for Android</title>
+  <meta name="description" content="VAP (Vetro Android Player) is a free video player for Android with no ads: a local library, network sources, subtitle tools and on-device AI." data-i18n-attr="content:vap.desc">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="VAP — Vetro Android Player">
+  <meta property="og:description" content="A video library, a Media3 player, subtitle tools and on-device AI for Android.">
+  <meta property="og:image" content="https://phnem.github.io/Vetro-Studio/assets/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="vap-icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Roboto:wght@400;500;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body class="page-vap">
+  <div class="bg-field" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-pill glass">
+      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vap-icon.svg" alt="" width="36" height="36"><span>VETRO<b>VAP</b></span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="index.html">Studio</a>
+        <a href="collection.html" data-i18n="nav.collection">Collection</a>
+        <a href="look.html">VetroLook</a>
+        <a href="#features" data-i18n="vap.nav.features">Features</a>
+        <a href="#ai" data-i18n="vap.nav.ai">On-device AI</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button></div>
+        <a class="pill-cta" href="#download"><span data-i18n="vap.nav.download">Download</span> <i>↓</i></a>
+        <button class="burger" type="button" aria-expanded="false" aria-controls="mobileSheet" aria-label="Menu" data-i18n-attr="aria-label:nav.menu"><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-sheet" id="mobileSheet" aria-hidden="true">
+    <div class="mobile-sheet-panel glass">
+      <p class="sheet-tag" data-i18n="nav.navigation">Navigation</p>
+      <nav aria-label="Mobile navigation">
+        <a href="index.html"><span>01</span><b>Vetro Studio</b><i>↗</i></a>
+        <a href="collection.html"><span>02</span><b data-i18n="nav.collection">Collection</b><i>↗</i></a>
+        <a href="look.html"><span>03</span><b>VetroLook</b><i>↗</i></a>
+        <a href="#features"><span>04</span><b data-i18n="vap.nav.features">Features</b><i>↓</i></a>
+        <a href="#ai"><span>05</span><b data-i18n="vap.nav.ai">On-device AI</b><i>↓</i></a>
+        <a href="#download" class="is-accent"><span>06</span><b data-i18n="vap.nav.download">Download</b><i>↓</i></a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button></div>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="col-hero vap-hero theme-red">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><i class="pulse"></i><span data-i18n="vap.eyebrow">Video player · Android</span></p>
+          <h1 data-i18n-html="vap.h1">every video.<br><em>your player.</em></h1>
+          <p class="hero-lede" data-i18n="vap.lede">VAP — Vetro Android Player. A video library, a Media3 player, subtitle tools and on-device AI, in the familiar Vetro glass look.</p>
+          <div class="hero-actions">
+            <a class="btn btn-cream" href="#download"><span data-i18n="vap.cta.download">Download VAP</span> <b>↓</b></a>
+            <a class="btn btn-glass" href="https://github.com/Phnem/VAP" target="_blank" rel="noopener noreferrer"><span data-i18n="vap.cta.src">View source</span> <b>↗</b></a>
+          </div>
+          <ul class="facts glass" aria-label="Highlights" data-i18n-attr="aria-label:col.facts">
+            <li><b data-i18n="vap.fact.free">Free</b><span data-i18n="vap.fact1">to use</span></li>
+            <li><b>0</b><span data-i18n="vap.fact2">ads</span></li>
+            <li><b>MIT</b><span data-i18n="vap.fact3">open source license</span></li>
+          </ul>
+        </div>
+        <div class="hero-stage">
+          <div class="cluster cluster-hero" data-parallax role="img" aria-label="VAP app screens" data-i18n-attr="aria-label:vap.stage.alt">
+            <div class="phone phone-l" style="--w:36cqw"><div class="phone-screen shot-slot"><img src="assets/img/vap-library.webp" alt="" width="720" height="1560" decoding="async"><div class="slot-ph" aria-hidden="true"><b data-i18n="vap.slot.library">Library</b></div><span class="island"></span><span class="glare"></span></div></div>
+            <div class="phone phone-r" style="--w:36cqw"><div class="phone-screen shot-slot"><img src="assets/img/vap-subtitles.webp" alt="" width="720" height="1560" decoding="async"><div class="slot-ph" aria-hidden="true"><b data-i18n="vap.slot.subtitles">Subtitles</b></div><span class="island"></span><span class="glare"></span></div></div>
+            <div class="phone phone-c" style="--w:46cqw"><div class="phone-screen shot-slot"><img src="assets/img/vap-player.webp" alt="" width="720" height="1560" fetchpriority="high" decoding="async"><div class="slot-ph" aria-hidden="true"><b data-i18n="vap.slot.player">Player</b></div><span class="island"></span><span class="glare"></span></div></div>
+            <span class="float-chip chip-a">Media3</span>
+            <span class="float-chip chip-b">ASS · SSA</span>
+            <span class="float-chip chip-c" data-i18n="vap.chip.offline">Whisper offline</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span data-i18n="vap.tick.local">LOCAL</span><i>●</i><span data-i18n="vap.tick.network">NETWORK</span><i>●</i><span data-i18n="vap.tick.subs">SUBTITLES</span><i>●</i><span>WHISPER</span><i>●</i><span>DLNA</span><i>●</i><span data-i18n="vap.tick.free">FREE</span><i>●</i><span data-i18n="ticker.4">NO ADS</span><i>●</i><span data-i18n="ticker.5">OPEN SOURCE</span><i>●</i>
+        <span data-i18n="vap.tick.local">LOCAL</span><i>●</i><span data-i18n="vap.tick.network">NETWORK</span><i>●</i><span data-i18n="vap.tick.subs">SUBTITLES</span><i>●</i><span>WHISPER</span><i>●</i><span>DLNA</span><i>●</i><span data-i18n="vap.tick.free">FREE</span><i>●</i><span data-i18n="ticker.4">NO ADS</span><i>●</i><span data-i18n="ticker.5">OPEN SOURCE</span><i>●</i>
+      </div>
+    </div>
+
+    <!-- SCREENSHOTS -->
+    <section class="vap-shots theme-cream section" id="screens" aria-labelledby="vap-shots-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="vap.sh.eyebrow">Screenshots</p>
+          <h2 id="vap-shots-title" data-i18n-html="vap.sh.title">A calm player,<br>built for <em>your videos.</em></h2>
+        </div>
+        <div class="vap-shots-grid">
+          <figure class="vap-shot reveal">
+            <div class="phone" style="--w:min(86cqw,260px)"><div class="phone-screen shot-slot"><img src="assets/img/vap-library.webp" alt="VAP video library with folders and thumbnails" data-i18n-attr="alt:vap.sh.a1" width="720" height="1560" loading="lazy" decoding="async"><div class="slot-ph" aria-hidden="true"><b data-i18n="vap.slot.library">Library</b></div><span class="island"></span><span class="glare"></span></div></div>
+            <figcaption><b data-i18n="vap.sh.c1">Your library</b><span data-i18n="vap.sh.d1">Folders, thumbnails, search, sorting and filters.</span></figcaption>
+          </figure>
+          <figure class="vap-shot reveal">
+            <div class="phone" style="--w:min(86cqw,260px)"><div class="phone-screen shot-slot"><img src="assets/img/vap-player.webp" alt="VAP player with gesture controls" data-i18n-attr="alt:vap.sh.a2" width="720" height="1560" loading="lazy" decoding="async"><div class="slot-ph" aria-hidden="true"><b data-i18n="vap.slot.player">Player</b></div><span class="island"></span><span class="glare"></span></div></div>
+            <figcaption><b data-i18n="vap.sh.c2">Gestures and tracks</b><span data-i18n="vap.sh.d2">Speed, zoom, audio and subtitle tracks, picture-in-picture.</span></figcaption>
+          </figure>
+          <figure class="vap-shot reveal">
+            <div class="phone" style="--w:min(86cqw,260px)"><div class="phone-screen shot-slot"><img src="assets/img/vap-subtitles.webp" alt="VAP subtitle editor with timing offsets" data-i18n-attr="alt:vap.sh.a3" width="720" height="1560" loading="lazy" decoding="async"><div class="slot-ph" aria-hidden="true"><b data-i18n="vap.slot.subtitles">Subtitles</b></div><span class="island"></span><span class="glare"></span></div></div>
+            <figcaption><b data-i18n="vap.sh.c3">Subtitle tools</b><span data-i18n="vap.sh.d3">Styled ASS/SSA, two tracks at once, offsets and editing.</span></figcaption>
+          </figure>
+          <figure class="vap-shot reveal">
+            <div class="phone" style="--w:min(86cqw,260px)"><div class="phone-screen shot-slot"><img src="assets/img/vap-ai.webp" alt="VAP on-device Whisper subtitle generation" data-i18n-attr="alt:vap.sh.a4" width="720" height="1560" loading="lazy" decoding="async"><div class="slot-ph" aria-hidden="true"><b data-i18n="vap.slot.ai">Whisper</b></div><span class="island"></span><span class="glare"></span></div></div>
+            <figcaption><b data-i18n="vap.sh.c4">On-device AI</b><span data-i18n="vap.sh.d4">Generate and translate subtitles without leaving the app.</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features theme-ink section" id="features" aria-labelledby="vap-features-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="vap.f.eyebrow">Everything a player needs</p>
+          <h2 id="vap-features-title" data-i18n-html="vap.f.title">Built for the way<br>you <em>actually</em> watch.</h2>
+        </div>
+        <div class="bento">
+          <article class="glass-card bento-xl reveal"><span class="num">01</span><h3 data-i18n="vap.f1.t">A library that knows your folders</h3><p data-i18n="vap.f1.d">MediaStore scanning plus extra folders through the system picker. Directory trees, grid and list layouts, thumbnails, search, sorting and filters.</p></article>
+          <article class="glass-card reveal"><span class="num">02</span><h3 data-i18n="vap.f2.t">Pick up where you left off</h3><p data-i18n="vap.f2.d">Favorites, hidden folders, history, resume playback, playlists and a queue.</p></article>
+          <article class="glass-card reveal"><span class="num">03</span><h3 data-i18n="vap.f3.t">A player with gestures</h3><p data-i18n="vap.f3.d">AndroidX Media3 / ExoPlayer with gesture controls, speed, zoom and aspect ratio, track selection, background playback and picture-in-picture.</p></article>
+          <article class="glass-card reveal"><span class="num">04</span><h3 data-i18n="vap.f4.t">Subtitles, done properly</h3><p data-i18n="vap.f4.d">Embedded and external tracks, SRT and VTT, styled ASS/SSA through libass, two at once, timing offsets, text editing and export.</p></article>
+          <article class="glass-card reveal"><span class="num">05</span><h3 data-i18n="vap.f5.t">Your sources, anywhere</h3><p data-i18n="vap.f5.d">HTTP(S), HLS, DASH, SMB, WebDAV, FTP/FTPS and SFTP, plus Jellyfin, Emby, Plex and browsing DLNA sources.</p></article>
+          <article class="glass-card bento-wide reveal"><span class="num">06</span><h3 data-i18n="vap.f6.t">Audio and video tools</h3><p data-i18n="vap.f6.d">Processing settings, external audio tracks, audio synchronization, screenshots and clip export. On a TV, play over DLNA, or over Google Cast in the cast build.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ON-DEVICE AI -->
+    <section class="vap-ai theme-red section" id="ai" aria-labelledby="ai-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="vap.ai.eyebrow">On-device AI</p>
+          <h2 id="ai-title" data-i18n-html="vap.ai.title">Speech in.<br><em>Subtitles out.</em></h2>
+          <p class="section-lede" data-i18n="vap.ai.lede">Generate subtitles with Whisper, translate them between English and Russian locally, and let Smart Sync line them up. Models are downloaded once; after that it all works offline.</p>
+        </div>
+        <div class="quick-flow ai-flow reveal" role="img" aria-label="Video, Whisper, subtitles, translation, Smart Sync" data-i18n-attr="aria-label:vap.ai.flow">
+          <span class="q-node" data-i18n="vap.ai.n1">Video</span><i>→</i><span class="q-node is-active">Whisper</span><i>→</i><span class="q-node" data-i18n="vap.ai.n3">Subtitles</span><i>→</i><span class="q-node" data-i18n="vap.ai.n4">Translate</span><i>→</i><span class="q-node">Smart Sync</span>
+        </div>
+        <div class="trio">
+          <article class="glass-card reveal"><span class="num">01</span><h3>Whisper</h3><p data-i18n="vap.ai1.d">On-device subtitle generation after you download a model, with chunked processing of finite videos, caching and cancellation.</p></article>
+          <article class="glass-card reveal"><span class="num">02</span><h3 data-i18n="vap.ai2.t">Local translation</h3><p data-i18n="vap.ai2.d">EN → RU and RU → EN through CTranslate2 on your device. Optional cloud translation uses a compatible API and your own key.</p></article>
+          <article class="glass-card reveal"><span class="num">03</span><h3>Smart Sync</h3><p data-i18n="vap.ai3.d">Estimates subtitle offsets and uniform timing drift from recognized speech.</p></article>
+        </div>
+        <p class="fineprint reveal" data-i18n="vap.ai.note">Whisper and translation models are downloaded separately and are not bundled in the APK. Cloud translation sends text to the service you configure.</p>
+      </div>
+    </section>
+
+    <!-- BUILDS + LIMITS -->
+    <section class="vap-know theme-cream section" aria-labelledby="know-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="vap.k.eyebrow">Good to know</p>
+          <h2 id="know-title" data-i18n-html="vap.k.title">Two builds.<br><em>Honest limits.</em></h2>
+        </div>
+        <div class="trio">
+          <article class="glass-card reveal"><span class="num">01</span><h3 data-i18n="vap.k1.t">Pick your build</h3><p data-i18n-html="vap.k1.d"><b>foss</b> is the main build without the Google Cast SDK; it still includes DLNA. <b>cast</b> adds Google Cast. Both use the same package and replace each other.</p></article>
+          <article class="glass-card reveal"><span class="num">02</span><h3 data-i18n="vap.k2.t">Android 8.0 and newer</h3><p data-i18n="vap.k2.d">Universal APKs for arm64-v8a, armeabi-v7a, x86_64 and x86. Updating an installation signed with the same key keeps your data.</p></article>
+          <article class="glass-card reveal"><span class="num">03</span><h3 data-i18n="vap.k3.t">What it does not do</h3><p data-i18n="vap.k3.d">Codec, HDR and export support depend on your device. There is no universal transcoding for TV receivers and no live subtitle streaming. VAP provides no movies or servers.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section class="download theme-ink section" id="download" aria-labelledby="vap-download-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <p class="eyebrow" id="vapEyebrow" data-i18n="vap.dl.eyebrow">Android · latest release</p>
+          <h2 id="vap-download-title" data-i18n-html="vap.dl.title">press<br><em>play.</em></h2>
+          <p class="section-lede" data-i18n="vap.dl.lede">VAP is free, has no ads and is MIT licensed. Download a signed APK, allow installation from your browser or file manager and open it. Requires Android 8.0 or newer.</p>
+        </div>
+        <div class="download-cards">
+          <a class="dl-card dl-featured glass-card reveal" id="vapFossDownload" href="https://github.com/Phnem/VAP/releases/latest" target="_blank" rel="noopener noreferrer">
+            <img src="vap-icon.svg" alt="" width="56" height="56">
+            <div><small id="vapFossVersion" data-i18n="vap.dl.foss.small">Main build · latest release</small><strong id="vapFossAction" data-i18n="col.dl.apk.t">Download APK</strong></div>
+            <i>↓</i>
+          </a>
+          <a class="dl-card glass-card reveal" id="vapCastDownload" href="https://github.com/Phnem/VAP/releases/latest" target="_blank" rel="noopener noreferrer"><span class="dl-glyph">◈</span><div><small id="vapCastVersion" data-i18n="vap.dl.cast.small">With Google Cast</small><strong id="vapCastAction" data-i18n="vap.dl.cast.t">Cast APK</strong></div><i>↓</i></a>
+          <a class="dl-card glass-card reveal" href="https://github.com/Phnem/VAP/releases" target="_blank" rel="noopener noreferrer"><span class="dl-glyph">❖</span><div><small data-i18n="vap.dl.all.small">All versions</small><strong>GitHub Releases</strong></div><i>↗</i></a>
+        </div>
+        <p class="fineprint reveal" data-i18n="vap.disclaimer">VAP does not provide movies, servers or subscriptions to third-party services. OpenSubtitles search and cloud features need your own credentials.</p>
+        <div class="center-actions reveal">
+          <button class="btn btn-glass" type="button" data-open-dialog="privacyDialog"><span data-i18n="footer.privacy">Privacy Policy</span> <b>↗</b></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer theme-red">
+    <div class="wrap footer-grid">
+      <div class="footer-brand"><a class="brand" href="index.html"><img src="vap-icon.svg" alt="" width="36" height="36"><span>VETRO<b>VAP</b></span></a><p data-i18n="footer.vap">Vetro Android Player — your videos, subtitles and sources in one app.</p></div>
+      <div><h4>Vetro</h4><a href="index.html">Studio</a><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a><a href="vap.html">VAP</a></div>
+      <div><h4 data-i18n="footer.project">Project</h4><a href="https://github.com/Phnem/VAP" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://github.com/Phnem/VAP/releases" target="_blank" rel="noopener noreferrer">Releases</a><a href="https://github.com/Phnem/VAP/issues" target="_blank" rel="noopener noreferrer">Issues</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></div>
+      <div><h4 data-i18n="footer.legal">Legal</h4><button type="button" class="link-btn" data-open-dialog="privacyDialog" data-i18n="footer.privacy">Privacy Policy</button><a href="https://github.com/Phnem/VAP/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" data-i18n="footer.mit">MIT License</a><a href="https://github.com/Phnem/VAP/blob/main/THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener noreferrer" data-i18n="footer.third">Third-party notices</a></div>
+    </div>
+  </footer>
+
+
+  <dialog class="modal" id="privacyDialog" aria-labelledby="privacyDlgTitle">
+    <div class="modal-inner glass-card">
+      <button class="modal-close" type="button" data-close-dialog aria-label="Close" data-i18n-attr="aria-label:modal.close">×</button>
+      <p class="eyebrow" data-i18n="vap.pd.eyebrow">VAP Privacy Policy</p>
+      <h2 id="privacyDlgTitle" data-i18n-html="vap.pd.title">Your videos<br>stay <em>yours.</em></h2>
+      <p class="modal-lede" data-i18n="vap.pd.lede">VAP is a free player with no ads and no accounts. It works with the videos already on your device and the sources you add yourself.</p>
+      <ol class="modal-points">
+        <li><span>01</span><div><h3 data-i18n="vap.pd1.t">Your videos stay on your device</h3><p data-i18n="vap.pd1.d">VAP scans the folders you allow and keeps its library, history, playlists and settings on the device. None of it is uploaded to a VAP server — VAP has no servers.</p></div></li>
+        <li><span>02</span><div><h3 data-i18n="vap.pd2.t">No ads, no accounts, no analytics</h3><p data-i18n="vap.pd2.d">VAP is free to use and shows no ads. It needs no account and contains no analytics, crash-reporting or advertising SDKs.</p></div></li>
+        <li><span>03</span><div><h3 data-i18n="vap.pd3.t">Network only when you use it</h3><p data-i18n="vap.pd3.d">VAP goes online only for features you choose: playing from network sources and media servers you configure, subtitle search through OpenSubtitles with your own key, downloading Whisper and translation models, and optional cloud translation through an API you set up, which receives the subtitle text. Saved connection details and keys stay on your device.</p></div></li>
+        <li><span>04</span><div><h3 data-i18n="vap.pd4.t">Permissions</h3><p data-i18n="vap.pd4.d">VAP asks for access to videos on your device, notifications for playback and background processing, and network access. Extra folders are added through the system folder picker. The cast build also includes the Google Cast SDK, which is governed by Google’s own terms and privacy policy.</p></div></li>
+        <li><span>05</span><div><h3 data-i18n="vap.pd5.t">Website and questions</h3><p data-i18n="vap.pd5.d">This website may ask GitHub for the latest VAP release. Links to GitHub, Telegram and other services open sites with their own privacy policies. For a privacy question, contact the project through GitHub Issues or the Vetro Telegram chat.</p></div></li>
+      </ol>
+      <p class="modal-meta" data-i18n="vap.pd.updated">Last updated: October 2026. VAP is released under the MIT License.</p>
+    </div>
+  </dialog>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/screens.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

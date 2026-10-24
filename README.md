@@ -21,14 +21,27 @@
 | --- | --- | --- |
 | [Vetro Collection](https://github.com/Phnem/Vetro) | Android | A personal library for anime, movies, series, manga and audiobooks. |
 | [VetroLook](https://github.com/Phnem/VetroLook) | Windows 10/11 | A native image viewer and local photo library with Quick Look, RAW support and local indexing. |
+| [VAP](https://github.com/Phnem/VAP) | Android 8.0+ | Vetro Android Player: a standalone video player with a local library, network sources, subtitle tools and on-device AI. |
 
 ## This website
 
-A static product hub with three pages, in **English and Russian** (the language is detected from the browser and can be switched in the header; `?lang=ru` / `?lang=en` forces one).
+A static product hub with four pages, in **English and Russian** (the language is detected from the browser and can be switched in the header; `?lang=ru` / `?lang=en` forces one).
 
-- `index.html` — Vetro Studio: the entry point and route to both products.
+- `index.html` — Vetro Studio: the entry point and route to every product.
 - `collection.html` — Vetro Collection: animated phone mockups, a scroll-driven app tour, the trailer, features, sync, downloads (latest APK from GitHub Releases).
 - `look.html` — VetroLook: a 3D window mockup, preview video, supported formats, native-performance notes, animated benchmarks, privacy dialog and the MSI download.
+- `vap.html` — VAP (Vetro Android Player): phone mockups, features, on-device AI (Whisper, local translation, Smart Sync), the foss/cast builds and APK downloads (latest release from GitHub).
+
+#### VAP screenshots
+
+The phones on `index.html` and `vap.html` show a placeholder until real screenshots exist. Drop portrait images (about 720×1560, WebP) into `assets/img/` under these names and they replace the placeholders automatically, with no HTML changes:
+
+| File | Shown as |
+| --- | --- |
+| `vap-player.webp` | the centre phone in the hero, "Gestures and tracks" |
+| `vap-library.webp` | the left phone in the hero, "Your library" |
+| `vap-subtitles.webp` | the right phone in the hero, "Subtitle tools" |
+| `vap-ai.webp` | "On-device AI" |
 
 ### Design
 
@@ -41,7 +54,8 @@ A static product hub with three pages, in **English and Russian** (the language 
 ### Structure
 
 ```
-index.html · collection.html · look.html
+index.html · collection.html · look.html · vap.html
+vap-icon.svg             VAP "V-Play" mark (from the VAP repository)
 assets/css/site.css      design system, mockups, app screens, responsive rules
 assets/js/i18n.js        English (authored in HTML) + Russian dictionary, language switch
 assets/js/screens.js     generated app screens and their live behaviours
