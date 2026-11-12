@@ -64,6 +64,12 @@ assets/video/            trailer + poster
 assets/img/og-cover.jpg  social preview
 ```
 
+#### For developers and agents
+
+- [`docs/books-api.md`](docs/books-api.md) — how to use the public book catalogue API (`api.vetrostudio.bid`): search, book cards, covers, CORS, limits, ready-to-paste snippets.
+- [`docs/mascot.md`](docs/mascot.md) — the Vetro mascot ported from the Android app: files, scenes, the `VetroMascot` core (`assets/js/mascot-core.js`), embedding and the rules for changing it.
+- [`CLAUDE.md`](CLAUDE.md) — where to start for an AI agent session.
+
 To add or change a string, put the English text in the HTML with a `data-i18n="key"` (or `data-i18n-html`, `data-i18n-attr`) attribute and add the Russian translation under the same key in `assets/js/i18n.js`.
 
 ## Technology
