@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e1251b">
+  <title data-i18n="api.title">VetroBook API — a free book catalogue API</title>
+  <meta name="description" content="VetroBook API is a free, public, read-only API for a catalogue of 269,000 books and audiobooks: search, book cards and covers. No keys, CORS open." data-i18n-attr="content:api.desc">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="VetroBook API">
+  <meta property="og:description" content="Search 269,000 books and audiobooks, open cards and covers. No keys, no sign-up.">
+  <meta property="og:image" content="https://vetrostudio.bid/assets/img/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="vetro-studio-icon.png">
+  <link rel="apple-touch-icon" href="vetro-studio-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.vetrostudio.bid">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Roboto:wght@400;500;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body class="page-api">
+  <div class="bg-field" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-pill glass">
+      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>BOOK API</b></span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="index.html">Studio</a>
+        <a href="collection.html" data-i18n="nav.collection">Collection</a>
+        <a href="#try" data-i18n="api.nav.try">Try it</a>
+        <a href="#numbers" data-i18n="api.nav.numbers">Numbers</a>
+        <a href="#access" data-i18n="api.nav.access">Get access</a>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button></div>
+        <a class="pill-cta" href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer"><span data-i18n="api.nav.cta">Get the API</span> <i>↗</i></a>
+        <button class="burger" type="button" aria-expanded="false" aria-controls="mobileSheet" aria-label="Menu" data-i18n-attr="aria-label:nav.menu"><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-sheet" id="mobileSheet" aria-hidden="true">
+    <div class="mobile-sheet-panel glass">
+      <p class="sheet-tag" data-i18n="nav.navigation">Navigation</p>
+      <nav aria-label="Mobile navigation">
+        <a href="index.html"><span>01</span><b>Vetro Studio</b><i>↗</i></a>
+        <a href="collection.html"><span>02</span><b data-i18n="nav.collection">Collection</b><i>↗</i></a>
+        <a href="#try"><span>03</span><b data-i18n="api.nav.try">Try it</b><i>↓</i></a>
+        <a href="#numbers"><span>04</span><b data-i18n="api.nav.numbers">Numbers</b><i>↓</i></a>
+        <a href="#access" class="is-accent"><span>05</span><b data-i18n="api.nav.access">Get access</b><i>↓</i></a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button></div>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="col-hero modules-hero theme-red">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><i class="pulse"></i><span data-i18n="api.eyebrow">Public API · read-only · no keys</span></p>
+          <h1 data-i18n-html="api.h1">every book.<br><em>one request.</em></h1>
+          <p class="hero-lede" data-i18n="api.lede">A free catalogue of books and audiobooks: search, book cards and covers. The same API that powers audiobook search in Vetro Collection. No keys, no sign-up, CORS open.</p>
+          <div class="hero-actions">
+            <a class="btn btn-cream" href="#try"><span data-i18n="api.cta.try">Try the search</span> <b>↓</b></a>
+            <a class="btn btn-glass" href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer"><span data-i18n="api.nav.cta">Get the API</span> <b>↗</b></a>
+          </div>
+          <ul class="facts glass" aria-label="Highlights" data-i18n-attr="aria-label:col.facts">
+            <li><b data-count="269270">269,270</b><span data-i18n="api.fact1">works</span></li>
+            <li><b>0</b><span data-i18n="api.fact2">keys needed</span></li>
+            <li><b>120</b><span data-i18n="api.fact3">requests a minute</span></li>
+          </ul>
+        </div>
+        <div class="hero-stage">
+          <div class="mod-stage">
+            <div class="mascot-card" data-mascot="hello" data-mascot-theme="light"></div>
+            <span class="float-chip chip-a">GET /v1/search</span>
+            <span class="float-chip chip-b">AVIF</span>
+            <span class="float-chip chip-c">CORS *</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">BOOK CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.nokeys">NO KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
+        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">BOOK CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.nokeys">NO KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
+      </div>
+    </div>
+
+    <!-- TRY IT -->
+    <section class="api-try theme-cream section" id="try" aria-labelledby="api-try-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="api.try.eyebrow">Live demo</p>
+          <h2 id="api-try-title" data-i18n-html="api.try.title">Search the<br><em>catalogue.</em></h2>
+          <p class="section-lede" data-i18n="api.try.lede">Type a title or an author. The results come straight from the API, right in your browser. Tap a book to open its card.</p>
+        </div>
+        <div class="api-search glass-card reveal">
+          <form class="search-box" id="searchForm" role="search" autocomplete="off">
+            <label class="api-sr" for="q" data-i18n="api.q.label">Book title or author</label>
+            <input id="q" name="q" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="A title or an author…" data-i18n-attr="placeholder:api.q.ph">
+            <button class="btn btn-ink" type="submit"><span data-i18n="api.q.go">Search</span> <b>↗</b></button>
+          </form>
+          <div class="try-examples">
+            <span data-i18n="api.q.try">Try:</span>
+            <button type="button" class="chip-ex" data-q="Оруэлл">Оруэлл</button>
+            <button type="button" class="chip-ex" data-q="Dune">Dune</button>
+            <button type="button" class="chip-ex" data-q="Мастер и Маргарита">Мастер и Маргарита</button>
+            <button type="button" class="chip-ex" data-q="Harry Potter">Harry Potter</button>
+            <button type="button" class="chip-ex" data-q="Достоевский">Достоевский</button>
+          </div>
+          <p class="search-status" id="searchStatus" role="status" aria-live="polite"></p>
+          <div class="book-grid" id="results"></div>
+          <div class="search-state" id="searchState" hidden></div>
+        </div>
+        <p class="fineprint reveal" data-i18n="api.try.note">Words in your query are matched as prefixes. The server does not fix typos, so if nothing turns up, try another spelling.</p>
+      </div>
+    </section>
+
+    <!-- NUMBERS -->
+    <section class="api-numbers theme-ink section" id="numbers" aria-labelledby="api-num-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow" data-i18n="api.n.eyebrow">By the numbers</p>
+          <h2 id="api-num-title" data-i18n-html="api.n.title">Big catalogue.<br><em>Fast answers.</em></h2>
+          <p class="section-lede" data-i18n="api.n.lede">Counted from the data loaded into the cloud, and measured on the live service.</p>
+        </div>
+
+        <h3 class="num-group reveal"><span>01</span><b data-i18n="api.g1">Catalogue volume</b></h3>
+        <div class="kpis">
+          <div class="kpi glass-card reveal"><b data-count="269270">269,270</b><span data-i18n="api.k1">works in the API</span></div>
+          <div class="kpi glass-card reveal"><b data-count="95187">95,187</b><span data-i18n="api.k2">works with a cover</span></div>
+          <div class="kpi glass-card reveal"><b><span data-dec="8.1">8.1</span> <small data-i18n="unit.gb">GB</small></b><span data-i18n="api.k3">of covers, 2 sizes, 190,376 files</span></div>
+          <div class="kpi glass-card reveal"><b data-count="218794">218,794</b><span data-i18n="api.k4">works with a year</span></div>
+        </div>
+
+        <div class="chart-pair">
+          <article class="bm glass-card reveal" data-chart>
+            <header><div><p class="kicker" data-i18n="api.names.k">Titles</p><h3 data-i18n="api.names.t">Russian and English names</h3></div></header>
+            <div class="donut-wrap">
+              <svg class="donut" viewBox="0 0 140 140" role="img" aria-label="32.9% of works have both a Russian and an English title, 67.1% only a Russian one" data-i18n-attr="aria-label:api.names.aria">
+                <circle class="donut-bg" cx="70" cy="70" r="54"/>
+                <circle class="donut-ru" cx="70" cy="70" r="54" pathLength="100" stroke-dasharray="100 100"/>
+                <circle class="donut-both" cx="70" cy="70" r="54" pathLength="100" stroke-dasharray="32.9 100"/>
+                <text x="70" y="66" text-anchor="middle" class="donut-n">33%</text>
+                <text x="70" y="84" text-anchor="middle" class="donut-s" data-i18n="api.names.bi">bilingual</text>
+              </svg>
+              <ul class="donut-legend">
+                <li><i class="dl-both"></i><div><b><span data-n="88575">88,575</span></b><span data-i18n="api.names.l1">Russian and English title</span><small data-i18n-html="api.names.l1s">core of verified pairs: <span data-n="70280">70,280</span></small></div></li>
+                <li><i class="dl-ru"></i><div><b><span data-n="180695">180,695</span></b><span data-i18n="api.names.l2">Russian title only</span></div></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="bm glass-card reveal" data-chart>
+            <header><div><p class="kicker" data-i18n="api.cov.k">Coverage</p><h3 data-i18n="api.cov.t">What each work comes with</h3></div><span class="stat" data-i18n="api.cov.s">share of 269,270</span></header>
+            <div class="bars api-bars" role="img" aria-label="Share of works with a year, cover, translations, series, description, editions, genres and rating" data-i18n-attr="aria-label:api.cov.aria">
+              <div class="row"><span data-i18n="api.c.year">Year</span><div class="track"><i style="--bar:81.3"></i></div><b><span data-n="218794">218,794</span> <small data-pct="81.3">81.3%</small></b></div>
+              <div class="row is-vetro"><span data-i18n="api.c.cover">Cover</span><div class="track"><i style="--bar:35.3"></i></div><b><span data-n="95187">95,187</span> <small data-pct="35.3">35.3%</small></b></div>
+              <div class="row"><span data-i18n="api.c.tr">Translations</span><div class="track"><i style="--bar:26.9"></i></div><b><span data-n="72337">72,337</span> <small data-pct="26.9">26.9%</small></b></div>
+              <div class="row"><span data-i18n="api.c.series">Series</span><div class="track"><i style="--bar:21"></i></div><b><span data-n="56604">56,604</span> <small data-pct="21.0">21.0%</small></b></div>
+              <div class="row"><span data-i18n="api.c.desc">Description</span><div class="track"><i style="--bar:5.8"></i></div><b><span data-n="15634">15,634</span> <small data-pct="5.8">5.8%</small></b></div>
+              <div class="row"><span data-i18n="api.c.ed">Editions</span><div class="track"><i style="--bar:5"></i></div><b><span data-n="13395">13,395</span> <small data-pct="5.0">5.0%</small></b></div>
+              <div class="row"><span data-i18n="api.c.gen">Genres</span><div class="track"><i style="--bar:4.9"></i></div><b><span data-n="13272">13,272</span> <small data-pct="4.9">4.9%</small></b></div>
+              <div class="row"><span data-i18n="api.c.rate">Reader rating</span><div class="track"><i style="--bar:4.4"></i></div><b><span data-n="11921">11,921</span> <small data-pct="4.4">4.4%</small></b></div>
+            </div>
+          </article>
+        </div>
+
+        <article class="bm glass-card years reveal" data-chart>
+          <header><div><p class="kicker" data-i18n="api.y.k">Years</p><h3 data-i18n="api.y.t">From −1600 to 2027</h3></div><span class="stat" data-i18n-html="api.y.s"><b>99.0%</b> in 1800–2026</span></header>
+          <div class="year-axis" role="img" aria-label="Years range from −1600 to 2027; 216,642 of 218,794 works fall in 1800–2026" data-i18n-attr="aria-label:api.y.aria">
+            <div class="year-rail"><i class="year-hot"></i></div>
+            <span class="yt" style="left:0">−1600</span><span class="yt" style="left:44.1%">0</span><span class="yt yt-hot" style="left:93.7%">1800</span><span class="yt" style="left:100%">2027</span>
+          </div>
+          <p class="desc" data-i18n-html="api.y.d"><span data-n="216642">216,642</span> of <span data-n="218794">218,794</span> dated works are from 1800 to 2026.</p>
+        </article>
+
+        <h3 class="num-group reveal"><span>02</span><b data-i18n="api.g2">Speed</b></h3>
+        <div class="kpis kpis-3">
+          <div class="kpi glass-card reveal"><b>31 <small data-i18n="unit.ms">ms</small></b><span data-i18n="api.s1">repeat search, median (edge cache)</span></div>
+          <div class="kpi glass-card reveal"><b>224 <small data-i18n="unit.ms">ms</small></b><span data-i18n="api.s2">new search, median (D1, FTS5)</span></div>
+          <div class="kpi glass-card reveal"><b>28 <small data-i18n="unit.ms">ms</small></b><span data-i18n="api.s3">repeat cover, median</span></div>
+        </div>
+        <article class="bm glass-card reveal" data-chart>
+          <header><div><p class="kicker" data-i18n="api.lat.k">Latency</p><h3 data-i18n="api.lat.t">Median and p95 by request</h3></div>
+            <div class="legend"><span><i class="lg-vetro"></i> <span data-i18n="api.lat.med">Median</span></span><span><i></i> p95</span><strong data-i18n="look.bm.less">↓ less is better</strong></div></header>
+          <div class="lat" role="img" aria-label="Median and 95th percentile latency for search, card, batch, cover, health and TLS requests" data-i18n-attr="aria-label:api.lat.aria">
+            <div class="lat-row" data-med="224" data-p95="503"><span data-i18n="api.l1">Search, new query</span><div class="lat-tracks"><div class="track is-med"><i></i></div><div class="track"><i></i></div></div><b>224 <em>/ 503</em> <small data-i18n="unit.ms">ms</small></b></div>
+            <div class="lat-row" data-med="31" data-p95="54"><span data-i18n="api.l2">Search, repeat</span><div class="lat-tracks"><div class="track is-med"><i></i></div><div class="track"><i></i></div></div><b>31 <em>/ 54</em> <small data-i18n="unit.ms">ms</small></b></div>
+            <div class="lat-row" data-med="110" data-p95="131"><span data-i18n="api.l3">Book card, new</span><div class="lat-tracks"><div class="track is-med"><i></i></div><div class="track"><i></i></div></div><b>110 <em>/ 131</em> <small data-i18n="unit.ms">ms</small></b></div>
+            <div class="lat-row" data-med="33" data-p95="50"><span data-i18n="api.l4">Book card, repeat</span><div class="lat-tracks"><div class="track is-med"><i></i></div><div class="track"><i></i></div></div><b>33 <em>/ 50</em> <small data-i18n="unit.ms">ms</small></b></div>
+            <div class="lat-row" data-med="108" data-p95="115"><span data-i18n="api.l5">40 books in one request</span><div class="lat-tracks"><div class="track is-med"><i></i></div><div class="track"><i></i></div></div><b>108 <em>/ 115</em> <small data-i18n="unit.ms">ms</small></b></div>
+            <div class="lat-row" data-med="319" data-p95="508"><span data-i18n="api.l6">Cover, first (from R2)</span><div class="lat-tracks"><div class="track is-med"><i></i></div><div class="track"><i></i></div></div><b>319 <em>/ 508</em> <small data-i18n="unit.ms">ms</small></b></div>
+            <div class="lat-row" data-med="28" data-p95="39"><span data-i18n="api.l7">Cover, repeat</span><div class="lat-tracks"><div class="track is-med"><i></i></div><div class="track"><i></i></div></div><b>28 <em>/ 39</em> <small data-i18n="unit.ms">ms</small></b></div>
+            <div class="lat-row" data-med="21" data-p95="50"><span data-i18n="api.l8">Health check</span><div class="lat-tracks"><div class="track is-med"><i></i></div><div class="track"><i></i></div></div><b>21 <em>/ 50</em> <small data-i18n="unit.ms">ms</small></b></div>
+            <div class="lat-row" data-med="34" data-p95="145"><span data-i18n="api.l9">New TLS connection</span><div class="lat-tracks"><div class="track is-med"><i></i></div><div class="track"><i></i></div></div><b>34 <em>/ 145</em> <small data-i18n="unit.ms">ms</small></b></div>
+          </div>
+          <footer data-i18n="api.lat.f">Measured from a PC in Israel against the Cloudflare TLV node. Samples of 20–40 requests, a single region: your numbers will differ.</footer>
+        </article>
+
+        <h3 class="num-group reveal"><span>03</span><b data-i18n="api.g3">Limits and infrastructure</b></h3>
+        <div class="limits">
+          <div class="limit glass-card reveal"><b>120<small data-i18n="api.u.min">/min</small></b><p data-i18n="api.li1">requests per client for search and cards. Covers, the index and health are not counted.</p></div>
+          <div class="limit glass-card reveal"><b>50 · 40</b><p data-i18n="api.li2">up to 50 results per search and up to 40 books in one batch request.</p></div>
+          <div class="limit glass-card reveal"><b>3 <small data-i18n="api.u.days">days</small></b><p data-i18n="api.li3">the app asks for the update manifest at most once in three days.</p></div>
+          <div class="limit glass-card reveal"><b>~19 <small data-i18n="api.u.s">s</small></b><p data-i18n="api.li4">to swap data tables between releases, with no downtime. v1 shipped on 12 Nov, v2 on 13 Nov.</p></div>
+          <div class="limit glass-card reveal"><b>10M</b><p data-i18n="api.li5">requests and 30M CPU-ms a month: the Workers Paid plan quota.</p></div>
+          <div class="limit glass-card reveal"><b>0</b><p data-i18n="api.li6">keys, accounts or stored data about the caller. Read-only, with open CORS.</p></div>
+        </div>
+
+        <article class="bm glass-card reveal" data-chart>
+          <header><div><p class="kicker" data-i18n="api.cache.k">Cache</p><h3 data-i18n="api.cache.t">How long answers stay fresh</h3></div><span class="stat" data-i18n="api.cache.s">log scale</span></header>
+          <div class="bars api-bars" role="img" aria-label="Cache lifetimes: search 10 minutes, card 24 hours, cover and index 1 year" data-i18n-attr="aria-label:api.cache.aria">
+            <div class="row"><span data-i18n="api.ca1">Search</span><div class="track"><i style="--bar:37"></i></div><b data-i18n="api.ca1v">10 min</b></div>
+            <div class="row"><span data-i18n="api.ca2">Book card</span><div class="track"><i style="--bar:66"></i></div><b data-i18n="api.ca2v">24 h</b></div>
+            <div class="row is-vetro"><span data-i18n="api.ca3">Cover, index</span><div class="track"><i style="--bar:100"></i></div><b data-i18n="api.ca3v">1 year</b></div>
+          </div>
+          <footer data-i18n="api.cache.f">Covers and the index carry a version in the link, so a new version is a new address and the old copy never goes stale.</footer>
+        </article>
+
+        <div class="infra reveal">
+          <p class="kicker" data-i18n="api.infra.k">Infrastructure</p>
+          <div class="quick-flow" role="img" aria-label="Your page, Cloudflare edge cache, Worker, D1 database 306 MB and R2 storage 8.1 GB" data-i18n-attr="aria-label:api.infra.aria">
+            <span class="q-node" data-i18n="api.f1">Your page</span><i>→</i><span class="q-node" data-i18n="api.f2">Edge cache</span><i>→</i><span class="q-node is-active">Workers</span><i>→</i><span class="q-node">D1 · 306 <span data-i18n="unit.mb">MB</span></span><i>+</i><span class="q-node">R2 · <span data-dec="8.1">8.1</span> <span data-i18n="unit.gb">GB</span></span>
+          </div>
+          <p class="fineprint" data-i18n="api.infra.d">Cloudflare Workers, a D1 database (search and cards) and R2 storage (covers) behind api.vetrostudio.bid.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACCESS -->
+    <section class="api-access theme-red section" id="access" aria-labelledby="api-access-title">
+      <div class="section-blobs" aria-hidden="true"><i></i><i></i></div>
+      <div class="wrap">
+        <div class="section-head center reveal">
+          <p class="eyebrow" data-i18n="api.a.eyebrow">Build with it</p>
+          <h2 id="api-access-title" data-i18n-html="api.a.title">get the<br><em>API.</em></h2>
+          <p class="section-lede" data-i18n="api.a.lede">Open the Telegram bot to get the API. It is read-only and public, so you can call it straight from a page or an app.</p>
+          <a class="btn btn-cream btn-lg" href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer"><span>@VetroBook_API_bot</span> <b>↗</b></a>
+        </div>
+        <div class="api-code glass-card reveal">
+          <p class="kicker" data-i18n="api.a.quick">Quick start</p>
+          <pre><code><b>GET</b> https://api.vetrostudio.bid/v1/search?q=orwell&amp;limit=5
+<b>GET</b> https://api.vetrostudio.bid/v1/books/000000771
+<b>GET</b> https://api.vetrostudio.bid/v1/books?ids=000000771,000032099
+<b>GET</b> https://api.vetrostudio.bid/covers/small/000000771.avif?v=7013464</code></pre>
+        </div>
+        <p class="fineprint reveal"><span data-i18n="api.a.col">Vetro Collection uses this API natively as its source for audiobooks.</span> <a class="inline-link" href="collection.html" data-i18n="api.a.collink">Open Vetro Collection ↗</a></p>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="modal book-dialog" id="bookDialog" aria-labelledby="bookTitle">
+    <div class="modal-inner glass-card">
+      <button class="modal-close" type="button" data-close-dialog aria-label="Close" data-i18n-attr="aria-label:modal.close">×</button>
+      <div class="book-view">
+        <div class="book-cover-lg" id="bookCover"></div>
+        <div class="book-info">
+          <p class="eyebrow" id="bookKind"></p>
+          <h2 id="bookTitle"></h2>
+          <p class="book-by" id="bookBy"></p>
+          <ul class="chips" id="bookChips"></ul>
+          <div class="book-secs" id="bookSecs"></div>
+          <p class="book-loading" id="bookLoading" hidden data-i18n="api.d.loading">Loading the card…</p>
+          <div class="book-links" id="bookLinks"></div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <footer class="site-footer theme-red">
+    <div class="wrap footer-grid">
+      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>BOOK API</b></span></a><p data-i18n="footer.api">A free public API for a catalogue of books and audiobooks.</p></div>
+      <div><h4>Vetro</h4><a href="index.html">Studio</a><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a><a href="vap.html">VAP</a><a href="modules.html">Modules</a><a href="api.html">API</a></div>
+      <div><h4 data-i18n="footer.project">Project</h4><a href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer">@VetroBook_API_bot</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/screens.js"></script>
+  <script src="assets/js/mascot-core.js"></script>
+  <script src="assets/js/mascot.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/api.js"></script>
+</body>
+</html>

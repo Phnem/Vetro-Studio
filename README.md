@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://phnem.github.io/Vetro-Studio/"><img src="https://img.shields.io/badge/Website-Live-E1251B?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live website" /></a>
+  <a href="https://vetrostudio.bid/"><img src="https://img.shields.io/badge/Website-Live-E1251B?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live website" /></a>
   <a href="https://github.com/Phnem/Vetro-Studio"><img src="https://img.shields.io/badge/Source-Vetro%20Studio-181717?style=for-the-badge&logo=github&logoColor=white" alt="Vetro Studio source" /></a>
   <a href="https://t.me/Vetro_chat"><img src="https://img.shields.io/badge/Telegram-Vetro__chat-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Vetro Telegram chat" /></a>
   <a href="https://ko-fi.com/phnem"><img src="https://img.shields.io/badge/Support-Ko--fi-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white" alt="Support on Ko-fi" /></a>
@@ -25,7 +25,7 @@
 
 ## This website
 
-A static product hub with five pages, in **English and Russian** (the language is detected from the browser and can be switched in the header; `?lang=ru` / `?lang=en` forces one).
+A static product hub with six pages, in **English and Russian** (the language is detected from the browser and can be switched in the header; `?lang=ru` / `?lang=en` forces one).
 
 - `index.html` — Vetro Studio: the entry point and route to every product.
 - `collection.html` — Vetro Collection: animated phone mockups, a scroll-driven app tour, the trailer, features, sync, downloads (latest APK from GitHub Releases).
@@ -33,6 +33,8 @@ A static product hub with five pages, in **English and Russian** (the language i
 - `vap.html` — VAP (Vetro Android Player): phone mockups, features, on-device AI (Whisper, local translation, Smart Sync), the foss/cast builds and APK downloads (latest release from GitHub).
 
 - `modules.html` — Vetro Modules: Compose recipes from the app (frosted glass, motion springs, chunked downloader) with the real screen recordings (`assets/video/modules/`, re-encoded from the [Vetro-Modules](https://github.com/Phnem/Vetro-Modules) repository), the download benchmark and the latest release archives (read from GitHub Releases).
+
+- `api.html` — VetroBook API: a live book search against `api.vetrostudio.bid` (a card with cover, authors, translations and editions opens on click), charts of the catalogue volume, speed, limits and cache, the Telegram bot link (`@VetroBook_API_bot`) and a quick start. Logic is in `assets/js/api.js`; the contract is in [`docs/books-api.md`](docs/books-api.md). Vetro Collection links here from its download section.
 
 The Vetro mascot (ported from the app, see [`docs/mascot.md`](docs/mascot.md)) lives on every page as a `.mascot-card` panel mounted by `assets/js/mascot.js`.
 
@@ -58,7 +60,7 @@ The phones on `index.html` and `vap.html` show a placeholder until real screensh
 ### Structure
 
 ```
-index.html · collection.html · look.html · vap.html · modules.html
+index.html · collection.html · look.html · vap.html · modules.html · api.html
 vap-icon.svg             VAP "V-Play" mark (from the VAP repository)
 assets/css/site.css      design system, mockups, app screens, responsive rules
 assets/js/i18n.js        English (authored in HTML) + Russian dictionary, language switch

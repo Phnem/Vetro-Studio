@@ -39,5 +39,6 @@
     }, { rootMargin: '80px' }).observe(el);
   };
 
+  window.VetroMascotMount = (el, i = 0) => mount(el, i);   // for panels created after load (empty/error states)
   nodes.forEach(mount);
 })();
