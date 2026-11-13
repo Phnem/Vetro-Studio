@@ -277,6 +277,56 @@
     document.addEventListener('langchange', renderVap);
   }
 
+  /* ---------- Vetro Modules: looping demo videos, play only while on screen ---------- */
+  const loopVideos = $$('video[data-loop]');
+  if (loopVideos.length) {
+    const play = (v) => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      loopVideos.forEach((v) => { v.controls = true; });
+    } else {
+      const vio = new IntersectionObserver((entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.preload = 'auto'; play(e.target); } else e.target.pause();
+      }), { threshold: 0.3 });
+      loopVideos.forEach((v) => {
+        vio.observe(v);
+        v.addEventListener('click', () => { if (v.paused) play(v); else v.pause(); });
+      });
+    }
+  }
+
+  /* ---------- releases: Vetro Modules archives ---------- */
+  const modZips = $$('[data-module-zip]');
+  if (modZips.length) {
+    const eyebrow = $('#modEyebrow');
+    const rows = modZips.map((link) => ({ link, small: $('small', link), re: new RegExp(`^${link.dataset.moduleZip}\\.zip$`, 'i') }));
+    let rel = null;
+    const renderMods = () => {
+      if (!rel) return;
+      eyebrow.removeAttribute('data-i18n');
+      eyebrow.textContent = T('mod.dl.version', 'GitHub Releases · {tag}').replace('{tag}', rel.tag);
+      rows.forEach((r, i) => {
+        r.small.removeAttribute('data-i18n');
+        const kb = rel.kb[i];
+        r.small.textContent = `${rel.tag}${kb ? ` · ${kb} ${T('unit.kb', 'KB')}` : ''}`;
+      });
+    };
+    fetch('https://api.github.com/repos/Phnem/Vetro-Modules/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
+      .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then((data) => {
+        const assets = Array.isArray(data.assets) ? data.assets : [];
+        const tag = data.tag_name || data.name;
+        const kb = rows.map((r) => {
+          const zip = assets.find((a) => r.re.test(a.name || ''));
+          if (!zip || !zip.browser_download_url) return '';
+          r.link.href = zip.browser_download_url; r.link.setAttribute('download', zip.name); r.link.removeAttribute('target');
+          return zip.size ? Math.max(1, Math.round(zip.size / 1024)) : '';
+        });
+        if (tag) { rel = { tag, kb }; renderMods(); }
+      })
+      .catch(() => { /* keeps the GitHub releases links */ });
+    document.addEventListener('langchange', renderMods);
+  }
+
   /* ---------- init ---------- */
   document.documentElement.classList.add('js');
   onScroll();

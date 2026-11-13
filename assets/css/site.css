@@ -623,6 +623,75 @@ dialog.modal::backdrop { background: rgba(12, 4, 3, .6); -webkit-backdrop-filter
 .vap-know .trio b { font-weight: 800; color: var(--ink); }
 
 /* ==========================================================================
+   Mascot panels — the app's character (docs/mascot.md). The panel carries the
+   character's own backdrop (light or near-black), so it reads on red, cream and ink alike.
+   ========================================================================== */
+.mascot-card { --mw: 300px; position: relative; isolation: isolate; flex: none; width: min(100%, var(--mw)); aspect-ratio: 1; overflow: hidden; border-radius: 30px; background: linear-gradient(180deg, #FFD8CB 0%, #FBEDE6 30%, #F9F9F9 62%, #F9F9F9 100%); border: 1px solid rgba(255, 255, 255, .55); box-shadow: 0 34px 60px -30px rgba(40, 0, 0, .65), inset 0 1px 0 rgba(255, 255, 255, .7); }
+.mascot-card[data-mascot-theme='dark'] { background: linear-gradient(180deg, #430B05 0%, #210907 24%, #000 58%, #000 100%); border-color: rgba(255, 176, 103, .24); box-shadow: 0 34px 60px -30px rgba(0, 0, 0, .7), inset 0 1px 0 rgba(255, 176, 103, .18); }
+.mascot-card::after { content: ''; position: absolute; inset: 0; z-index: 1; background: var(--noise); opacity: .07; mix-blend-mode: soft-light; pointer-events: none; }
+.mascot-card svg { display: block; width: 100%; height: auto; }
+.hero-lower .mascot-card { --mw: 230px; }
+.oss-side { display: grid; gap: 24px; justify-items: start; }
+.oss-side .mascot-card { --mw: 260px; }
+.dl-grid .mascot-card { --mw: 240px; margin-top: 12px; }
+.head-mascot { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(24px, 5vw, 72px); align-items: center; margin-bottom: clamp(32px, 5vw, 64px); }
+.head-mascot .section-head { margin-bottom: 0; }
+.head-mascot .mascot-card { --mw: 280px; transform: rotate(3deg); }
+@media (max-width: 899px) {
+  .hero-lower { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 720px) {
+  .head-mascot { grid-template-columns: minmax(0, 1fr); }
+  .head-mascot .mascot-card { --mw: 240px; }
+}
+
+/* ==========================================================================
+   Vetro Modules page
+   ========================================================================== */
+.mod-stage { position: relative; container-type: inline-size; width: 100%; max-width: 520px; margin-inline: auto; display: grid; place-items: center; padding-block: 8%; }
+.mod-stage .mascot-card { --mw: min(100%, 400px); transform: rotate(-3deg); }
+.mod-stage .float-chip { background: rgba(21, 13, 11, .62); border-color: rgba(255, 241, 214, .3); }
+.mod-stage .chip-a { top: 4%; left: 0; } .mod-stage .chip-b { top: 34%; right: -2%; } .mod-stage .chip-c { bottom: 6%; left: 6%; }
+.mod-split { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(28px, 5vw, 80px); align-items: center; }
+.mod-split.is-flip .mod-media { order: -1; }
+.mod-copy { display: grid; gap: 18px; justify-items: start; min-width: 0; }
+.mod-no { display: inline-grid; place-items: center; min-width: 30px; height: 24px; padding-inline: 8px; border-radius: 99px; background: var(--em-bg); color: var(--em-fg); letter-spacing: .04em; }
+.mod-sub { font: 700 13px/1.3 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+.mod-note { color: var(--muted); font-size: 14px; max-width: 62ch; }
+.mod-media { margin: 0; display: grid; gap: 14px; padding: clamp(12px, 1.6vw, 20px); border-radius: 30px; }
+.mod-media video { display: block; width: 100%; height: auto; border-radius: 20px; background: #0b0807; }
+.product-modules .mod-media { max-width: 380px; margin-inline: auto; }
+.product-modules .mod-media img { display: block; width: 100%; height: auto; border-radius: 20px; }
+.product-modules .float-chip.chip-a { top: 8%; left: -2%; } .product-modules .float-chip.chip-b { bottom: 10%; right: -2%; }
+.mod-media figcaption { padding-inline: 8px 8px; color: var(--muted); font: 600 12px/1.4 var(--font-mono); letter-spacing: .04em; }
+.mod-glass .mod-media, .mod-motion .mod-media { max-width: 520px; margin-inline: auto; width: 100%; }
+.layer-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; }
+.layer-list li { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 16px; background: rgba(255, 241, 214, .07); border: 1px solid rgba(255, 241, 214, .16); }
+.layer-list span { font: 700 11px var(--font-mono); letter-spacing: .08em; color: var(--orange); }
+.layer-list b { font-weight: 700; font-size: 15px; line-height: 1.3; }
+.mod-points { display: grid; gap: 10px; width: 100%; }
+.mod-points li { display: grid; gap: 4px; padding: 16px 18px; border-radius: 20px; background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .26); }
+.mod-points b { font-weight: 800; }
+.mod-points span { color: var(--muted); font-size: 15px; }
+.mod-chunk .mod-split { margin-bottom: clamp(32px, 5vw, 56px); }
+.mod-chunk .chips li { background: rgba(255, 255, 255, .7); }
+.mod-chunk .track { background: rgba(21, 13, 11, .1); }
+.mod-chunk .track i { background: rgba(21, 13, 11, .34); }
+.mod-chunk .row.is-vetro > span, .mod-chunk .row.is-vetro b { color: var(--red); }
+.mod-chunk .bm footer { color: var(--muted); border-top-color: rgba(21, 13, 11, .14); }
+.mod-chunk .bm footer b { color: var(--ink); }
+.mod-chunk .stat, .mod-chunk .stat b { color: var(--red); }
+.mod-media video[data-loop]:not(.is-playing) { cursor: pointer; }
+@media (max-width: 1024px) {
+  .mod-split { grid-template-columns: minmax(0, 1fr); }
+  .mod-split.is-flip .mod-media { order: 0; }
+}
+@media (max-width: 720px) {
+  .layer-list { grid-template-columns: minmax(0, 1fr); }
+  .mod-stage { max-width: 400px; }
+}
+
+/* ==========================================================================
    Responsive
    ========================================================================== */
 @media (max-width: 1100px) {
@@ -639,7 +708,7 @@ dialog.modal::backdrop { background: rgba(12, 4, 3, .6); -webkit-backdrop-filter
   .vap-shots-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
   .bench-intro, .preview-grid, .native-grid, .dl-grid, .sync-grid, .trailer-grid, .oss-card, .quick { grid-template-columns: minmax(0, 1fr); }
   .product { grid-template-columns: minmax(0, 1fr); }
-  .product-look .product-visual { order: 2; }
+  .product-look .product-visual, .product-modules .product-visual { order: 2; }
   .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .download-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .download-cards .dl-featured { grid-column: 1 / -1; }
   .trailer-phone { order: -1; }
