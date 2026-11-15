@@ -38,10 +38,92 @@
   const author = (b) => (lang() === 'ru' ? b.ra || b.ea : b.ea || b.ra) || '';
   const initial = (s) => (String(s).trim().match(/[\p{L}\p{N}]/u) || ['V'])[0].toUpperCase();
 
+  /* ---------- query cleaning, typo correction, ranking ----------
+     The server already normalises and transliterates the query and runs AND, then OR when little is found (docs/books-api.md).
+     The page adds the rest: it cleans the query the same way, fixes typos against a vocabulary built from the answers it has
+     seen (the server does not), and re-ranks the results by how well titles and authors match. */
+  const SPECIAL = { 'ß': 'ss', 'æ': 'ae', 'œ': 'oe', 'ø': 'o', 'đ': 'd', 'ł': 'l', 'ð': 'd', 'þ': 'th', 'ı': 'i', 'ħ': 'h' };
+  const norm = (s) => String(s == null ? '' : s).toLowerCase()
+    .replace(/й/g, '\u0001')                                  // й stays a letter of its own (война ≠ воина)
+    .normalize('NFKD').replace(/[̀-ͯ]/g, '')        // diacritics off: é→e, ё→е
+    .replace(/[ßæœøđłðþıħ]/g, (c) => SPECIAL[c])
+    .replace(/\u0001/g, 'й')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ').trim();                 // anything that is not a letter or digit is one space
+  const TR = { а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ж: 'zh', з: 'z', и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'kh', ц: 'ts', ч: 'ch', ш: 'sh', щ: 'shch', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya' };
+  const translit = (s) => s.replace(/[а-я]/g, (c) => TR[c]);
+  const words = (s) => { const n = norm(s); return n ? n.split(' ') : []; };
+  const prep = (raw) => words(raw).slice(0, 8).map((w) => w.slice(0, 40));
+
+  // Damerau–Levenshtein distance (insert, delete, replace, swap of neighbours); gives up above `max`
+  function dl(a, b, max) {
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    const d = [];
+    for (let i = 0; i <= a.length; i += 1) d[i] = [i];
+    for (let j = 1; j <= b.length; j += 1) d[0][j] = j;
+    for (let i = 1; i <= a.length; i += 1) {
+      for (let j = 1; j <= b.length; j += 1) {
+        d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+      }
+    }
+    return d[a.length][b.length];
+  }
+
+  const vocab = new Map();                                    // word (and its transliteration) → number of books it was seen in
+  function learn(list) {
+    if (vocab.size > 60000) vocab.clear();
+    list.forEach((b) => {
+      const seen = new Set();
+      [b.ru, b.en, b.ra, b.ea].forEach((t) => words(t).forEach((w) => { seen.add(w); seen.add(translit(w)); }));
+      seen.forEach((w) => vocab.set(w, (vocab.get(w) || 0) + 1));
+    });
+  }
+  const known = (w) => { for (const v of vocab.keys()) if (v.startsWith(w)) return true; return false; };
+  function fixWord(w) {
+    if (w.length < 4 || known(w)) return w;                  // short words are left alone; a known prefix counts as correct
+    const max = w.length < 8 ? 1 : 2;
+    let best = w; let bestD = max + 1; let bestC = 0;
+    vocab.forEach((c, v) => {
+      if (v[0] !== w[0] || v[1] !== w[1]) return;            // the first two letters must agree
+      const d = Math.min(dl(w, v, max), v.length > w.length ? dl(w, v.slice(0, w.length), max) : max + 1);   // also vs. the start of a longer word
+      if (d < bestD || (d === bestD && c > bestC)) { best = v; bestD = d; bestC = c; }
+    });
+    return bestD <= max ? best : w;
+  }
+
+  function titleScore(f, qw, qn, authorWords) {
+    if (f === qn) return 1000;
+    const tw = f ? f.split(' ') : [];
+    let s = 0; let covered = 0;
+    qw.forEach((w) => {
+      if (tw.some((x) => x.startsWith(w))) { s += 100; covered += 1; if (tw.includes(w)) s += 20; }
+      else if (authorWords.some((x) => x.startsWith(w))) { s += 60; covered += 1; }
+    });
+    if (qw.length && covered === qw.length) s += 200;
+    s -= 5 * tw.filter((x) => !qw.some((w) => x.startsWith(w))).length;
+    if (qn && f.startsWith(qn)) s += 50;
+    return s;
+  }
+  function score(b, qw) {
+    const qn = qw.join(' ');
+    const authorWords = [];
+    [b.ra, b.ea].forEach((t) => words(t).forEach((w) => authorWords.push(w, translit(w))));
+    let best = -Infinity;
+    [b.ru, b.en].forEach((t) => {
+      const n = norm(t);
+      if (n) [n, translit(n)].forEach((f) => { best = Math.max(best, titleScore(f, qw, qn, authorWords)); });
+    });
+    if (best === -Infinity) best = titleScore('', qw, qn, authorWords);
+    return best + ((b.f & 1) ? 15 : 0) + ((b.f & 4) ? 10 : 0);
+  }
+  const rank = (list, qw) => list.map((b, i) => [score(b, qw), i, b]).sort((x, y) => y[0] - x[0] || x[1] - y[1]).map((x) => x[2]);
+  const top = (list, qw) => (list.length ? score(list[0], qw) : -Infinity);
+
   /* ---------- search ---------- */
   const form = $('#searchForm'); const input = $('#q'); const grid = $('#results');
   const statusEl = $('#searchStatus'); const stateEl = $('#searchState');
   let items = []; let ctl = null; let timer = 0; let mounted = 0;
+  let fix = null;                                             // { shown, orig } while results for a corrected query are on screen
 
   const mountMascot = (node) => { if (window.VetroMascotMount) window.VetroMascotMount(node, 100 + mounted++); };
 
@@ -78,13 +160,21 @@
     grid.textContent = '';
     if (!items.length) {
       setStatus('');
-      showState('search', 'api.empty.t', 'Nothing found', 'api.empty.d', 'Try another spelling: the server does not fix typos. A title in the original language or just the author’s surname often works.');
+      showState('search', 'api.empty.t', 'Nothing found', 'api.empty.d', 'Try another spelling. A title in the original language or just the author’s surname often works.');
       return;
     }
     hideState();
     let msg = T('api.found', 'Found: {n}').replace('{n}', fmtN(items.length));
     if (items.length >= LIMIT) msg += ` · ${T('api.more', 'showing the first {n}, refine the query to narrow it down').replace('{n}', LIMIT)}`;
     setStatus(msg);
+    if (fix) {
+      const f = fix;
+      statusEl.append(` · ${T('api.fix', 'Showing results for “{q}”.').replace('{q}', f.shown)} `);
+      const back = el('button', 'link-btn', T('api.fix.orig', 'Search for “{q}” instead').replace('{q}', f.orig));
+      back.type = 'button';
+      back.addEventListener('click', () => search(f.orig, true));
+      statusEl.append(back);
+    }
     const frag = document.createDocumentFragment();
     items.forEach((b) => frag.append(makeCard(b)));
     grid.append(frag);
@@ -96,20 +186,38 @@
     for (let i = 0; i < 8; i += 1) { const s = el('span', 'book-card is-skel'); s.append(el('span', 'book-cover'), el('b', 'book-title'), el('span', 'book-meta')); grid.append(s); }
   }
 
-  async function search(raw) {
+  async function run(qw, signal) {
+    const data = await api(`/v1/search?q=${encodeURIComponent(qw.join(' '))}&limit=${LIMIT}`, signal);
+    const list = Array.isArray(data.items) ? data.items : [];
+    learn(list);
+    return rank(list, qw);
+  }
+
+  async function search(raw, exact = false) {
     const q = raw.trim();
     if (ctl) ctl.abort();
     syncUrl(q);
-    if (q.length < 2) {
-      items = []; grid.textContent = ''; hideState();
+    const qw = prep(raw);                                     // cleaned words: no punctuation, case or diacritics
+    if (qw.join(' ').length < 2) {
+      items = []; fix = null; grid.textContent = ''; hideState();
       setStatus(q ? T('api.short', 'Type at least 2 characters') : '');
       return;
     }
     ctl = new AbortController();
     showLoading();
     try {
-      const data = await api(`/v1/search?q=${encodeURIComponent(q)}&limit=${LIMIT}`, ctl.signal);
-      items = Array.isArray(data.items) ? data.items : [];
+      let list = await run(qw, ctl.signal);
+      fix = null;
+      // nothing found: a typo leaves no vocabulary to correct it from, so look up shortened words once, only to learn spellings
+      if (!list.length && !exact) await run(qw.map((w) => (w.length >= 5 ? w.slice(0, w.length - 3) : w)), ctl.signal);
+      if (!exact) {                                           // typos: check the words against what the answers have shown so far
+        const fixed = qw.map(fixWord);
+        if (fixed.some((w, i) => w !== qw[i])) {
+          const alt = await run(fixed, ctl.signal);
+          if (alt.length && top(alt, fixed) > top(list, qw)) { list = alt; fix = { shown: fixed.join(' '), orig: q }; }
+        }
+      }
+      items = list;
       renderResults();
     } catch (e) {
       if (e.name === 'AbortError') return;

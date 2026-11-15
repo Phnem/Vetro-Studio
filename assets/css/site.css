@@ -700,6 +700,7 @@ dialog.modal::backdrop { background: rgba(12, 4, 3, .6); -webkit-backdrop-filter
 .chip-ex { padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(21, 13, 11, .18); background: rgba(255, 255, 255, .55); color: var(--ink); font: 600 13px var(--font-body); letter-spacing: 0; text-transform: none; transition: background .25s, color .25s, transform .3s var(--ease); }
 .chip-ex:hover { background: var(--ink); color: var(--cream); transform: translateY(-2px); }
 .search-status { min-height: 1.4em; font: 600 13px var(--font-mono); color: var(--muted); }
+.search-status .link-btn { font: inherit; color: var(--red); text-decoration: underline; text-underline-offset: 3px; opacity: 1; }
 .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 22px 18px; }
 .book-card { display: grid; gap: 8px; align-content: start; text-align: left; background: none; border: 0; padding: 0; color: inherit; min-width: 0; transition: transform .35s var(--ease); }
 .book-card:hover { transform: translateY(-6px); }
