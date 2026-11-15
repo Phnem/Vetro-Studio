@@ -140,8 +140,10 @@ const cover = (b, large = false) =>
 
 ## Лимиты и ошибки
 
-- Поиск и карточки: **120 запросов в минуту на клиента**. Дальше `429 {"error":"rate_limited"}` (не кэшируется).
+- Поиск и карточки: **120 запросов в минуту на клиента** без ключа; с ключом лимиты по тарифу (у ключа сайта, Ultra: 20 в секунду, 600 в минуту, 200 000 в сутки,
+  см. `docs/api-key.md`). Дальше `429 {"error":"rate_limited"}` (не кэшируется), пауза в `Retry-After`.
   `health`, манифест и обложки лимитом не считаются. Делайте debounce 250–300 мс и `AbortController`.
+- Ключ в запросах к API: заголовок `Authorization: Bearer <ключ>`, у обложек в `<img>` ещё `&key=<ключ>`. Полная документация для людей: страница `api-docs.html`.
 - Ошибки — JSON `{"error": "<код>"}`: `not_found` (404, в том числе неверный путь/неизвестный id),
   `method_not_allowed` (405), `rate_limited` (429), `internal` (500).
 - Кэширование: браузер и край Cloudflare держат поиск 10 минут, карточку сутки. Не добавляйте в запрос лишних
@@ -157,14 +159,16 @@ async function searchBooks(q, limit = 12) {
   inflight?.abort();
   if (q.trim().length < 2) return [];
   inflight = new AbortController();
-  const r = await fetch(`${BOOKS_API}/v1/search?q=${encodeURIComponent(q)}&limit=${limit}`, { signal: inflight.signal });
+  const r = await fetch(`${BOOKS_API}/v1/search?q=${encodeURIComponent(q)}&limit=${limit}`, {
+    signal: inflight.signal, headers: { Authorization: `Bearer ${BOOKS_KEY}` }   // BOOKS_KEY: см. docs/api-key.md
+  });
   if (r.status === 429) throw new Error("rate_limited");
   if (!r.ok) throw new Error("http_" + r.status);
   return (await r.json()).items;
 }
 
 async function bookCard(id9) {
-  const r = await fetch(`${BOOKS_API}/v1/books/${id9}`);
+  const r = await fetch(`${BOOKS_API}/v1/books/${id9}`, { headers: { Authorization: `Bearer ${BOOKS_KEY}` } });
   return r.ok ? r.json() : null;
 }
 

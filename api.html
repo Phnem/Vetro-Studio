@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#e1251b">
-  <title data-i18n="api.title">VetroBook API — a free book catalogue API</title>
-  <meta name="description" content="VetroBook API is a free, public, read-only API for a catalogue of 269,000 books and audiobooks: search, book cards and covers. No keys, CORS open." data-i18n-attr="content:api.desc">
+  <title data-i18n="api.title">VetroBook API — a book catalogue API</title>
+  <meta name="description" content="VetroBook API is a read-only API for a catalogue of 269,000 books and audiobooks: search, book cards and covers. Access by key, three plans, CORS open." data-i18n-attr="content:api.desc">
   <meta property="og:type" content="website">
   <meta property="og:title" content="VetroBook API">
-  <meta property="og:description" content="Search 269,000 books and audiobooks, open cards and covers. No keys, no sign-up.">
+  <meta property="og:description" content="Search 269,000 books and audiobooks, open cards and covers. Access by key, from 100 Telegram Stars for 30 days.">
   <meta property="og:image" content="https://vetrostudio.bid/assets/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="vetro-studio-icon.png">
@@ -32,6 +32,7 @@
         <a href="collection.html" data-i18n="nav.collection">Collection</a>
         <a href="#try" data-i18n="api.nav.try">Try it</a>
         <a href="#numbers" data-i18n="api.nav.numbers">Numbers</a>
+        <a href="api-docs.html" data-i18n="api.nav.docs">Docs</a>
         <a href="#access" data-i18n="api.nav.access">Get access</a>
       </nav>
       <div class="header-actions">
@@ -50,7 +51,8 @@
         <a href="collection.html"><span>02</span><b data-i18n="nav.collection">Collection</b><i>↗</i></a>
         <a href="#try"><span>03</span><b data-i18n="api.nav.try">Try it</b><i>↓</i></a>
         <a href="#numbers"><span>04</span><b data-i18n="api.nav.numbers">Numbers</b><i>↓</i></a>
-        <a href="#access" class="is-accent"><span>05</span><b data-i18n="api.nav.access">Get access</b><i>↓</i></a>
+        <a href="api-docs.html"><span>05</span><b data-i18n="api.nav.docs">Docs</b><i>↗</i></a>
+        <a href="#access" class="is-accent"><span>06</span><b data-i18n="api.nav.access">Get access</b><i>↓</i></a>
       </nav>
       <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label"><button type="button" data-lang="en">EN</button><button type="button" data-lang="ru">RU</button></div>
     </div>
@@ -61,17 +63,17 @@
     <section class="col-hero modules-hero theme-red">
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow"><i class="pulse"></i><span data-i18n="api.eyebrow">Public API · read-only · no keys</span></p>
+          <p class="eyebrow"><i class="pulse"></i><span data-i18n="api.eyebrow">Read-only API · access by key · CORS open</span></p>
           <h1 data-i18n-html="api.h1">every book.<br><em>one request.</em></h1>
-          <p class="hero-lede" data-i18n="api.lede">A free catalogue of books and audiobooks: search, book cards and covers. The same API that powers audiobook search in Vetro Collection. No keys, no sign-up, CORS open.</p>
+          <p class="hero-lede" data-i18n="api.lede">A catalogue of books and audiobooks: search, book cards and covers. The same API that powers audiobook search in Vetro Collection. Access by key, three plans, CORS open.</p>
           <div class="hero-actions">
             <a class="btn btn-cream" href="#try"><span data-i18n="api.cta.try">Try the search</span> <b>↓</b></a>
-            <a class="btn btn-glass" href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer"><span data-i18n="api.nav.cta">Get the API</span> <b>↗</b></a>
+            <a class="btn btn-glass" href="api-docs.html"><span data-i18n="api.cta.docs">Documentation</span> <b>→</b></a>
           </div>
           <ul class="facts glass" aria-label="Highlights" data-i18n-attr="aria-label:col.facts">
             <li><b data-count="269270">269,270</b><span data-i18n="api.fact1">works</span></li>
-            <li><b>0</b><span data-i18n="api.fact2">keys needed</span></li>
-            <li><b>120</b><span data-i18n="api.fact3">requests a minute</span></li>
+            <li><b>3</b><span data-i18n="api.fact2">plans</span></li>
+            <li><b>600</b><span data-i18n="api.fact3">requests a minute on Ultra</span></li>
           </ul>
         </div>
         <div class="hero-stage">
@@ -87,8 +89,8 @@
 
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">BOOK CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.nokeys">NO KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
-        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">BOOK CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.nokeys">NO KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
+        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">BOOK CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.keys">API KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
+        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">BOOK CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.keys">API KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
       </div>
     </div>
 
@@ -208,12 +210,12 @@
 
         <h3 class="num-group reveal"><span>03</span><b data-i18n="api.g3">Limits and infrastructure</b></h3>
         <div class="limits">
-          <div class="limit glass-card reveal"><b>120<small data-i18n="api.u.min">/min</small></b><p data-i18n="api.li1">requests per client for search and cards. Covers, the index and health are not counted.</p></div>
-          <div class="limit glass-card reveal"><b>50 · 40</b><p data-i18n="api.li2">up to 50 results per search and up to 40 books in one batch request.</p></div>
+          <div class="limit glass-card reveal"><b>30–600<small data-i18n="api.u.min">/min</small></b><p data-i18n="api.li1">requests per key, by plan: Basic 30, Pro 120, Ultra 600. A daily quota applies too.</p></div>
+          <div class="limit glass-card reveal"><b>50 · 40</b><p data-i18n="api.li2">up to 50 results per search and up to 40 books per batch request on Pro and Ultra (Basic: 20 and 10).</p></div>
           <div class="limit glass-card reveal"><b>3 <small data-i18n="api.u.days">days</small></b><p data-i18n="api.li3">the app asks for the update manifest at most once in three days.</p></div>
           <div class="limit glass-card reveal"><b>~19 <small data-i18n="api.u.s">s</small></b><p data-i18n="api.li4">to swap data tables between releases, with no downtime. v1 shipped on 12 Nov, v2 on 13 Nov.</p></div>
           <div class="limit glass-card reveal"><b>10M</b><p data-i18n="api.li5">requests and 30M CPU-ms a month: the Workers Paid plan quota.</p></div>
-          <div class="limit glass-card reveal"><b>0</b><p data-i18n="api.li6">keys, accounts or stored data about the caller. Read-only, with open CORS.</p></div>
+          <div class="limit glass-card reveal"><b>0</b><p data-i18n="api.li6">IP addresses or user agents logged. Only per-key request counters are kept. Read-only, with open CORS.</p></div>
         </div>
 
         <article class="bm glass-card reveal" data-chart>
@@ -243,15 +245,58 @@
         <div class="section-head center reveal">
           <p class="eyebrow" data-i18n="api.a.eyebrow">Build with it</p>
           <h2 id="api-access-title" data-i18n-html="api.a.title">get the<br><em>API.</em></h2>
-          <p class="section-lede" data-i18n="api.a.lede">Open the Telegram bot to get the API. It is read-only and public, so you can call it straight from a page or an app.</p>
-          <a class="btn btn-cream btn-lg" href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer"><span>@VetroBook_API_bot</span> <b>↗</b></a>
+          <p class="section-lede" data-i18n="api.a.lede">Open the Telegram bot, tell it about your project, pick a plan and pay in Telegram Stars. It shows you a key once; send it in an Authorization header.</p>
+          <div class="hero-actions">
+            <a class="btn btn-cream btn-lg" href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer"><span>@VetroBook_API_bot</span> <b>↗</b></a>
+            <a class="btn btn-glass btn-lg" href="api-docs.html"><span data-i18n="api.cta.docs">Documentation</span> <b>→</b></a>
+          </div>
         </div>
+        <div class="plans reveal">
+          <article class="plan glass-card">
+            <p class="kicker">Basic</p>
+            <p class="plan-price"><b>100 ⭐</b><small data-i18n="api.pl.per">per 30 days</small></p>
+            <ul class="plan-list">
+              <li><span data-i18n="api.pl.sec">Burst per second</span><b>2</b></li>
+              <li><span data-i18n="api.pl.min">Per minute</span><b data-n="30">30</b></li>
+              <li><span data-i18n="api.pl.day">Per day (UTC)</span><b data-n="2000">2,000</b></li>
+              <li><span data-i18n="api.pl.max">limit / ids max</span><b>20 / 10</b></li>
+              <li><span data-i18n="api.pl.covers">Covers</span><b data-i18n="api.pl.no">no</b></li>
+              <li><span data-i18n="api.pl.index">Offline index</span><b data-i18n="api.pl.no">no</b></li>
+            </ul>
+          </article>
+          <article class="plan glass-card">
+            <p class="kicker">Pro</p>
+            <p class="plan-price"><b>400 ⭐</b><small data-i18n="api.pl.per">per 30 days</small></p>
+            <ul class="plan-list">
+              <li><span data-i18n="api.pl.sec">Burst per second</span><b>5</b></li>
+              <li><span data-i18n="api.pl.min">Per minute</span><b data-n="120">120</b></li>
+              <li><span data-i18n="api.pl.day">Per day (UTC)</span><b data-n="20000">20,000</b></li>
+              <li><span data-i18n="api.pl.max">limit / ids max</span><b>50 / 40</b></li>
+              <li><span data-i18n="api.pl.covers">Covers</span><b data-i18n="api.pl.yes">yes</b></li>
+              <li><span data-i18n="api.pl.index">Offline index</span><b data-i18n="api.pl.no">no</b></li>
+            </ul>
+          </article>
+          <article class="plan glass-card">
+            <p class="kicker">Ultra</p>
+            <p class="plan-price"><b>1,500 ⭐</b><small data-i18n="api.pl.per">per 30 days</small></p>
+            <ul class="plan-list">
+              <li><span data-i18n="api.pl.sec">Burst per second</span><b>20</b></li>
+              <li><span data-i18n="api.pl.min">Per minute</span><b data-n="600">600</b></li>
+              <li><span data-i18n="api.pl.day">Per day (UTC)</span><b data-n="200000">200,000</b></li>
+              <li><span data-i18n="api.pl.max">limit / ids max</span><b>50 / 40</b></li>
+              <li><span data-i18n="api.pl.covers">Covers</span><b data-i18n="api.pl.yes">yes</b></li>
+              <li><span data-i18n="api.pl.index">Offline index</span><b data-i18n="api.pl.yes">yes</b></li>
+            </ul>
+          </article>
+        </div>
+        <p class="fineprint reveal"><span data-i18n="api.pl.note">A key issued to a website works only from the domains you gave the bot. Prices and limits are current ones: the bot shows the live values before you pay.</span> <a class="inline-link" href="api-docs.html#terms" data-i18n="api.pl.terms">Terms of use ↗</a></p>
         <div class="api-code glass-card reveal">
           <p class="kicker" data-i18n="api.a.quick">Quick start</p>
-          <pre><code><b>GET</b> https://api.vetrostudio.bid/v1/search?q=orwell&amp;limit=5
+          <pre><code><b>Authorization:</b> Bearer vk_pro_…
+<b>GET</b> https://api.vetrostudio.bid/v1/search?q=orwell&amp;limit=5
 <b>GET</b> https://api.vetrostudio.bid/v1/books/000000771
 <b>GET</b> https://api.vetrostudio.bid/v1/books?ids=000000771,000032099
-<b>GET</b> https://api.vetrostudio.bid/covers/small/000000771.avif?v=7013464</code></pre>
+<b>GET</b> https://api.vetrostudio.bid/covers/small/000000771.avif?v=7013464&amp;key=vk_pro_…</code></pre>
         </div>
         <p class="fineprint reveal"><span data-i18n="api.a.col">Vetro Collection uses this API natively as its source for audiobooks.</span> <a class="inline-link" href="collection.html" data-i18n="api.a.collink">Open Vetro Collection ↗</a></p>
       </div>
@@ -278,9 +323,9 @@
 
   <footer class="site-footer theme-red">
     <div class="wrap footer-grid">
-      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>BOOK API</b></span></a><p data-i18n="footer.api">A free public API for a catalogue of books and audiobooks.</p></div>
+      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>BOOK API</b></span></a><p data-i18n="footer.api">A read-only API for a catalogue of books and audiobooks.</p></div>
       <div><h4>Vetro</h4><a href="index.html">Studio</a><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a><a href="vap.html">VAP</a><a href="modules.html">Modules</a><a href="api.html">API</a></div>
-      <div><h4 data-i18n="footer.project">Project</h4><a href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer">@VetroBook_API_bot</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></div>
+      <div><h4 data-i18n="footer.project">Project</h4><a href="api-docs.html" data-i18n="api.nav.docs">Docs</a><a href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer">@VetroBook_API_bot</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></div>
     </div>
   </footer>
 

@@ -34,7 +34,8 @@ A static product hub with six pages, in **English and Russian** (the language is
 
 - `modules.html` — Vetro Modules: Compose recipes from the app (frosted glass, motion springs, chunked downloader) with the real screen recordings (`assets/video/modules/`, re-encoded from the [Vetro-Modules](https://github.com/Phnem/Vetro-Modules) repository), the download benchmark and the latest release archives (read from GitHub Releases).
 
-- `api.html` — VetroBook API: a live book search against `api.vetrostudio.bid` (a card with cover, authors, translations and editions opens on click), charts of the catalogue volume, speed, limits and cache, the Telegram bot link (`@VetroBook_API_bot`) and a quick start. Logic is in `assets/js/api.js`; the contract is in [`docs/books-api.md`](docs/books-api.md). Vetro Collection links here from its download section.
+- `api.html` — VetroBook API: a live book search against `api.vetrostudio.bid` (a card with cover, authors, translations and editions opens on click), charts of the catalogue volume, speed, limits and cache, the plans (Basic / Pro / Ultra), the Telegram bot link (`@VetroBook_API_bot`) and a quick start. Logic is in `assets/js/api.js`; the contract is in [`docs/books-api.md`](docs/books-api.md). The page sends the site key (Ultra, permanent, bound to the site domains) in an `Authorization` header and `&key=` on cover links; the key is one constant, see [`docs/api-key.md`](docs/api-key.md). Vetro Collection links here from its download section.
+- `api-docs.html` — the API documentation: getting a key, plans, authentication, endpoints, response fields, errors and limits, quick start, technical notes and the terms of use (a working draft). Content comes from `docs/api/README*.md` and `docs/api/terms*.md` of the app repository; the side menu and copy buttons are in `assets/js/api-docs.js`. Linked from `api.html` (nav, hero, access section, footer).
 
 The Vetro mascot (ported from the app, see [`docs/mascot.md`](docs/mascot.md)) lives on every page as a `.mascot-card` panel mounted by `assets/js/mascot.js`.
 
@@ -60,7 +61,7 @@ The phones on `index.html` and `vap.html` show a placeholder until real screensh
 ### Structure
 
 ```
-index.html · collection.html · look.html · vap.html · modules.html · api.html
+index.html · collection.html · look.html · vap.html · modules.html · api.html · api-docs.html
 vap-icon.svg             VAP "V-Play" mark (from the VAP repository)
 assets/css/site.css      design system, mockups, app screens, responsive rules
 assets/js/i18n.js        English (authored in HTML) + Russian dictionary, language switch

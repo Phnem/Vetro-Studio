@@ -13,22 +13,27 @@
 
   const API = 'https://api.vetrostudio.bid';
   const FALLBACK = 'https://vetro-books-api.1234idelchik.workers.dev';
+  /* Site key (Ultra, permanent, bound to vetrostudio.bid, www.vetrostudio.bid and phnem.github.io). It is public by design:
+     protected by the domain check, the daily quota and replacement, not by secrecy. Sent only to API/FALLBACK. See docs/api-key.md. */
+  const KEY = 'vk_ultra_rq4dkgxrfnoo2vaple3t2w6wk546z5tp';
   const LIMIT = 30;
   let base = API;
 
   /* ---------- API ---------- */
+  const get = (path, signal) => fetch(base + path, { signal, headers: { Authorization: `Bearer ${KEY}` } });
   async function api(path, signal) {
     let r;
-    try { r = await fetch(base + path, { signal }); }
+    try { r = await get(path, signal); }
     catch (e) {
       if (e.name === 'AbortError' || base === FALLBACK) throw e;
       base = FALLBACK;                                  // the main domain did not answer: use the backup once
-      r = await fetch(base + path, { signal });
+      r = await get(path, signal);
     }
     if (!r.ok) { const err = new Error(`http_${r.status}`); err.code = r.status; throw err; }
     return r.json();
   }
-  const coverUrl = (b, large) => ((b.f & 1) && b.cv) ? `${base}/covers/${large ? 'large' : 'small'}/${b.id}.avif?v=${b.cv}` : null;
+  // <img> cannot send headers, so covers take the key in the query string
+  const coverUrl = (b, large) => ((b.f & 1) && b.cv) ? `${base}/covers/${large ? 'large' : 'small'}/${b.id}.avif?v=${b.cv}&key=${KEY}` : null;
   const title = (b) => (lang() === 'ru' ? b.ru || b.en : b.en || b.ru) || '—';
   const author = (b) => (lang() === 'ru' ? b.ra || b.ea : b.ea || b.ra) || '';
   const initial = (s) => (String(s).trim().match(/[\p{L}\p{N}]/u) || ['V'])[0].toUpperCase();
@@ -109,7 +114,8 @@
     } catch (e) {
       if (e.name === 'AbortError') return;
       grid.textContent = ''; setStatus('');
-      if (e.code === 429) showState('think', 'api.rl.t', 'Too many requests', 'api.rl.d', 'The limit is 120 requests a minute per client. Wait a little and search again.');
+      if (e.code === 429) showState('think', 'api.rl.t', 'Too many requests', 'api.rl.d', 'The site’s request limit was reached. Wait a little and search again.');
+      else if (e.code === 401 || e.code === 403) showState('question', 'api.auth.t', 'The catalogue refused the key', 'api.auth.d', 'The site’s access key was rejected. The key works only on vetrostudio.bid, so a copy of the page opened from another address (for example localhost) will not get results.');
       else showState('question', 'api.err.t', 'The catalogue did not answer', 'api.err.d', 'Check your connection and try again in a moment.');
     }
   }
@@ -137,7 +143,7 @@
   const pick = (map, key) => (map[key] ? map[key][lang() === 'ru' ? 1 : 0] : human(key));
   const safeUrl = (u) => (typeof u === 'string' && /^https:\/\//i.test(u) ? u : null);
 
-  let current = null; let bookCtl = null; let lastBtn = null;
+  let current = null; let bookCtl = null; let lastBtn = null; let jsonUrl = null;
 
   function section(label, content) {
     const s = el('section', 'book-sec'); s.append(el('h3', null, label));
@@ -206,7 +212,10 @@
     mk('fantlab', (v) => `https://fantlab.ru/work${v}`, 'FantLab ↗');
     const page = d.cover && safeUrl(d.cover.page);
     if (page) nodes.links.append(link(page, `${T('api.d.coversrc', 'Cover source')} ↗`));
-    nodes.links.append(link(`${base}/v1/books/${encodeURIComponent(b.id)}`, `${T('api.d.json', 'Raw JSON')} ↗`));
+    // Raw JSON: the API wants the key in a header, which a plain link cannot send, so open what was already fetched
+    if (jsonUrl) URL.revokeObjectURL(jsonUrl);
+    jsonUrl = URL.createObjectURL(new Blob([JSON.stringify(b, null, 2)], { type: 'application/json' }));
+    nodes.links.append(link(jsonUrl, `${T('api.d.json', 'Raw JSON')} ↗`));
   }
 
   async function openBook(b, btn) {
@@ -227,6 +236,7 @@
       if (e.name === 'AbortError') return;
       nodes.loading.hidden = false;
       nodes.loading.textContent = e.code === 429 ? T('api.d.rl', 'Too many requests, wait a little and open the card again.') : T('api.d.fail', 'The full card could not be loaded.');
+      if (e.code === 401 || e.code === 403) nodes.loading.textContent = T('api.d.auth', 'The catalogue refused the site’s key.');
     }
   }
   dlg.addEventListener('close', () => { if (bookCtl) bookCtl.abort(); if (lastBtn) lastBtn.focus({ preventScroll: true }); });
