@@ -1,0 +1,604 @@
+VETRO CHUNKED DOWNLOAD — manual guide
+=====================================
+
+For people who write the code themselves. (With an AI coding agent, give it SKILL.md.)
+
+Licence: GPL-3.0 (Vetro Modules).
+
+
+1. WHAT AND WHY
+---------------
+
+A downloader for big files of known size (an APK update, a model, an archive):
+
+  - several connections pull small chunks from ONE shared queue,
+  - an interrupted download resumes from the first missing chunk,
+  - the file gets its final name only when it is complete and verified (size + SHA-256),
+  - a slow connection is replaced mid-chunk, an expired signed CDN link is re-resolved,
+  - a server that ignores Range falls back to a single stream.
+
+Why a queue and not "N equal parts": with equal parts the last percent is pulled by the slowest connection while
+the fast ones are idle. With 1 MB chunks, whoever gets free takes the next chunk, so a slow socket owns one chunk,
+not a share of the file.
+
+
+2. MEASURED RESULTS
+-------------------
+
+Setup: the real release APK of Vetro v3.4.9-Stable, 38 370 427 bytes (36.6 MB), downloaded from GitHub's CDN
+(redirect to a signed URL). One home connection. 5 runs per method, the three methods interleaved and their order
+rotated every run (no method always gets the "good time of day"). SHA-256 verified on every run. HTTP/1.1 client.
+
+  method                              runs (s)                             median     MB/s
+  single stream                       46.90  47.23  47.33  48.12  50.41     47.33 s    0.77
+  6 equal parts (classic split)        8.93   9.42   9.79  10.03  11.60      9.79 s    3.74
+  6 connections, 1 MB chunk queue      9.54   9.70  10.15  10.56  10.71     10.15 s    3.61
+
+  -> about 4.7x faster than one stream (47.3 s -> 10.2 s).
+
+Read this honestly:
+  - On this network the classic equal split is within noise of the chunk queue (3 % faster at the median). The
+    big win here is parallelism itself; one stream stayed at 0.77 MB/s, which is consistent with the CDN limiting a
+    single connection.
+  - The queue's advantages are behavioural (resume from the first missing chunk, slow-connection replacement,
+    no stitching pass, small tail) and were NOT what this measurement isolates. A network where one connection
+    stalls would show them; yours may or may not.
+  - Your network and CDN will differ. Reproduce it (section 8).
+
+Functional check of the portable version below, against the same real release: download interrupted at 12 MB
+-> `.part` and `.part.map` left on disk -> second call reported progress starting at 12 MB, finished in 6.9 s,
+size and SHA-256 matched, only the final file remained.
+
+
+3. REQUIREMENTS
+---------------
+
+  Verified with: Kotlin 2.4.21, JVM 21, OkHttp 5.4.0, kotlinx-coroutines 1.10.2.
+  (Code uses OkHttp 5's non-null `response.body`; with OkHttp 4 write `response.body!!`.)
+
+  dependencies {
+      implementation("com.squareup.okhttp3:okhttp:5.4.0")
+      implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+  }
+
+THE CLIENT MUST BE HTTP/1.1 ONLY:
+
+  val client = OkHttpClient.Builder()
+      .protocols(listOf(Protocol.HTTP_1_1))
+      .connectTimeout(20, TimeUnit.SECONDS)
+      .readTimeout(60, TimeUnit.SECONDS)
+      .build()
+
+With HTTP/2 all parallel requests to one host share one multiplexed connection: no gain.
+
+
+4. THE ALGORITHM IN TEN LINES
+-----------------------------
+
+  1. final file exists -> return it
+  2. parallel only if connections > 1 and size >= 4 MB, else single stream with resume
+  3. probe: GET with "Range: bytes=0-0". HTTP 200 -> server ignores Range -> single stream.
+     Else remember the final URL after redirects and use it for every chunk
+  4. create name.part at full length; chunk i is written at offset i * 1 MB
+  5. name.part.map: header "v1 <total> <chunk>", then one line per FINISHED chunk (written after the chunk is done)
+  6. resume = .part has the right length AND the header matches -> skip the listed chunks
+  7. a Channel<Int> of pending chunks, min(connections, pending) coroutines pull from it
+  8. chunk request "Range: bytes=start+have-end"; 200 -> RangeIgnored; 400/401/403/410 -> link expired, re-probe;
+     4 attempts with 1 s x attempt pause continuing from the same byte; an attempt > 15 s = slow connection,
+     abort and continue on a new one (max 8)
+  9. progress comes from ONE ticker (250 ms) reading an AtomicLong, never from the workers
+ 10. verify size and SHA-256, then rename .part -> final name (final name only for a complete verified file)
+
+
+5. THE CODE  (ChunkedDownloader.kt — compiled and run against the real release)
+-------------------------------------------------------------------------------
+
+```kotlin
+package vetro.download
+
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.File
+import java.io.IOException
+import java.io.RandomAccessFile
+import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
+import java.security.MessageDigest
+import java.util.concurrent.atomic.AtomicLong
+import kotlin.coroutines.coroutineContext
+
+/** The downloaded file does not match what was declared (size or SHA-256). */
+class IntegrityException(message: String) : IOException(message)
+
+/** The server answered a range request with the whole file: a parallel download is impossible. */
+internal class RangeIgnoredException(message: String) : IOException(message)
+
+/** A chunk takes too long over one connection: continue it on a fresh one instead of waiting. */
+private class SlowChunkException : IOException("chunk is too slow")
+
+/** What to download and how to verify it. */
+data class DownloadTarget(
+    /** Identifies this download; it becomes part of the file name. */
+    val id: String,
+    val url: String,
+    /** Expected size in bytes; 0 = unknown (a single stream is used and the size check is skipped). */
+    val sizeBytes: Long,
+    /** Expected SHA-256 as hex, or null to skip the check. */
+    val sha256: String?,
+)
+
+/**
+ * Chunk-queue downloader with resume and verification.
+ *
+ * A large file of known size is cut into small chunks ([chunkBytes]) that [connections] workers pull
+ * from one shared queue ([downloadParallel]). The classic layout - N equal shares, one per
+ * connection - leaves the tail to the slowest connection: the fast ones are long done while the last
+ * percent crawls over one socket. With a queue, a worker that gets free simply takes the next chunk,
+ * so a slow connection is only ever responsible for one chunk, not for a share of the file.
+ *
+ * Interrupted downloads continue from the first chunk that is not on disk (HTTP Range). The file gets
+ * its final name only when it is complete and verified; until then it lives as `.part`.
+ *
+ * @param client must speak HTTP/1.1 (`protocols(listOf(Protocol.HTTP_1_1))`); otherwise parallel
+ *  requests to one host are multiplexed over a single HTTP/2 connection and there is no gain.
+ */
+class ChunkedDownloader(
+    private val client: OkHttpClient,
+    private val dir: File,
+    private val filePrefix: String = "download",
+    private val fileExtension: String = "bin",
+    private val bufferSize: Int = 64 * 1024,
+    private val connections: Int = CONNECTIONS,
+    private val parallelMinBytes: Long = PARALLEL_MIN_BYTES,
+    private val retryDelayMs: Long = RETRY_DELAY_MS,
+    private val chunkBytes: Long = CHUNK_BYTES,
+    /** How long one attempt on a chunk may take before the connection is considered slow and replaced. */
+    private val slowChunkMs: Long = SLOW_CHUNK_MS,
+) {
+
+    /** Where the finished file of this download ends up. */
+    fun fileFor(id: String): File = File(dir, "$filePrefix-${safe(id)}.$fileExtension")
+
+    private fun partFor(id: String): File = File(dir, "$filePrefix-${safe(id)}.$fileExtension.part")
+
+    /** Which chunks of `.part` are fully on disk (see [downloadParallel]). */
+    private fun mapFor(id: String): File = File(dir, "$filePrefix-${safe(id)}.$fileExtension.part.map")
+
+    /** The finished file, if this download is already complete (it only appears under its name after verification). */
+    fun downloaded(id: String): File? = fileFor(id).takeIf { it.isFile && it.length() > 0 }
+
+    /** Delete everything except the file of [keepId]: old versions and partial files must not pile up. */
+    fun cleanExcept(keepId: String?) {
+        val keep = keepId?.let { fileFor(it).name }
+        dir.listFiles()?.forEach { file -> if (file.name != keep) file.delete() }
+    }
+
+    /**
+     * @param onProgress called while downloading with (bytes done, bytes total); at most once per
+     *  [PROGRESS_STEP_BYTES] (single stream) or [PROGRESS_TICK_MS] (several connections) and never
+     *  from several threads at once.
+     * @throws IntegrityException if the result does not match [target]; the bad file is deleted.
+     */
+    suspend fun download(target: DownloadTarget, onProgress: (done: Long, total: Long) -> Unit): File =
+        withContext(Dispatchers.IO) {
+            dir.mkdirs()
+            downloaded(target.id)?.let { return@withContext it }
+            val part = partFor(target.id)
+            val parallel = connections > 1 && target.sizeBytes >= parallelMinBytes &&
+                try {
+                    downloadParallel(target, part, onProgress)
+                    true
+                } catch (e: RangeIgnoredException) {
+                    // The server does not understand Range: chunks are useless, download in one piece.
+                    part.delete()
+                    mapFor(target.id).delete()
+                    false
+                }
+            if (!parallel) downloadSequential(target, part, onProgress)
+            verify(part, target)
+            val file = fileFor(target.id)
+            if (file.exists()) file.delete()
+            if (!part.renameTo(file)) {
+                part.delete()
+                throw IOException("cannot move the downloaded file")
+            }
+            file
+        }
+
+    /**
+     * `.part` is created at full length up front, chunks are written at their own offsets, and finished
+     * chunks are recorded in `.part.map` (header `v1 <size> <chunk>`, then one line per finished chunk).
+     * An interrupted download resumes from the first unrecorded chunk; a half-written chunk starts over.
+     * There is no final stitching pass over the file.
+     *
+     * Release links usually redirect to a signed CDN address. Going through the redirect for every
+     * chunk is expensive, so the address is resolved once by a probe request and then used directly.
+     * The signature is short-lived: on an access error the address is resolved again.
+     * @throws RangeIgnoredException if the server answered a chunk request with the whole file.
+     */
+    private suspend fun downloadParallel(
+        target: DownloadTarget,
+        part: File,
+        onProgress: (done: Long, total: Long) -> Unit,
+    ) = coroutineScope {
+        val total = target.sizeBytes
+        val chunkCount = ((total + chunkBytes - 1) / chunkBytes).toInt()
+        val map = mapFor(target.id)
+        val header = "v1 $total $chunkBytes"
+
+        // Chunks of an older layout (`.part.N`) and foreign state are not resumed: clean up and start over.
+        deleteLegacySegments(target.id)
+        val finished = BooleanArray(chunkCount)
+        val resumable = part.isFile && part.length() == total && map.isFile &&
+            map.readLines().firstOrNull() == header
+        if (resumable) {
+            map.readLines().drop(1).forEach { line ->
+                line.trim().toIntOrNull()?.takeIf { it in 0 until chunkCount }?.let { finished[it] = true }
+            }
+        } else {
+            part.delete()
+            RandomAccessFile(part, "rw").use { it.setLength(total) }
+            map.writeText("$header\n")
+        }
+        fun chunkSize(i: Int) = minOf(chunkBytes, total - i * chunkBytes)
+        val done = AtomicLong((0 until chunkCount).filter { finished[it] }.sumOf { chunkSize(it) })
+
+        val resolver = UrlResolver(target.url)
+        val queue = Channel<Int>(Channel.UNLIMITED)
+        val pending = (0 until chunkCount).filter { !finished[it] }
+        pending.forEach { queue.trySend(it) }
+        queue.close()
+        val mapLock = Any()
+
+        // Progress is reported by one collector, not by the workers: the consumer is not thread-safe.
+        val ticker = launch {
+            while (true) {
+                onProgress(done.get(), total)
+                delay(PROGRESS_TICK_MS)
+            }
+        }
+        try {
+            if (pending.isNotEmpty()) resolver.probe()
+            RandomAccessFile(part, "rw").use { raf ->
+                val channel = raf.channel
+                (0 until minOf(connections, maxOf(pending.size, 1))).map {
+                    async {
+                        for (index in queue) {
+                            val start = index * chunkBytes
+                            fetchChunk(resolver, start, start + chunkSize(index) - 1, channel, done)
+                            synchronized(mapLock) { map.appendText("$index\n") }
+                        }
+                    }
+                }.awaitAll()
+            }
+        } finally {
+            ticker.cancel()
+        }
+        onProgress(done.get(), total)
+        map.delete()
+    }
+
+    /** The address used for chunk requests: the final one (after redirects), re-resolvable on demand. */
+    private inner class UrlResolver(private val original: String) {
+        @Volatile
+        var url: HttpUrl = original.toHttpUrl()
+            private set
+        private val lock = Mutex()
+
+        /** Probe request for the first byte: finds the final address and checks that the server honours Range. */
+        suspend fun probe() = lock.withLock {
+            var failures = 0
+            while (true) {
+                try {
+                    val request = Request.Builder().url(original)
+                        .header("Accept", "application/octet-stream")
+                        .header("Range", "bytes=0-0")
+                        .build()
+                    client.newCall(request).execute().use { response ->
+                        if (response.code == 200) throw RangeIgnoredException("HTTP 200 on a range request")
+                        if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
+                        url = response.request.url
+                    }
+                    return@withLock
+                } catch (e: RangeIgnoredException) {
+                    throw e
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: IOException) {
+                    if (++failures >= CHUNK_ATTEMPTS) throw e
+                    delay(retryDelayMs * failures)
+                }
+            }
+        }
+    }
+
+    /**
+     * One chunk [start]..[end] (inclusive) is written into [channel] at its own offset; a broken
+     * connection continues from the same byte. An attempt longer than [slowChunkMs] is aborted and
+     * continued on a new connection: a CDN's per-connection speed varies a lot, and a slow socket must
+     * not hold back the last percent of the download.
+     */
+    private suspend fun fetchChunk(
+        resolver: UrlResolver,
+        start: Long,
+        end: Long,
+        channel: FileChannel,
+        done: AtomicLong,
+    ) {
+        val wanted = end - start + 1
+        var have = 0L
+        var failures = 0
+        var slowRestarts = 0
+        while (have < wanted) {
+            val attemptStartedAt = System.nanoTime()
+            try {
+                val request = Request.Builder().url(resolver.url)
+                    .header("Accept", "application/octet-stream")
+                    .header("Range", "bytes=${start + have}-$end")
+                    .build()
+                client.newCall(request).execute().use { response ->
+                    if (response.code == 200) throw RangeIgnoredException("HTTP 200 on a range request")
+                    if (response.code in EXPIRED_LINK_CODES) {
+                        // The CDN signature expired: resolve the address again; this attempt counts as failed.
+                        resolver.probe()
+                        throw IOException("HTTP ${response.code}")
+                    }
+                    if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
+                    val body = response.body
+                    val buffer = ByteArray(bufferSize)
+                    body.byteStream().use { input ->
+                        while (have < wanted) {
+                            coroutineContext.ensureActive()
+                            val n = input.read(buffer, 0, minOf(buffer.size.toLong(), wanted - have).toInt())
+                            if (n < 0) break
+                            writeFully(channel, ByteBuffer.wrap(buffer, 0, n), start + have)
+                            have += n
+                            done.addAndGet(n.toLong())
+                            val elapsedMs = (System.nanoTime() - attemptStartedAt) / 1_000_000
+                            if (have < wanted && elapsedMs > slowChunkMs) throw SlowChunkException()
+                        }
+                    }
+                }
+                if (have == wanted) return
+                throw IOException("chunk cut short")
+            } catch (e: RangeIgnoredException) {
+                throw e
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SlowChunkException) {
+                if (++slowRestarts > MAX_SLOW_RESTARTS) throw IOException("chunk is too slow")
+            } catch (e: IOException) {
+                // Weak mobile networks drop connections: a couple of paused retries beat starting over.
+                if (++failures >= CHUNK_ATTEMPTS) throw e
+                delay(retryDelayMs * failures)
+            }
+        }
+    }
+
+    private fun writeFully(channel: FileChannel, buffer: ByteBuffer, position: Long) {
+        var at = position
+        while (buffer.hasRemaining()) at += channel.write(buffer, at)
+    }
+
+    /** Remove `.part.N` pieces of the older layout (equal shares, one per connection). */
+    private fun deleteLegacySegments(id: String) {
+        val prefix = "${partFor(id).name}."
+        dir.listFiles()?.forEach { f ->
+            val suffix = f.name.takeIf { it.startsWith(prefix) }?.removePrefix(prefix)
+            if (suffix?.toIntOrNull() != null) f.delete()
+        }
+    }
+
+    /** Plain single-stream download with resume of one `.part`. */
+    private suspend fun downloadSequential(
+        target: DownloadTarget,
+        part: File,
+        onProgress: (done: Long, total: Long) -> Unit,
+    ) {
+        // A full-length `.part` from a parallel download (with a chunk map) cannot be resumed from its end.
+        if (mapFor(target.id).exists()) {
+            part.delete()
+            mapFor(target.id).delete()
+        }
+        var have = if (part.isFile) part.length() else 0L
+        // A partial file larger than the declared size is garbage from an earlier attempt.
+        if (target.sizeBytes > 0 && have > target.sizeBytes) {
+            part.delete()
+            have = 0L
+        }
+
+        val request = Request.Builder().url(target.url)
+            .header("Accept", "application/octet-stream")
+            .apply { if (have > 0) header("Range", "bytes=$have-") }
+            .build()
+        client.newCall(request).execute().use { response ->
+            if (response.code == 416 && have > 0) {
+                // The server says there is nothing to resume or the file differs: start over.
+                part.delete()
+                throw IOException("range not satisfiable")
+            }
+            if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
+            val body = response.body
+            val resumed = response.code == 206
+            if (!resumed) have = 0L
+            val total = when {
+                target.sizeBytes > 0 -> target.sizeBytes
+                body.contentLength() > 0 -> have + body.contentLength()
+                else -> 0L
+            }
+            RandomAccessFile(part, "rw").use { out ->
+                if (resumed) out.seek(have) else out.setLength(0)
+                val buffer = ByteArray(bufferSize)
+                var done = have
+                var reported = done
+                onProgress(done, total)
+                body.byteStream().use { input ->
+                    while (true) {
+                        coroutineContext.ensureActive()
+                        val n = input.read(buffer)
+                        if (n < 0) break
+                        out.write(buffer, 0, n)
+                        done += n
+                        if (done - reported >= PROGRESS_STEP_BYTES) {
+                            reported = done
+                            onProgress(done, total)
+                        }
+                    }
+                }
+                onProgress(done, total)
+            }
+        }
+    }
+
+    private fun verify(file: File, target: DownloadTarget) {
+        if (target.sizeBytes > 0 && file.length() != target.sizeBytes) {
+            file.delete()
+            throw IntegrityException("size ${file.length()} != ${target.sizeBytes}")
+        }
+        val expected = target.sha256 ?: return
+        val actual = sha256(file)
+        if (!actual.equals(expected, ignoreCase = true)) {
+            file.delete()
+            throw IntegrityException("sha256 mismatch")
+        }
+    }
+
+    companion object {
+        const val PROGRESS_STEP_BYTES = 128L * 1024
+
+        /** How often the collector reports progress during a multi-connection download. */
+        const val PROGRESS_TICK_MS = 250L
+
+        /** How many connections pull the file at once. */
+        const val CONNECTIONS = 6
+
+        /**
+         * Chunk size in the shared queue. Smaller = shorter tail (a slow connection gets little) but
+         * more requests; 1 MB chunks on a 33 MB file mean ~30 requests in total.
+         */
+        const val CHUNK_BYTES = 1L * 1024 * 1024
+
+        /** Below this size splitting is pointless: handshakes eat the gain. */
+        const val PARALLEL_MIN_BYTES = 4L * 1024 * 1024
+
+        /** An attempt on one chunk longer than this marks the connection as slow; it is replaced. */
+        const val SLOW_CHUNK_MS = 15_000L
+
+        private const val MAX_SLOW_RESTARTS = 8
+        private const val CHUNK_ATTEMPTS = 4
+        private const val RETRY_DELAY_MS = 1_000L
+
+        /** Responses with which a signed CDN address says it has expired. */
+        private val EXPIRED_LINK_CODES = setOf(400, 401, 403, 410)
+
+        fun sha256(file: File): String {
+            val digest = MessageDigest.getInstance("SHA-256")
+            file.inputStream().use { input ->
+                val buffer = ByteArray(64 * 1024)
+                while (true) {
+                    val n = input.read(buffer)
+                    if (n < 0) break
+                    digest.update(buffer, 0, n)
+                }
+            }
+            return digest.digest().joinToString("") { "%02x".format(it) }
+        }
+
+        /** The id goes into the file name: everything except letters, digits, dot and hyphen is replaced. */
+        private fun safe(id: String): String = id.replace(Regex("[^A-Za-z0-9._-]"), "_")
+    }
+}
+```
+
+Changes versus the app's internal version: renamed (UpdateRelease -> DownloadTarget, tag -> id, "vetro-*.apk"
+file names -> configurable filePrefix/fileExtension), comments translated to English, no other behavioural change.
+
+
+6. USING IT
+-----------
+
+```kotlin
+val downloader = ChunkedDownloader(
+    client = client,                                  // HTTP/1.1 client from section 3
+    dir = File(context.cacheDir, "updates"),
+    filePrefix = "myapp",
+    fileExtension = "apk",
+)
+
+val file = downloader.download(
+    DownloadTarget(
+        id = "v1.2.3",
+        url = asset.browserDownloadUrl,
+        sizeBytes = asset.size,                       // GitHub API: assets[].size
+        sha256 = asset.digest?.removePrefix("sha256:"),   // GitHub API: assets[].digest = "sha256:<hex>"
+    ),
+) { done, total ->
+    // called by a single collector every 250 ms (several connections) or every 128 KB (single stream)
+    progress.value = if (total > 0) done.toFloat() / total else 0f
+}
+```
+
+Android integration advice:
+  - Run it from WorkManager (or a foreground service) so the download does not depend on a screen's lifetime.
+  - Keep files in cacheDir/filesDir; call `cleanExcept(currentId)` after a successful update to remove old versions
+    and partial files.
+  - Before installing an APK, verify its signature matches your own, then hand it to PackageInstaller.
+  - IntegrityException means the file is already deleted; offer a retry.
+  - On metered networks consider `connections = 1..2` if the user prefers.
+
+Parameters worth knowing:
+
+  connections        6        more is rarely better and is rude to the server
+  chunkBytes         1 MB     smaller = shorter tail but more requests (~37 requests for a 37 MB file)
+  parallelMinBytes   4 MB     below this the handshakes eat the gain
+  slowChunkMs        15 000   an attempt on one chunk longer than this = slow connection, replace it
+  bufferSize         64 KB
+
+
+7. WHAT TO TEST (MockWebServer)
+-------------------------------
+
+  a. happy path, SHA matches
+  b. the server answers 200 to a Range request -> falls back to a single stream
+  c. kill mid-way, call again -> progress starts from the recorded chunks
+  d. wrong SHA -> the file is deleted, IntegrityException
+  e. 403 once on a chunk (expired link) -> re-probe, success
+  f. one chunk stalls beyond slowChunkMs -> replaced by a new connection
+  g. cancel the coroutine -> workers stop, .part and .part.map stay
+
+
+8. REPRODUCE THE BENCHMARK
+--------------------------
+
+The harness lives in the project repository under tools/bench (Kotlin, plain Gradle project):
+
+  gradle installDist          (Gradle 8.13+, JDK 21; no wrapper is bundled)
+  build/install/bench/bin/bench <url> <sizeBytes> <sha256> <runs> results.json <workDir>
+
+It runs "single", "equal6" and "vetro" interleaved with a rotating order, verifies SHA-256 each time and writes the
+byte timeline of every run. tools/bench_prepare.py turns it into the data for the race graphic.
+
+
+9. PITFALLS WE HIT OR GUARD AGAINST
+-----------------------------------
+
+  - HTTP/2 client -> no parallel speed-up. Force HTTP/1.1.
+  - GitHub release URLs redirect to a short-lived signed CDN URL. Resolve once, reuse; re-resolve on 400/401/403/410.
+  - Some servers answer 200 (whole file) to a Range request. Detect it, do not corrupt the file.
+  - Half-written files must never carry the final name.
+  - Progress callbacks from several threads break UI consumers: use one ticker.
+  - Do not stitch parts at the end of a multi-GB download: write at offsets into one preallocated file.

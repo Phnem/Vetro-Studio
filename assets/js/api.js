@@ -1,5 +1,6 @@
-/* VetroBook API page: live search against api.vetrostudio.bid, book card dialog, number formatting, charts.
-   Contract: docs/books-api.md. Everything that comes from the API is written with textContent, never innerHTML. */
+/* Vetro API page: live search (/v1/find) across books, anime, movies and series on api.vetrostudio.bid, the card dialog
+   (/v1/books/{id} or /v1/media/{id}), number formatting, charts. Contract: docs/books-api.md (books, and the section on
+   media and /v1/find at its end). Everything that comes from the API is written with textContent, never innerHTML. */
 (() => {
   'use strict';
 
@@ -32,9 +33,13 @@
     if (!r.ok) { const err = new Error(`http_${r.status}`); err.code = r.status; throw err; }
     return r.json();
   }
-  // <img> cannot send headers, so covers take the key in the query string
-  const coverUrl = (b, large) => ((b.f & 1) && b.cv) ? `${base}/covers/${large ? 'large' : 'small'}/${b.id}.avif?v=${b.cv}&key=${KEY}` : null;
-  const title = (b) => (lang() === 'ru' ? b.ru || b.en : b.en || b.ru) || '—';
+  const KINDS = ['all', 'anime', 'movie', 'tv', 'book'];
+  const isMedia = (b) => !!b.kind && b.kind !== 'book';          // books come without a kind or with kind=book
+  const KIND_LABEL = { anime: ['app.anime', 'Anime'], movie: ['app.movie', 'Movie'], tv: ['app.series', 'Series'], book: ['api.d.book', 'Book'] };
+  const kindLabel = (b) => { const k = KIND_LABEL[b.kind] || KIND_LABEL.book; return T(k[0], k[1]); };
+  // <img> cannot send headers, so covers take the key in the query string; media covers live under /covers/media/
+  const coverUrl = (b, large) => ((b.f & 1) && b.cv) ? `${base}/covers/${isMedia(b) ? 'media/' : ''}${large ? 'large' : 'small'}/${b.id}.avif?v=${b.cv}&key=${KEY}` : null;
+  const title = (b) => (lang() === 'ru' ? b.ru || b.en || b.ro || b.orig : b.en || b.ro || b.ru || b.orig) || '—';
   const author = (b) => (lang() === 'ru' ? b.ra || b.ea : b.ea || b.ra) || '';
   const initial = (s) => (String(s).trim().match(/[\p{L}\p{N}]/u) || ['V'])[0].toUpperCase();
 
@@ -74,7 +79,7 @@
     if (vocab.size > 60000) vocab.clear();
     list.forEach((b) => {
       const seen = new Set();
-      [b.ru, b.en, b.ra, b.ea].forEach((t) => words(t).forEach((w) => { seen.add(w); seen.add(translit(w)); }));
+      [b.ru, b.en, b.ro, b.orig, b.ra, b.ea].forEach((t) => words(t).forEach((w) => { seen.add(w); seen.add(translit(w)); }));
       seen.forEach((w) => vocab.set(w, (vocab.get(w) || 0) + 1));
     });
   }
@@ -109,7 +114,7 @@
     const authorWords = [];
     [b.ra, b.ea].forEach((t) => words(t).forEach((w) => authorWords.push(w, translit(w))));
     let best = -Infinity;
-    [b.ru, b.en].forEach((t) => {
+    [b.ru, b.en, b.ro, b.orig].forEach((t) => {
       const n = norm(t);
       if (n) [n, translit(n)].forEach((f) => { best = Math.max(best, titleScore(f, qw, qn, authorWords)); });
     });
@@ -118,11 +123,23 @@
   }
   const rank = (list, qw) => list.map((b, i) => [score(b, qw), i, b]).sort((x, y) => y[0] - x[0] || x[1] - y[1]).map((x) => x[2]);
   const top = (list, qw) => (list.length ? score(list[0], qw) : -Infinity);
+  /* "All": the server ranks every catalogue on its own and interleaves them. The page ranks each catalogue again (typos, exact
+     titles) and merges the lists round by round, the catalogue with the best match first. */
+  function rankMixed(list, qw) {
+    const groups = new Map();
+    list.forEach((b) => { const k = b.kind || 'book'; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(b); });
+    const ranked = [...groups.values()].map((g) => rank(g, qw)).sort((a, b) => top(b, qw) - top(a, qw));
+    const out = [];
+    for (let i = 0; ranked.some((g) => i < g.length); i += 1) ranked.forEach((g) => { if (i < g.length) out.push(g[i]); });
+    return out;
+  }
 
   /* ---------- search ---------- */
   const form = $('#searchForm'); const input = $('#q'); const grid = $('#results');
   const statusEl = $('#searchStatus'); const stateEl = $('#searchState');
   let items = []; let ctl = null; let timer = 0; let mounted = 0;
+  let kind = 'all';                                           // all | anime | movie | tv | book
+  const limitFor = () => (kind === 'all' ? 40 : LIMIT);
   let fix = null;                                             // { shown, orig } while results for a corrected query are on screen
 
   const mountMascot = (node) => { if (window.VetroMascotMount) window.VetroMascotMount(node, 100 + mounted++); };
@@ -150,6 +167,7 @@
       img.addEventListener('error', () => img.remove());
       cov.append(img);
     }
+    cov.append(el('span', `kind-badge kind-${b.kind || 'book'}`, kindLabel(b)));
     const meta = [author(b), b.y].filter(Boolean).join(' · ');
     btn.append(cov, el('b', 'book-title', title(b)), el('span', 'book-meta', meta));
     btn.addEventListener('click', () => openBook(b, btn));
@@ -165,7 +183,7 @@
     }
     hideState();
     let msg = T('api.found', 'Found: {n}').replace('{n}', fmtN(items.length));
-    if (items.length >= LIMIT) msg += ` · ${T('api.more', 'showing the first {n}, refine the query to narrow it down').replace('{n}', LIMIT)}`;
+    if (items.length >= limitFor()) msg += ` · ${T('api.more', 'showing the first {n}, refine the query to narrow it down').replace('{n}', limitFor())}`;
     setStatus(msg);
     if (fix) {
       const f = fix;
@@ -187,10 +205,10 @@
   }
 
   async function run(qw, signal) {
-    const data = await api(`/v1/search?q=${encodeURIComponent(qw.join(' '))}&limit=${LIMIT}`, signal);
+    const data = await api(`/v1/find?q=${encodeURIComponent(qw.join(' '))}&kind=${kind}&limit=${limitFor()}`, signal);
     const list = Array.isArray(data.items) ? data.items : [];
     learn(list);
-    return rank(list, qw);
+    return kind === 'all' ? rankMixed(list, qw) : rank(list, qw);
   }
 
   async function search(raw, exact = false) {
@@ -232,10 +250,21 @@
     try {
       const u = new URL(location.href);
       if (q) u.searchParams.set('q', q); else u.searchParams.delete('q');
+      if (kind !== 'all') u.searchParams.set('kind', kind); else u.searchParams.delete('kind');
       history.replaceState(null, '', u);
     } catch (e) { /* history unavailable */ }
   }
 
+  const tabs = $$('.kind-tab');
+  function setKind(k, rerun = true) {
+    kind = KINDS.includes(k) ? k : 'all';
+    tabs.forEach((t) => { const on = t.dataset.kind === kind; t.classList.toggle('is-active', on); t.setAttribute('aria-pressed', String(on)); });
+    if (!rerun) return;                                       // initial state from the address: leave the address alone
+    if (input.value.trim()) { clearTimeout(timer); search(input.value); } else syncUrl('');
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => setKind(t.dataset.kind)));
+  const initialKind = new URLSearchParams(location.search).get('kind');
+  if (initialKind) setKind(initialKind, false);
   input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => search(input.value), 300); });
   form.addEventListener('submit', (e) => { e.preventDefault(); clearTimeout(timer); search(input.value); });
   $$('.chip-ex').forEach((b) => b.addEventListener('click', () => { input.value = b.dataset.q; clearTimeout(timer); search(b.dataset.q); }));
@@ -247,6 +276,7 @@
   const nodes = { cover: $('#bookCover'), kind: $('#bookKind'), title: $('#bookTitle'), by: $('#bookBy'), chips: $('#bookChips'), secs: $('#bookSecs'), loading: $('#bookLoading'), links: $('#bookLinks') };
   const TYPES = { literary_work: ['Literary work', 'Произведение'], novel: ['Novel', 'Роман'], book_series: ['Book series', 'Серия книг'], short_story: ['Short story', 'Рассказ'], poem: ['Poem', 'Стихотворение'], audiobook: ['Audiobook', 'Аудиокнига'], non_fiction: ['Non-fiction', 'Нон-фикшен'] };
   const GENRES = { fantasy: ['Fantasy', 'Фэнтези'], scifi: ['Sci-fi', 'Фантастика'], adventure: ['Adventure', 'Приключения'], detective: ['Detective', 'Детектив'], thriller: ['Thriller', 'Триллер'], horror: ['Horror', 'Ужасы'], romance: ['Romance', 'Романтика'], drama: ['Drama', 'Драма'], history: ['History', 'История'], classic: ['Classic', 'Классика'], children: ['Children', 'Детское'], poetry: ['Poetry', 'Поэзия'], humor: ['Humour', 'Юмор'], biography: ['Biography', 'Биография'] };
+  const STATUS = { released: ['Released', 'Вышло'], ongoing: ['Ongoing', 'Выходит'], announced: ['Announced', 'Анонс'], ended: ['Ended', 'Завершён'], canceled: ['Canceled', 'Отменён'], returning_series: ['Returning', 'Продолжается'], planned: ['Planned', 'В планах'], in_production: ['In production', 'В производстве'] };
   const human = (s) => { const t = String(s).replace(/_/g, ' '); return t.charAt(0).toUpperCase() + t.slice(1); };
   const pick = (map, key) => (map[key] ? map[key][lang() === 'ru' ? 1 : 0] : human(key));
   const safeUrl = (u) => (typeof u === 'string' && /^https:\/\//i.test(u) ? u : null);
@@ -265,7 +295,7 @@
     nodes.title.textContent = title(b);
     nodes.by.textContent = author(b);
     nodes.by.hidden = !author(b);
-    nodes.kind.textContent = d.type ? pick(TYPES, d.type) : T('api.d.book', 'Book');
+    nodes.kind.textContent = isMedia(b) ? kindLabel(b) : (d.type ? pick(TYPES, d.type) : T('api.d.book', 'Book'));
 
     // cover
     nodes.cover.textContent = '';
@@ -283,6 +313,12 @@
     const chips = [];
     if (b.y) chips.push(String(b.y));
     if (d.rate && d.rate.v) chips.push(`★ ${d.rate.v}${d.rate.n ? ` · ${fmtN(d.rate.n)} ${T('api.d.ratings', 'ratings')}` : ''}`);
+    if (isMedia(b)) {
+      if (d.seas) chips.push(T('api.d.seas', 'Seasons: {n}').replace('{n}', d.seas));
+      if (d.eps) chips.push(T('api.d.ep', 'Episodes: {n}').replace('{n}', d.eps));
+      if (d.dur) chips.push(T('api.d.min', '{n} min').replace('{n}', d.dur));
+      if (d.st) chips.push(pick(STATUS, d.st));
+    }
     (Array.isArray(d.gen) ? d.gen.slice(0, 5) : []).forEach((g) => chips.push(pick(GENRES, g)));
     chips.push(`ID ${b.id}`);
     chips.forEach((c) => nodes.chips.append(el('li', null, c)));
@@ -291,9 +327,12 @@
     nodes.secs.textContent = '';
     const desc = d.desc && d.desc.t;
     if (desc) nodes.secs.append(section(T('api.d.desc', 'About'), el('p', 'book-desc', desc)));
-    const seen = new Set([title(b).toLowerCase()]);
-    if (d.orig && d.orig.t && !seen.has(d.orig.t.toLowerCase())) { seen.add(d.orig.t.toLowerCase()); nodes.secs.append(section(T('api.d.orig', 'Original title'), el('p', null, d.orig.t))); }
-    const alts = (d.alts || []).map((a) => a.t).filter((t) => t && !seen.has(t.toLowerCase()));
+    const seen = new Set([title(b), b.ru, b.en].filter(Boolean).map((t) => t.toLowerCase()));
+    const origT = isMedia(b) ? b.orig : d.orig && d.orig.t;            // media carry the original title on the row, books in the card
+    if (origT && !seen.has(origT.toLowerCase())) { seen.add(origT.toLowerCase()); nodes.secs.append(section(T('api.d.orig', 'Original title'), el('p', null, origT))); }
+    if (isMedia(b) && b.ro && !seen.has(b.ro.toLowerCase())) { seen.add(b.ro.toLowerCase()); nodes.secs.append(section('Romaji', el('p', null, b.ro))); }
+    const altRows = isMedia(b) ? String(b.alt || '').split('|').map((s) => s.trim()) : (d.alts || []).map((a) => a.t);   // media: one string, "a | b | c"
+    const alts = altRows.filter((t) => t && !seen.has(t.toLowerCase()));
     const altsU = [...new Set(alts)].slice(0, 8);
     if (altsU.length) nodes.secs.append(section(T('api.d.alts', 'Also known as'), list(altsU)));
     if (Array.isArray(d.series) && d.series.length) {
@@ -318,6 +357,14 @@
     mk('wikidata', (v) => `https://www.wikidata.org/wiki/${v}`, 'Wikidata ↗');
     mk('openlibrary', (v) => `https://openlibrary.org/works/${v}`, 'Open Library ↗');
     mk('fantlab', (v) => `https://fantlab.ru/work${v}`, 'FantLab ↗');
+    mk('mal', (v) => `https://myanimelist.net/anime/${v}`, 'MyAnimeList ↗');
+    mk('anilist', (v) => `https://anilist.co/anime/${v}`, 'AniList ↗');
+    mk('shikimori', (v) => `https://shikimori.one/animes/${v}`, 'Shikimori ↗');
+    mk('kitsu', (v) => `https://kitsu.app/anime/${v}`, 'Kitsu ↗');
+    mk('imdb', (v) => `https://www.imdb.com/title/${v}/`, 'IMDb ↗');
+    mk('tmdb', (v) => `https://www.themoviedb.org/${b.kind === 'movie' ? 'movie' : 'tv'}/${v}`, 'TMDB ↗');
+    mk('tvmaze', (v) => `https://www.tvmaze.com/shows/${v}`, 'TVmaze ↗');
+    if (isMedia(b) && d.cover && d.cover.lic) nodes.secs.append(section(T('api.d.cover', 'Cover'), el('p', 'book-desc', [d.cover.src, d.cover.lic].filter(Boolean).join(' · '))));
     const page = d.cover && safeUrl(d.cover.page);
     if (page) nodes.links.append(link(page, `${T('api.d.coversrc', 'Cover source')} ↗`));
     // Raw JSON: the API wants the key in a header, which a plain link cannot send, so open what was already fetched
@@ -338,7 +385,7 @@
     if (bookCtl) bookCtl.abort();
     bookCtl = new AbortController();
     try {
-      const full = await api(`/v1/books/${encodeURIComponent(b.id)}`, bookCtl.signal);
+      const full = await api(`/v1/${isMedia(b) ? 'media' : 'books'}/${encodeURIComponent(b.id)}`, bookCtl.signal);
       current = full; renderBook(); nodes.loading.hidden = true;
     } catch (e) {
       if (e.name === 'AbortError') return;

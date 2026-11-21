@@ -32,23 +32,23 @@ A static product hub with six pages, in **English and Russian** (the language is
 - `look.html` — VetroLook: a 3D window mockup, preview video, supported formats, native-performance notes, animated benchmarks, privacy dialog and the MSI download.
 - `vap.html` — VAP (Vetro Android Player): phone mockups, features, on-device AI (Whisper, local translation, Smart Sync), the foss/cast builds and APK downloads (latest release from GitHub).
 
-- `modules.html` — Vetro Modules: Compose recipes from the app (frosted glass, motion springs, chunked downloader) with the real screen recordings (`assets/video/modules/`, re-encoded from the [Vetro-Modules](https://github.com/Phnem/Vetro-Modules) repository), the download benchmark and the latest release archives (read from GitHub Releases).
+- `modules.html` — Vetro Modules: Compose recipes from the app (frosted glass, motion springs, chunked downloader). The glass and motion recipes are **live demos** drawn in DOM/CSS/JS (`assets/js/modules-demo.js`): the eight glass layers with the module's own numbers (tap a layer to switch it off, dark/light, still/moving backdrop) and three motion patterns (a window out of a dock icon, a "…" popover, a notification stack with swipe) on spring tokens `(ζ, T)` taken from the module's token table. They run only while on screen, and `prefers-reduced-motion` makes every spring critically damped. The downloader keeps its benchmark video (`assets/video/modules/download_benchmark.mp4`); `frostedglass-poster.jpg` there is used by `index.html`. Each module has a pair of download buttons, **SKILL.md** and **GUIDE.txt** as separate files copied from the [Vetro-Modules](https://github.com/Phnem/Vetro-Modules) repository into `assets/modules/<module>/` (see `assets/modules/SOURCE.txt` for the source state; the `download` attribute only works for same-domain files). The zip archives are no longer offered on the page (the owner's decision of 20 Nov 2026); they still exist in GitHub Releases.
 
-- `api.html` — VetroBook API: a live book search against `api.vetrostudio.bid` (a card with cover, authors, translations and editions opens on click), charts of the catalogue volume, speed, limits and cache, the plans (Basic / Pro / Ultra), the Telegram bot link (`@VetroBook_API_bot`) and a quick start. Logic is in `assets/js/api.js`: the query is cleaned (lower case, no diacritics, `ё`→`е` but `й` kept, punctuation dropped), typos are fixed against a vocabulary built from the answers (Damerau–Levenshtein, words of 4+ letters), and the results are re-ranked by title/author match; the server itself does the AND→OR search and transliteration. The contract is in [`docs/books-api.md`](docs/books-api.md). The page sends the site key (Ultra, permanent, bound to the site domains) in an `Authorization` header and `&key=` on cover links; the key is one constant, see [`docs/api-key.md`](docs/api-key.md). Vetro Collection links here from its download section.
+- `api.html` — Vetro API (formerly "VetroBook API"; the catalogue now holds books, anime, movies and series): a live search against `api.vetrostudio.bid/v1/find` with an All / Anime / Movies / Series / Books switch (a card opens on click: books from `/v1/books/{id}`, titles from `/v1/media/{id}`), charts of the catalogue volume, speed, limits and cache, the plans (Basic / Pro / Ultra), the Telegram bot link (`@VetroBook_API_bot`) and a quick start. Logic is in `assets/js/api.js`: the query is cleaned (lower case, no diacritics, `ё`→`е` but `й` kept, punctuation dropped), typos are fixed against a vocabulary built from the answers (Damerau–Levenshtein, words of 4+ letters), and the results are re-ranked by title/author match; the server itself does the AND→OR search and transliteration. The contract is in [`docs/books-api.md`](docs/books-api.md). The page sends the site key (Ultra, permanent, bound to the site domains) in an `Authorization` header and `&key=` on cover links; the key is one constant, see [`docs/api-key.md`](docs/api-key.md). Vetro Collection links here from its download section.
 - `api-docs.html` — the API documentation: getting a key, plans, authentication, endpoints, response fields, errors and limits, quick start, technical notes and the terms of use (a working draft). Content comes from `docs/api/README*.md` and `docs/api/terms*.md` of the app repository; the side menu and copy buttons are in `assets/js/api-docs.js`. Linked from `api.html` (nav, hero, access section, footer).
 
 The Vetro mascot (ported from the app, see [`docs/mascot.md`](docs/mascot.md)) lives on every page as a `.mascot-card` panel mounted by `assets/js/mascot.js`.
 
 #### VAP screenshots
 
-The phones on `index.html` and `vap.html` show a placeholder until real screenshots exist. Drop portrait images (about 720×1560, WebP) into `assets/img/` under these names and they replace the placeholders automatically, with no HTML changes:
+The phones on `index.html` and `vap.html` show real VAP screenshots (taken from `captures/final/2-clean-screens` of the VAP repository, resized to 720×1560 WebP). A placeholder shows only if a file is missing. To replace one, drop a portrait image (about 720×1560, WebP) into `assets/img/` under the same name, with no HTML changes:
 
 | File | Shown as |
 | --- | --- |
-| `vap-player.webp` | the centre phone in the hero, "Gestures and tracks" |
-| `vap-library.webp` | the left phone in the hero, "Your library" |
+| `vap-library.webp` | the centre phone in the hero, "Your library" |
+| `vap-ai.webp` | the left phone in the hero, "On-device AI" |
 | `vap-subtitles.webp` | the right phone in the hero, "Subtitle tools" |
-| `vap-ai.webp` | "On-device AI" |
+| `vap-player.webp` | **landscape**, 1560×720: the wide phone (`.phone-land`) in the gallery, "Gestures and tracks". The player is landscape in the app, so it is not in the hero clusters |
 
 ### Design
 

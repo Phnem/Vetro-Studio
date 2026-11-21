@@ -1,0 +1,442 @@
+VETRO FROSTED GLASS — manual guide
+===================================
+
+For people who write the code themselves. (If you work with an AI coding agent, give it SKILL.md instead —
+the numbers and rules are the same.)
+
+Licence: GPL-3.0 (Vetro Modules). Free software under the terms of the GPL-3.0; keep the attribution of the
+backdrop library you depend on.
+
+
+1. WHAT YOU GET
+---------------
+
+A matte, diffuse glass surface for Jetpack Compose: dock capsules, round buttons, notification plates,
+dropdown panels. Unlike "liquid" glass (lens refraction, almost no blur) it DIFFUSES what is underneath, so text
+on top stays readable over moving covers, video or a busy list.
+
+Eight layers, in this order:
+
+  1  live backdrop            drawBackdrop(backdrop)
+  2  local blur               blur(radiusPx)
+  3  saturation + contrast    colorControls(contrast, saturation)
+  4  neutral tint             onDrawSurface { drawRect(tint) }           <- AFTER the blur
+  5  micro-grain 1-3 %        onDrawFront   { cached noise tile }
+  6  rim, ONE physical pixel  border(1px, rim, shape)
+  7  inner highlight          Highlight(width = 0.75.dp, alpha = ...)
+  8  wide weak shadow         Shadow(radius = ..., color = black @ low alpha)
+
+Rule of thumb: glass needs something to diffuse. Over a flat solid colour it looks exactly like an opaque
+rectangle, whatever the blur radius.
+
+
+2. REQUIREMENTS (versions the code was verified with)
+-----------------------------------------------------
+
+  Kotlin                2.4.21
+  Android Gradle Plugin 8.13.2
+  Compose BOM           2025.12.00
+  compileSdk/targetSdk  36
+  minSdk                26   (real blur needs API 31 / Android 12; below that the fallback material is used)
+  Backdrop library      io.github.kyant0:backdrop:1.0.0
+
+Gradle (version catalog style):
+
+  # gradle/libs.versions.toml
+  [versions]
+  backdrop = "1.0.0"
+  [libraries]
+  backdrop = { module = "io.github.kyant0:backdrop", version.ref = "backdrop" }
+
+  // app/build.gradle.kts
+  dependencies { implementation(libs.backdrop) }
+
+Check the licence of the backdrop library before you ship.
+
+
+3. THE CODE  (FrostedGlass.kt — change the package, nothing else is required)
+------------------------------------------------------------------------------
+
+Extracted from the production app. Edits made for sharing: the app's theme helper became an explicit `isDark`
+parameter, the app-specific "pinnable backdrop" wrapper (pauses glass re-capture during page swipes) and the
+classic/modern UI switch were removed, comments translated. The drawing chain is unchanged.
+
+```kotlin
+package your.app.ui.glass
+
+import android.graphics.Bitmap
+import android.os.Build
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.ImageShader
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.drawBackdrop
+import com.kyant.backdrop.effects.blur
+import com.kyant.backdrop.effects.colorControls
+import com.kyant.backdrop.highlight.Highlight
+import com.kyant.backdrop.shadow.Shadow
+import kotlin.random.Random
+
+@Immutable
+data class FrostedMaterial(
+    /** Local blur radius: the diffusion this material exists for. */
+    val blur: Dp,
+    /** Backdrop saturation: colour under the glass must stay alive, not wash out. */
+    val saturation: Float,
+    /** Contrast: a slight lift, otherwise blur flattens the underlay. */
+    val contrast: Float,
+    /** Neutral tint over the blur: gives the "matte" look and the contrast for text. */
+    val tint: Color,
+    /** Grain alpha, 0.01-0.03. More is visible dirt. */
+    val noiseAlpha: Float,
+    /** Rim colour; thickness is always one physical pixel. */
+    val rim: Color,
+    /** Inner highlight along the top edge. */
+    val highlight: Highlight?,
+    /** Wide, low-alpha shadow that separates the surface from the plane below. */
+    val shadow: Shadow?,
+    /** Fill used when the system has no local blur (API < 31). A deliberate material, not fake glass. */
+    val fallbackFill: Color,
+)
+
+object FrostedMaterials {
+
+    /** Notification plate over a list. Strong blur, denser tint: the plate carries the main text. */
+    @Composable
+    fun notification(isDark: Boolean): FrostedMaterial = remember(isDark) {
+        if (isDark) {
+            FrostedMaterial(
+                blur = 24.dp, saturation = 1.18f, contrast = 1.05f,
+                tint = Color(0xFF121212).copy(alpha = 0.62f),
+                noiseAlpha = 0.022f,
+                rim = Color.White.copy(alpha = 0.16f),
+                highlight = Highlight(width = 0.75.dp, alpha = 0.5f),
+                shadow = Shadow(radius = 28.dp, color = Color.Black.copy(alpha = 0.22f)),
+                fallbackFill = Color(0xFF1C1C1E),
+            )
+        } else {
+            FrostedMaterial(
+                blur = 24.dp, saturation = 1.16f, contrast = 1.04f,
+                tint = Color.White.copy(alpha = 0.66f),
+                noiseAlpha = 0.016f,
+                rim = Color.White.copy(alpha = 0.85f),
+                highlight = Highlight(width = 0.75.dp, alpha = 0.7f),
+                shadow = Shadow(radius = 26.dp, color = Color.Black.copy(alpha = 0.12f)),
+                fallbackFill = Color.White,
+            )
+        }
+    }
+
+    /**
+     * A plate lying UNDER the top one in a stack. Same modifier chain as [notification] (so promoting it to the
+     * top does not change the node set), but a different MATERIAL: no blur (invisible under the top plate and a
+     * waste of GPU), fully opaque tint (text of lower plates must not show through).
+     */
+    @Composable
+    fun stackedNotification(isDark: Boolean): FrostedMaterial {
+        val base = notification(isDark)
+        return remember(base, isDark) {
+            base.copy(
+                blur = 0.dp, saturation = 1f, contrast = 1f,
+                tint = if (isDark) Color(0xFF1C1C1E) else Color.White,
+                noiseAlpha = 0f, highlight = null, shadow = null,
+            )
+        }
+    }
+
+    /** Dock capsule, round buttons next to it, dropdown panels. Lighter tint: icons, no body text. */
+    @Composable
+    fun dock(isDark: Boolean): FrostedMaterial = remember(isDark) {
+        if (isDark) {
+            FrostedMaterial(
+                blur = 20.dp, saturation = 1.20f, contrast = 1.06f,
+                tint = Color(0xFF141414).copy(alpha = 0.48f),
+                noiseAlpha = 0.020f,
+                rim = Color.White.copy(alpha = 0.14f),
+                highlight = Highlight(width = 0.75.dp, alpha = 0.55f),
+                shadow = Shadow(radius = 30.dp, color = Color.Black.copy(alpha = 0.26f)),
+                fallbackFill = Color(0xFF1A1A1A),
+            )
+        } else {
+            FrostedMaterial(
+                blur = 20.dp, saturation = 1.18f, contrast = 1.05f,
+                tint = Color.White.copy(alpha = 0.54f),
+                noiseAlpha = 0.014f,
+                rim = Color.White.copy(alpha = 0.9f),
+                highlight = Highlight(width = 0.75.dp, alpha = 0.75f),
+                shadow = Shadow(radius = 28.dp, color = Color.Black.copy(alpha = 0.14f)),
+                fallbackFill = Color(0xFFF2F2F4),
+            )
+        }
+    }
+
+    /**
+     * Buttons and plates over cover art (player controls, mini player, "continue" card). The backdrop is a
+     * picture, so blur is full and the theme does not matter. Tint is darker than the dock: white icons need
+     * contrast on a light cover.
+     */
+    @Composable
+    fun playerControl(): FrostedMaterial = remember {
+        FrostedMaterial(
+            blur = 24.dp, saturation = 1.16f, contrast = 1.05f,
+            tint = Color(0xFF141414).copy(alpha = 0.42f),
+            noiseAlpha = 0.020f,
+            rim = Color.White.copy(alpha = 0.16f),
+            highlight = Highlight(width = 0.75.dp, alpha = 0.5f),
+            shadow = Shadow(radius = 24.dp, color = Color.Black.copy(alpha = 0.22f)),
+            fallbackFill = Color(0xE6202020),
+        )
+    }
+}
+
+/** Local blur exists from Android 12 (RenderEffect.createBlurEffect). Below that we do not fake it. */
+private val SystemBlurAvailable: Boolean
+    get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
+/**
+ * Apply [material] to a surface of [shape].
+ *
+ * The modifier never adds or removes nodes during the life of the component: the branch is chosen once by
+ * OS version. Structurally changing the modifier chain above a consumer of `layerBackdrop` resets the glass
+ * recording - keep the chain constant.
+ */
+@Composable
+fun Modifier.frostedGlass(
+    backdrop: Backdrop,
+    shape: Shape,
+    material: FrostedMaterial,
+): Modifier {
+    val density = LocalDensity.current
+    val blurPx = with(density) { material.blur.toPx() }
+    // Exactly one PHYSICAL pixel, not 1 dp: on a dense screen 1 dp is 3-4 px and the hairline becomes a frame.
+    val hairline = with(density) { 1f.toDp() }
+    val noiseBrush = rememberNoiseBrush()
+
+    // The chain is remembered: drawBackdrop creates a new ShapeProvider without equals every call, so any
+    // recomposition of the caller would rebuild the RenderEffect and repaint the shadow.
+    val body = remember(backdrop, shape, material, blurPx, noiseBrush) {
+        if (SystemBlurAvailable) {
+            Modifier.drawBackdrop(
+                backdrop = backdrop,
+                shape = { shape },
+                effects = {
+                    // Order matters: blur first, colour second. The reverse smears boosted saturation
+                    // into a dirty halo.
+                    blur(blurPx)
+                    colorControls(
+                        contrast = material.contrast,
+                        saturation = material.saturation,
+                    )
+                },
+                highlight = { material.highlight },
+                shadow = { material.shadow },
+                // Tint on top of the processed backdrop, not mixed into it: "blur before tint".
+                onDrawSurface = { drawRect(material.tint) },
+                onDrawFront = { drawNoise(noiseBrush, material.noiseAlpha) },
+            )
+        } else {
+            Modifier
+                .background(material.fallbackFill, shape)
+                .drawWithContent {
+                    drawContent()
+                    drawNoise(noiseBrush, material.noiseAlpha)
+                }
+        }
+    }
+
+    // The rim is a separate node: border() builds the stroke from the shape, so capsules and rounded
+    // rectangles are outlined correctly without hand-made geometry.
+    return this
+        .then(body)
+        .border(hairline, material.rim, shape)
+}
+
+private fun DrawScope.drawNoise(noiseBrush: ShaderBrush, alpha: Float) {
+    if (alpha > 0f) drawRect(brush = noiseBrush, alpha = alpha)
+}
+
+/**
+ * Grain tile. Built once per process and shared by all surfaces: never rebuild a noise texture per frame.
+ * Achromatic - coloured noise on a neutral underlay reads as an image defect.
+ */
+@Composable
+private fun rememberNoiseBrush(): ShaderBrush = remember {
+    ShaderBrush(
+        ImageShader(
+            image = NoiseTile,
+            tileModeX = TileMode.Repeated,
+            tileModeY = TileMode.Repeated,
+        ),
+    )
+}
+
+private val NoiseTile: ImageBitmap by lazy {
+    val size = 128
+    // Fixed seed: the texture must be identical between launches, otherwise the same surface differs
+    // slightly on screenshots and they cannot be compared.
+    val random = Random(0x5E7B0)
+    val pixels = IntArray(size * size) {
+        val v = 128 + random.nextInt(-64, 64)
+        (0xFF shl 24) or (v shl 16) or (v shl 8) or v
+    }
+    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    bitmap.setPixels(pixels, 0, size, 0, 0, size, size)
+    bitmap.asImageBitmap()
+}
+```
+
+This exact file is compiled and run in the demo app of the Vetro Modules repository (Kotlin 2.4.21, AGP 8.13.2,
+Compose BOM 2025.12.00, backdrop 1.0.0) on a real phone: Android 16, 120 Hz. If your Kotlin or backdrop version
+differs, expect small API drift in `Highlight` / `Shadow` / `drawBackdrop` parameter names — the structure and
+the numbers stay.
+
+
+4. USING IT
+-----------
+
+Skeleton of a screen:
+
+```kotlin
+@Composable
+fun CollectionScreen(isDark: Boolean) {
+    val backdrop = rememberLayerBackdrop()          // one per screen
+
+    Box(Modifier.fillMaxSize()) {
+        // 1) the content that scrolls UNDER the glass records itself into the backdrop
+        LazyColumn(Modifier.fillMaxSize().layerBackdrop(backdrop)) { /* covers, posters ... */ }
+
+        // 2) every glass surface is a SIBLING drawn after the content (never its ancestor)
+        val dock = FrostedMaterials.dock(isDark)
+        Row(
+            Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 22.dp)
+                .size(width = 300.dp, height = 66.dp)
+                .frostedGlass(backdrop, RoundedCornerShape(33.dp), dock),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+        ) { /* icons */ }
+
+        val plate = FrostedMaterials.notification(isDark)
+        Box(
+            Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 84.dp)
+                .size(width = 342.dp, height = 72.dp)
+                .frostedGlass(backdrop, RoundedCornerShape(26.dp), plate),
+        ) { /* icon, title, subtitle */ }
+    }
+}
+```
+
+Dropdown / "..." menu: draw the panel INSIDE the screen as another sibling with `frostedGlass(backdrop, shape,
+FrostedMaterials.dock(isDark))`. Do NOT use DropdownMenu / Popup: they are separate windows, the screen's
+layerBackdrop cannot be read from there and the menu comes out solid. A transparent full-screen scrim sibling
+(zIndex below the panel) catches taps outside.
+
+Text colours that worked: dark theme white @ 0.92 for titles, @ 0.62 for secondary; light theme #1C1C1E and
+#1C1C1E @ 0.58.
+
+
+5. THE NUMBERS (quick reference)
+--------------------------------
+
+                      dark                         light
+  dock
+    blur              20 dp                        20 dp
+    sat / contrast    1.20 / 1.06                  1.18 / 1.05
+    tint              #141414 @ 0.48               white @ 0.54
+    grain             0.020                        0.014
+    rim               white @ 0.14                 white @ 0.90
+    highlight         0.75 dp, alpha 0.55          0.75 dp, alpha 0.75
+    shadow            r 30 dp, black @ 0.26        r 28 dp, black @ 0.14
+    fallback          #1A1A1A                      #F2F2F4
+  notification
+    blur              24 dp                        24 dp
+    sat / contrast    1.18 / 1.05                  1.16 / 1.04
+    tint              #121212 @ 0.62               white @ 0.66
+    grain             0.022                        0.016
+    rim               white @ 0.16                 white @ 0.85
+    highlight         alpha 0.50                   alpha 0.70
+    shadow            r 28 dp, black @ 0.22        r 26 dp, black @ 0.12
+    fallback          #1C1C1E                      white
+  playerControl (theme independent)
+    blur 24 dp, sat 1.16, contrast 1.05, tint #141414 @ 0.42, grain 0.020, rim white @ 0.16,
+    highlight 0.50, shadow r 24 dp black @ 0.22, fallback #E6202020
+
+
+6. TUNING
+---------
+
+  Text is hard to read on the plate    -> raise the tint alpha first (0.62 -> 0.70), then blur. Not saturation.
+  Looks like a grey sticker            -> there is nothing to diffuse underneath; test over a colourful list.
+  Looks dirty / noisy                  -> grain alpha is too high; keep it between 0.014 and 0.022.
+  Colours wash out                     -> raise saturation by 0.02-0.04; never above ~1.25.
+  Rim looks thick                      -> you used 1.dp; use 1 physical pixel as in the code.
+  Light theme looks washed             -> the light rim must be bright (0.85-0.9) and the shadow weak (0.12-0.14).
+
+
+7. TROUBLESHOOTING
+------------------
+
+  The glass suddenly turns into a flat fill
+      You changed the NODE SET above a layerBackdrop consumer (conditional modifier, Modifier.blur that appears
+      only when radius > 0, a wrapper that starts to exist). Keep the chain permanent; toggle properties.
+      Also check that the glass is a sibling of the content, not its parent.
+
+  The dropdown menu is solid
+      It lives in a Popup / DropdownMenu window. Draw it inside the screen.
+
+  The blur "disappears" when a panel or plate appears or goes away
+      You animate the alpha of the glass (on open or on close). A half-transparent glass shows the SHARP,
+      un-blurred backdrop through it for a few frames. Keep alpha = 1 and change the glass SIZE instead: let a
+      dropdown grow out of its corner and shrink back into it (size follows the spring in the layout phase), and
+      fade only the content (text, icons). Capping alpha early (opaque in the first quarter of the motion) fixes the
+      opening but the closing still flashes the sharp backdrop. Same for stacks: do not swap glass for an opaque fill
+      while a plate moves back; keep the glass and fade the plate's text instead.
+
+  Glass flickers / is recaptured on every frame during page swipes
+      Pause backdrop re-capture while a pager swipe is in progress (the app has a small PinnableBackdrop wrapper for
+      this; it is not part of this guide because it is tied to its navigation).
+
+  Nothing blurs on a test phone
+      Android 11 or older: the fallback material is shown by design. On Android 12+ check that the content you
+      want to blur carries Modifier.layerBackdrop(backdrop).
+
+  Slow scrolling with many glass surfaces
+      Each surface is a full-resolution blur. Use stackedNotification (blur = 0) for plates that are covered, and
+      do not stack more than a handful of blurred surfaces on screen.
+
+
+8. HOW TO CHECK YOUR RESULT
+---------------------------
+
+  - Put a colourful, high-contrast list under the glass and scroll it. The picture must melt, not slide behind a
+    sheet of grey plastic.
+  - Put white and black text on top in both themes.
+  - Look at the rim on a 3x-density device at 1:1: a hairline, not a frame.
+  - Compare two screenshots of the same surface: grain must be identical (fixed seed).
+  - Rotate / switch theme / recompose: the glass must stay glass.
+
+
+9. CREDITS
+----------
+
+Material and tuning: Vetro (GPL-3.0). Backdrop capture, blur and highlight primitives: the Kyant backdrop library —
+respect its licence. The videos in the project README were recorded on a real phone (Android 16, 120 Hz) with the
+demo app that uses exactly this code.

@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#e1251b">
-  <title data-i18n="api.title">VetroBook API — a book catalogue API</title>
-  <meta name="description" content="VetroBook API is a read-only API for a catalogue of 269,000 books and audiobooks: search, book cards and covers. Access by key, three plans, CORS open." data-i18n-attr="content:api.desc">
+  <title data-i18n="api.title">Vetro API — a catalogue API for books, anime, movies and series</title>
+  <meta name="description" content="Vetro API is a read-only API for a catalogue of about 294,000 books and audiobooks and over 200,000 anime, movies and series: search, cards and covers. Access by key, three plans, CORS open." data-i18n-attr="content:api.desc">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="VetroBook API">
-  <meta property="og:description" content="Search 269,000 books and audiobooks, open cards and covers. Access by key, from 100 Telegram Stars for 30 days.">
+  <meta property="og:title" content="Vetro API">
+  <meta property="og:description" content="One search across books, anime, movies and series: cards and covers. Access by key, from 100 Telegram Stars for 30 days.">
   <meta property="og:image" content="https://vetrostudio.bid/assets/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="vetro-studio-icon.png">
@@ -26,7 +26,7 @@
 
   <header class="site-header">
     <div class="header-pill glass">
-      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>BOOK API</b></span></a>
+      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="index.html">Studio</a>
         <a href="collection.html" data-i18n="nav.collection">Collection</a>
@@ -64,14 +64,14 @@
       <div class="wrap hero-grid">
         <div class="hero-copy">
           <p class="eyebrow"><i class="pulse"></i><span data-i18n="api.eyebrow">Read-only API · access by key · CORS open</span></p>
-          <h1 data-i18n-html="api.h1">every book.<br><em>one request.</em></h1>
-          <p class="hero-lede" data-i18n="api.lede">A catalogue of books and audiobooks: search, book cards and covers. The same API that powers audiobook search in Vetro Collection. Access by key, three plans, CORS open.</p>
+          <h1 data-i18n-html="api.h1">every story.<br><em>one request.</em></h1>
+          <p class="hero-lede" data-i18n="api.lede">One catalogue of books and audiobooks, anime, movies and series: search, cards and covers. The same API that powers audiobook search in Vetro Collection. Access by key, three plans, CORS open.</p>
           <div class="hero-actions">
             <a class="btn btn-cream" href="#try"><span data-i18n="api.cta.try">Try the search</span> <b>↓</b></a>
             <a class="btn btn-glass" href="api-docs.html"><span data-i18n="api.cta.docs">Documentation</span> <b>→</b></a>
           </div>
           <ul class="facts glass" aria-label="Highlights" data-i18n-attr="aria-label:col.facts">
-            <li><b data-count="269270">269,270</b><span data-i18n="api.fact1">works</span></li>
+            <li><b>4</b><span data-i18n="api.fact1">catalogues: books, anime, movies, series</span></li>
             <li><b>3</b><span data-i18n="api.fact2">plans</span></li>
             <li><b>600</b><span data-i18n="api.fact3">requests a minute on Ultra</span></li>
           </ul>
@@ -79,7 +79,7 @@
         <div class="hero-stage">
           <div class="mod-stage">
             <div class="mascot-card" data-mascot="hello" data-mascot-theme="light"></div>
-            <span class="float-chip chip-a">GET /v1/search</span>
+            <span class="float-chip chip-a">GET /v1/find</span>
             <span class="float-chip chip-b">AVIF</span>
             <span class="float-chip chip-c">CORS *</span>
           </div>
@@ -89,8 +89,8 @@
 
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">BOOK CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.keys">API KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
-        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">BOOK CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.keys">API KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
+        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.keys">API KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
+        <span data-i18n="api.tick.search">SEARCH</span><i>●</i><span data-i18n="api.tick.cards">CARDS</span><i>●</i><span data-i18n="api.tick.covers">COVERS</span><i>●</i><span>CLOUDFLARE</span><i>●</i><span data-i18n="api.tick.keys">API KEYS</span><i>●</i><span data-i18n="api.tick.ro">READ-ONLY</span><i>●</i>
       </div>
     </div>
 
@@ -101,27 +101,35 @@
         <div class="section-head reveal">
           <p class="eyebrow" data-i18n="api.try.eyebrow">Live demo</p>
           <h2 id="api-try-title" data-i18n-html="api.try.title">Search the<br><em>catalogue.</em></h2>
-          <p class="section-lede" data-i18n="api.try.lede">Type a title or an author. The results come straight from the API, right in your browser. Tap a book to open its card.</p>
+          <p class="section-lede" data-i18n="api.try.lede">Type a title or an author and choose where to look: everywhere, or only anime, movies, series or books. The results come straight from the API, right in your browser. Tap a card to open the details.</p>
         </div>
         <div class="api-search glass-card reveal">
+          <div class="kind-tabs" id="kindTabs" role="group" aria-label="Where to search" data-i18n-attr="aria-label:api.kind.label">
+            <button type="button" class="kind-tab is-active" data-kind="all" aria-pressed="true" data-i18n="api.kind.all">All</button>
+            <button type="button" class="kind-tab" data-kind="anime" aria-pressed="false" data-i18n="fmt.anime">Anime</button>
+            <button type="button" class="kind-tab" data-kind="movie" aria-pressed="false" data-i18n="fmt.movies">Movies</button>
+            <button type="button" class="kind-tab" data-kind="tv" aria-pressed="false" data-i18n="fmt.series">Series</button>
+            <button type="button" class="kind-tab" data-kind="book" aria-pressed="false" data-i18n="app.books">Books</button>
+          </div>
           <form class="search-box" id="searchForm" role="search" autocomplete="off">
-            <label class="api-sr" for="q" data-i18n="api.q.label">Book title or author</label>
+            <label class="api-sr" for="q" data-i18n="api.q.label">Title or author</label>
             <input id="q" name="q" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="A title or an author…" data-i18n-attr="placeholder:api.q.ph">
             <button class="btn btn-ink" type="submit"><span data-i18n="api.q.go">Search</span> <b>↗</b></button>
           </form>
           <div class="try-examples">
             <span data-i18n="api.q.try">Try:</span>
-            <button type="button" class="chip-ex" data-q="Оруэлл">Оруэлл</button>
+            <button type="button" class="chip-ex" data-q="Death Note">Death Note</button>
+            <button type="button" class="chip-ex" data-q="Атака титанов">Атака титанов</button>
             <button type="button" class="chip-ex" data-q="Dune">Dune</button>
+            <button type="button" class="chip-ex" data-q="Breaking Bad">Breaking Bad</button>
+            <button type="button" class="chip-ex" data-q="Оруэлл">Оруэлл</button>
             <button type="button" class="chip-ex" data-q="Мастер и Маргарита">Мастер и Маргарита</button>
-            <button type="button" class="chip-ex" data-q="Harry Potter">Harry Potter</button>
-            <button type="button" class="chip-ex" data-q="Достоевский">Достоевский</button>
           </div>
           <p class="search-status" id="searchStatus" role="status" aria-live="polite"></p>
           <div class="book-grid" id="results"></div>
           <div class="search-state" id="searchState" hidden></div>
         </div>
-        <p class="fineprint reveal" data-i18n="api.try.note">Words in your query are matched as prefixes; case, ё and diacritics do not matter. The page fixes obvious typos itself, using words from the answers it has already received; if nothing turns up, try another spelling.</p>
+        <p class="fineprint reveal" data-i18n="api.try.note">Words in your query are matched as prefixes; case, ё and diacritics do not matter. The page fixes obvious typos itself, using words from the answers it has already received; if nothing turns up, try another spelling. In “All” mode the best results of each catalogue come interleaved.</p>
       </div>
     </section>
 
@@ -132,16 +140,17 @@
         <div class="section-head reveal">
           <p class="eyebrow" data-i18n="api.n.eyebrow">By the numbers</p>
           <h2 id="api-num-title" data-i18n-html="api.n.title">Big catalogue.<br><em>Fast answers.</em></h2>
-          <p class="section-lede" data-i18n="api.n.lede">Counted from the data loaded into the cloud, and measured on the live service.</p>
+          <p class="section-lede" data-i18n="api.n.lede">Volumes are rounded, from the data in the cloud on 20 November 2026: the catalogue grows with every data load. The book charts below come from the 12 November load. Speed is measured on the live service.</p>
         </div>
 
         <h3 class="num-group reveal"><span>01</span><b data-i18n="api.g1">Catalogue volume</b></h3>
         <div class="kpis">
-          <div class="kpi glass-card reveal"><b data-count="269270">269,270</b><span data-i18n="api.k1">works in the API</span></div>
-          <div class="kpi glass-card reveal"><b data-count="95187">95,187</b><span data-i18n="api.k2">works with a cover</span></div>
-          <div class="kpi glass-card reveal"><b><span data-dec="8.1">8.1</span> <small data-i18n="unit.gb">GB</small></b><span data-i18n="api.k3">of covers, 2 sizes, 190,376 files</span></div>
-          <div class="kpi glass-card reveal"><b data-count="218794">218,794</b><span data-i18n="api.k4">works with a year</span></div>
+          <div class="kpi glass-card reveal"><b data-count="294000">294,000</b><span data-i18n="api.k1">books and audiobooks</span></div>
+          <div class="kpi glass-card reveal"><b data-count="37000">37,000</b><span data-i18n="api.k2">anime</span></div>
+          <div class="kpi glass-card reveal"><b data-count="45500">45,500</b><span data-i18n="api.k3">movies</span></div>
+          <div class="kpi glass-card reveal"><b data-count="129000">129,000</b><span data-i18n="api.k4">series</span></div>
         </div>
+        <p class="fineprint reveal" data-i18n="api.k.cov">Most records have a cover: about 77% of books, 94% of anime, 99% of movies and 93% of series. Some titles exist both as anime and as a series because they came from different databases.</p>
 
         <div class="chart-pair">
           <article class="bm glass-card reveal" data-chart>
@@ -293,6 +302,8 @@
         <div class="api-code glass-card reveal">
           <p class="kicker" data-i18n="api.a.quick">Quick start</p>
           <pre><code><b>Authorization:</b> Bearer vk_pro_…
+<b>GET</b> https://api.vetrostudio.bid/v1/find?q=death%20note&amp;kind=all&amp;limit=10
+<b>GET</b> https://api.vetrostudio.bid/v1/media/A00000050
 <b>GET</b> https://api.vetrostudio.bid/v1/search?q=orwell&amp;limit=5
 <b>GET</b> https://api.vetrostudio.bid/v1/books/000000771
 <b>GET</b> https://api.vetrostudio.bid/v1/books?ids=000000771,000032099
@@ -323,7 +334,7 @@
 
   <footer class="site-footer theme-red">
     <div class="wrap footer-grid">
-      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>BOOK API</b></span></a><p data-i18n="footer.api">A read-only API for a catalogue of books and audiobooks.</p></div>
+      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a><p data-i18n="footer.api">A read-only API for a catalogue of books, anime, movies and series.</p></div>
       <div><h4>Vetro</h4><a href="index.html">Studio</a><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a><a href="vap.html">VAP</a><a href="modules.html">Modules</a><a href="api.html">API</a></div>
       <div><h4 data-i18n="footer.project">Project</h4><a href="api-docs.html" data-i18n="api.nav.docs">Docs</a><a href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer">@VetroBook_API_bot</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></div>
     </div>

@@ -1,0 +1,5 @@
+Files in this folder are copied unchanged from the local Vetro-Modules repository (https://github.com/Phnem/Vetro-Modules, GPL-3.0):
+<module>/SKILL.md and <module>/GUIDE.txt.
+Source state on 2026-11-20: the working tree on top of commit 56c325b, WITH uncommitted edits (git status showed modified SKILL.md and GUIDE.txt files), so these may be newer than the published release.
+The page downloads them as separate files (the download attribute only works for files on the same domain).
+To update: copy the files again from the repository and change this note.

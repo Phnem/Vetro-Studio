@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#e1251b">
-  <title data-i18n="apid.title">VetroBook API documentation — keys, plans and endpoints</title>
-  <meta name="description" content="Documentation of the VetroBook API: how to get a key, plans, authentication, endpoints, response fields, errors, limits and terms of use." data-i18n-attr="content:apid.desc">
+  <title data-i18n="apid.title">Vetro API documentation — keys, plans and endpoints</title>
+  <meta name="description" content="Documentation of the Vetro API, a catalogue of books, anime, movies and series: how to get a key, plans, authentication, endpoints, response fields, errors, limits and terms of use." data-i18n-attr="content:apid.desc">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="VetroBook API documentation">
-  <meta property="og:description" content="Keys and plans, authentication, endpoints, response fields, errors and limits of the Vetro book catalogue API.">
+  <meta property="og:title" content="Vetro API documentation">
+  <meta property="og:description" content="Keys and plans, authentication, endpoints, response fields, errors and limits of the Vetro catalogue API: books, anime, movies and series.">
   <meta property="og:image" content="https://vetrostudio.bid/assets/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="vetro-studio-icon.png">
@@ -25,7 +25,7 @@
 
   <header class="site-header">
     <div class="header-pill glass">
-      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>BOOK API</b></span></a>
+      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="index.html">Studio</a>
         <a href="collection.html" data-i18n="nav.collection">Collection</a>
@@ -63,7 +63,7 @@
         <div class="hero-copy">
           <p class="eyebrow"><i class="pulse"></i><span data-i18n="apid.eyebrow">Documentation · API v1</span></p>
           <h1 data-i18n-html="apid.h1">api<br><em>docs.</em></h1>
-          <p class="hero-lede" data-i18n="apid.lede">Everything you need to call the Vetro book catalogue API: keys and plans, authentication, endpoints, response fields, errors and limits.</p>
+          <p class="hero-lede" data-i18n="apid.lede">Everything you need to call the Vetro catalogue API (books, anime, movies and series): keys and plans, authentication, endpoints, response fields, errors and limits.</p>
           <div class="hero-actions">
             <a class="btn btn-cream" href="#key"><span data-i18n="apid.cta.key">Get a key</span> <b>↓</b></a>
             <a class="btn btn-glass" href="api.html#try"><span data-i18n="apid.cta.try">Try the live search</span> <b>↗</b></a>
@@ -107,19 +107,33 @@
           <!-- 01 overview -->
           <section class="doc-sec" id="overview">
             <h2><span>01</span><b data-i18n="apid.s.overview">Overview</b></h2>
-            <p data-i18n="apid.ov.p">A read-only HTTP API of the Vetro book catalogue: search, book cards with descriptions, genres and series, and cover images.</p>
+            <p data-i18n="apid.ov.p">A read-only HTTP API of the Vetro catalogue: books and audiobooks, anime, movies and series. Search, cards with descriptions and genres, and cover images.</p>
             <div class="doc-table-wrap">
               <table class="doc-table">
                 <tbody>
                   <tr><td data-i18n="apid.ov.url">Base URL</td><td><code>https://api.vetrostudio.bid</code></td></tr>
                   <tr><td data-i18n="apid.ov.fmt">Format</td><td data-i18n="apid.ov.fmt.v">JSON, UTF-8; covers are AVIF images</td></tr>
                   <tr><td data-i18n="apid.ov.proto">Protocol</td><td data-i18n="apid.ov.proto.v">HTTPS only, CORS enabled for browsers</td></tr>
-                  <tr><td data-i18n="apid.ov.cat">Catalogue</td><td data-i18n="apid.ov.cat.v">About 269,000 works (Russian and English titles), about 96,000 covers, refreshed regularly</td></tr>
+                  <tr><td data-i18n="apid.ov.cat">Catalogue</td><td data-i18n="apid.ov.cat.v">About 294,000 books and audiobooks and over 200,000 anime, movies and series (titles in Russian, English, romaji and the original language), refreshed regularly</td></tr>
                   <tr><td data-i18n="apid.ov.acc">Access</td><td data-i18n="apid.ov.acc.v">An API key per client, obtained through a Telegram bot, in three plans</td></tr>
                   <tr><td data-i18n="apid.ov.av">Availability</td><td data-i18n-html="apid.ov.av.v">Best effort, no uptime guarantee (see the <a href="#terms">terms of use</a>)</td></tr>
                 </tbody>
               </table>
             </div>
+            <h3 data-i18n="apid.cat.h">Four databases, one key</h3>
+            <p data-i18n-html="apid.cat.p">The catalogue consists of separate databases that share a key, plan limits and errors. Every result carries <code>kind</code>, so a client always knows where an item came from. Counts are rounded and grow with every data load.</p>
+            <div class="doc-table-wrap">
+              <table class="doc-table">
+                <thead><tr><th data-i18n="apid.cat.th.db">Database</th><th><code>kind</code></th><th data-i18n="apid.cat.th.n">Items</th><th data-i18n="apid.cat.th.id">Id</th></tr></thead>
+                <tbody>
+                  <tr><td data-i18n="apid.cat.books">Books and audiobooks</td><td><code>book</code></td><td>~294,000</td><td data-i18n-html="apid.cat.id9">nine digits, <code>000000771</code></td></tr>
+                  <tr><td data-i18n="apid.cat.anime">Anime</td><td><code>anime</code></td><td>~37,000</td><td data-i18n-html="apid.cat.ida"><code>A</code> and eight digits, <code>A00000050</code></td></tr>
+                  <tr><td data-i18n="apid.cat.movies">Movies</td><td><code>movie</code></td><td>~45,500</td><td data-i18n-html="apid.cat.idm"><code>M</code> and eight digits</td></tr>
+                  <tr><td data-i18n="apid.cat.series">Series</td><td><code>tv</code> (<code>t: "tv_series"</code>)</td><td>~129,000</td><td data-i18n-html="apid.cat.ids"><code>S</code> and eight digits</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p data-i18n-html="apid.cat.dup">Some titles exist both as anime and as a series because they come from different databases. A client can show both, or merge them by the ids in <code>ext</code>.</p>
           </section>
 
           <!-- 02 key -->
@@ -189,11 +203,36 @@
           <!-- 05 endpoints -->
           <section class="doc-sec" id="endpoints">
             <h2><span>05</span><b data-i18n="apid.s.endpoints">Endpoints</b></h2>
-            <p data-i18n-html="apid.ep.p">All paths are relative to <code>https://api.vetrostudio.bid</code>. Book ids are nine-digit strings, for example <code>000000771</code>.</p>
+            <p data-i18n-html="apid.ep.p">All paths are relative to <code>https://api.vetrostudio.bid</code>. Book ids are nine-digit strings, for example <code>000000771</code>; anime, movie and series ids are a letter and eight digits, for example <code>A00000050</code>.</p>
 
             <article class="endpoint glass-card">
               <div class="ep-route"><span class="method">GET</span><span class="ep-path">/v1/health</span><span class="ep-tag is-free" data-i18n="apid.ep.nokey">No key</span></div>
               <p><code>{"ok":true}</code></p>
+            </article>
+
+            <article class="endpoint glass-card">
+              <div class="ep-route"><span class="method">GET</span><span class="ep-path">/v1/find?q=&lt;text&gt;&amp;kind=&lt;all|anime|movie|tv|book&gt;&amp;limit=&lt;n&gt;</span></div>
+              <p data-i18n-html="apid.ep.find">One search over the books, anime, movie and series databases, or over just one of them. Every result carries <code>kind</code>. It counts as a search for the plan’s limits; <code>limit</code> is capped by the plan.</p>
+              <ul class="doc-list">
+                <li data-i18n-html="apid.ep.f1"><code>kind=all</code> (the default): each database is ranked on its own and the lists are interleaved, so the best match of every database is near the top. <code>counts</code> says how many items came from each.</li>
+                <li data-i18n-html="apid.ep.f2"><code>kind=anime</code>, <code>movie</code>, <code>tv</code> or <code>book</code>: only that database is searched. Use it when the user has already chosen a direction, for example a screen with “Anime”, “Series” and “Books” buttons.</li>
+                <li data-i18n-html="apid.ep.f3">An unknown <code>kind</code> returns <code>400 bad_kind</code> with the allowed values.</li>
+                <li data-i18n="apid.ep.f4">Search matches Latin, Cyrillic and transliterated titles; Japanese characters are not searchable.</li>
+              </ul>
+              <div class="codeblock">
+                <header><span data-i18n="apid.ep.findx">JSON · /v1/find?q=death%20note&amp;kind=all&amp;limit=3 (abridged)</span><button class="copy-btn" type="button" data-i18n="apid.copy">Copy</button></header>
+                <pre><code>{ "q": "death note", "kind": "all",
+  "counts": { "anime": 1, "tv": 1, "movie": 1 },
+  "items": [
+    { "kind": "anime", "id": "A00000051", "t": "anime",
+      "ru": "Тетрадь смерти", "en": "Death Note", "ro": "Death Note",
+      "y": 2006, "st": "tv", "f": 3, "cv": 232982840 },
+    { "kind": "tv", "id": "S00000706", "t": "tv_series",
+      "ru": "Тетрадь смерти", "en": "Death Note", "y": 2006, "f": 1, "cv": 165109764 },
+    { "kind": "movie", "id": "M00004546", "t": "movie",
+      "ru": "Тетрадь смерти", "en": "Death Note", "y": 2017, "f": 1, "cv": 210117633 }
+] }</code></pre>
+              </div>
             </article>
 
             <article class="endpoint glass-card">
@@ -239,6 +278,53 @@
             </article>
 
             <article class="endpoint glass-card">
+              <div class="ep-route"><span class="method">GET</span><span class="ep-path">/v1/media/search?q=&lt;text&gt;&amp;type=&lt;anime|movie|tv&gt;&amp;limit=&lt;n&gt;</span></div>
+              <p data-i18n-html="apid.ep.msearch">Search over anime, movies and series only. <code>type</code> is optional. Results are ordered by relevance with a boost for well-known titles. It counts as a search.</p>
+            </article>
+
+            <article class="endpoint glass-card">
+              <div class="ep-route"><span class="method">GET</span><span class="ep-path">/v1/media/{id}</span></div>
+              <p data-i18n="apid.ep.mcard">One title with its details card. Optional keys are listed under “Response fields”; any of them can be missing. It counts as a book lookup.</p>
+              <div class="codeblock">
+                <header><span data-i18n="apid.ep.mcardx">JSON · /v1/media/A00000050 (abridged)</span><button class="copy-btn" type="button" data-i18n="apid.copy">Copy</button></header>
+                <pre><code>{ "kind": "anime", "id": "A00000050", "t": "anime",
+  "ru": "Атака титанов", "en": "Attack on Titan",
+  "ro": "Shingeki no Kyojin", "orig": "Shingeki no Kyojin",
+  "y": 2013, "st": "tv", "f": 3, "cv": 7597630,
+  "alt": "Вторжение гигантов | Атакующий титан | AoT | SnK",
+  "detail": {
+    "desc": { "t": "С давних времён человечество ведёт свою борьбу с титанами…", "l": "ru" },
+    "gen": [ "Сёнен", "Экшен", "Драма" ],
+    "fr": { "t": "Shingeki No Kyojin", "i": 1, "n": 24 },
+    "ol": "ja", "eps": 25, "dur": 24, "st": "released",
+    "ext": { "mal": 16498, "shikimori": 16498, "anilist": 16498, "anidb": 9541, "kitsu": 7442 },
+    "cover": { "src": "shikimori", "lic": "Shikimori / Studio Fair Use", "w": 685, "h": 975 } } }</code></pre>
+              </div>
+            </article>
+
+            <article class="endpoint glass-card">
+              <div class="ep-route"><span class="method">GET</span><span class="ep-path">/v1/media?ids=A00000050,S00000110</span></div>
+              <p data-i18n-html="apid.ep.mids">Up to the plan’s <code>ids</code> maximum titles in one request, rows only, without cards. Unknown ids are skipped.</p>
+            </article>
+
+            <article class="endpoint glass-card">
+              <div class="ep-route"><span class="method">GET</span><span class="ep-path">/v1/media/ext?ids=anilist:16498,tmdb:13916&amp;kind=&lt;anime|movie|tv&gt;</span></div>
+              <p data-i18n-html="apid.ep.mext">Finds Vetro titles by their ids in other services. Up to the plan’s <code>ids</code> maximum ids, each as <code>service:id</code>; the services are <code>anilist</code>, <code>mal</code>, <code>shikimori</code>, <code>tmdb</code> and <code>imdb</code>. Every returned row has <code>via</code>, the id it was found by. It counts as a book lookup.</p>
+              <ul class="doc-list">
+                <li data-i18n-html="apid.ep.me1">One TMDB number can match a movie and a series, because TMDB numbers them separately. Pass <code>kind</code> when you know it.</li>
+                <li data-i18n-html="apid.ep.me2">Ids that do not look like <code>service:id</code> are dropped. An unknown <code>kind</code> returns <code>400 bad_kind</code>; no valid ids return an empty list.</li>
+              </ul>
+              <div class="codeblock">
+                <header><span data-i18n="apid.ep.mextx">JSON · /v1/media/ext?ids=anilist:16498&amp;kind=anime</span><button class="copy-btn" type="button" data-i18n="apid.copy">Copy</button></header>
+                <pre><code>{ "items": [
+  { "via": "anilist:16498", "kind": "anime", "id": "A00000050", "t": "anime",
+    "ru": "Атака титанов", "en": "Attack on Titan", "y": 2013, "f": 3, "cv": 7597630,
+    "ext": { "mal": 16498, "shikimori": 16498, "anilist": 16498, "anidb": 9541, "kitsu": 7442 } }
+] }</code></pre>
+              </div>
+            </article>
+
+            <article class="endpoint glass-card">
               <div class="ep-route"><span class="method">GET</span><span class="ep-path">/covers/{small|large}/{id}.avif?v={cv}</span><span class="ep-tag">Pro · Ultra</span></div>
               <p data-i18n-html="apid.ep.cover">The cover image: <code>small</code> for lists, <code>large</code> for a book page. Needs a plan with covers, and a book that has one (flag <code>f &amp; 1</code>).</p>
               <ul class="doc-list">
@@ -248,6 +334,15 @@
               <div class="codeblock">
                 <header><span>HTML</span><button class="copy-btn" type="button" data-i18n="apid.copy">Copy</button></header>
                 <pre><code>&lt;img src="https://api.vetrostudio.bid/covers/small/000000771.avif?v=7013464&amp;key=vk_pro_…" width="200" height="300" alt=""&gt;</code></pre>
+              </div>
+            </article>
+
+            <article class="endpoint glass-card">
+              <div class="ep-route"><span class="method">GET</span><span class="ep-path">/covers/media/{small|large}/{id}.avif?v={cv}</span><span class="ep-tag">Pro · Ultra</span></div>
+              <p data-i18n-html="apid.ep.mcover">Covers of anime, movies and series. The same rules as for book covers: it needs a plan with covers and a title with the flag <code>f &amp; 1</code>, responses are immutable, and <code>v</code> is the title’s <code>cv</code>. The licence of each cover is in <code>detail.cover.lic</code>.</p>
+              <div class="codeblock">
+                <header><span>HTML</span><button class="copy-btn" type="button" data-i18n="apid.copy">Copy</button></header>
+                <pre><code>&lt;img src="https://api.vetrostudio.bid/covers/media/small/A00000050.avif?v=7597630&amp;key=vk_pro_…" width="200" height="300" alt=""&gt;</code></pre>
               </div>
             </article>
 
@@ -267,6 +362,7 @@
                 <thead><tr><th data-i18n="apid.fl.field">Field</th><th data-i18n="apid.fl.meaning">Meaning</th></tr></thead>
                 <tbody>
                   <tr><td><code>id</code></td><td data-i18n-html="apid.fl.id">Nine-digit string, for example <code>"000000771"</code></td></tr>
+                  <tr><td><code>kind</code></td><td data-i18n-html="apid.fl.kind">Which database the item came from: <code>"book"</code> here. Items of all routes carry it</td></tr>
                   <tr><td><code>ru</code>, <code>en</code></td><td data-i18n="apid.fl.title">Title in Russian / in English</td></tr>
                   <tr><td><code>ra</code>, <code>ea</code></td><td data-i18n="apid.fl.author">Author in Russian / in English</td></tr>
                   <tr><td><code>y</code></td><td data-i18n="apid.fl.year">Year of the first edition</td></tr>
@@ -297,6 +393,44 @@
                   <tr><td><code>rate</code></td><td data-i18n-html="apid.d.rate">Reader rating <code>{v, n}</code>: the average and the number of votes</td></tr>
                   <tr><td><code>ol</code></td><td data-i18n="apid.d.ol">Original language</td></tr>
                   <tr><td><code>coll</code>, <code>ch</code>, <code>dur</code></td><td data-i18n="apid.d.misc">Collection flag, chapters, typical length in minutes</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 data-i18n="apid.fl.h3">Title row (anime, movie, series)</h3>
+            <p data-i18n-html="apid.fl.p3">Items of <code>/v1/find</code> (when they are not books), <code>/v1/media/search</code>, <code>/v1/media?ids=</code> and <code>/v1/media/ext</code>, and the top level of <code>/v1/media/{id}</code>. Empty fields are left out.</p>
+            <div class="doc-table-wrap">
+              <table class="doc-table">
+                <thead><tr><th data-i18n="apid.fl.field">Field</th><th data-i18n="apid.fl.meaning">Meaning</th></tr></thead>
+                <tbody>
+                  <tr><td><code>id</code></td><td data-i18n-html="apid.fm.id">A letter and eight digits: <code>A</code> anime, <code>M</code> movie, <code>S</code> series</td></tr>
+                  <tr><td><code>kind</code></td><td data-i18n-html="apid.fm.kind"><code>anime</code>, <code>movie</code> or <code>tv</code></td></tr>
+                  <tr><td><code>t</code></td><td data-i18n-html="apid.fm.t"><code>anime</code>, <code>movie</code> or <code>tv_series</code></td></tr>
+                  <tr><td><code>ru</code>, <code>en</code>, <code>ro</code>, <code>orig</code></td><td data-i18n="apid.fm.titles">Title in Russian, in English, in romaji and in the original language</td></tr>
+                  <tr><td><code>y</code></td><td data-i18n="apid.fm.y">Year of release</td></tr>
+                  <tr><td><code>st</code></td><td data-i18n-html="apid.fm.st">Subtype: <code>tv</code>, <code>movie</code>, <code>ova</code>, <code>special</code>, …</td></tr>
+                  <tr><td><code>f</code></td><td data-i18n-html="apid.fm.f">Bit flags: <code>1</code> has a cover, <code>2</code> the cover has a restricted licence (see the terms)</td></tr>
+                  <tr><td><code>cv</code></td><td data-i18n-html="apid.fm.cv">Cover revision: put it into <code>?v=</code> of the cover link</td></tr>
+                  <tr><td><code>ext</code></td><td data-i18n-html="apid.fm.ext">Ids of the title in other databases (when known), so a client can open it in its own source</td></tr>
+                  <tr><td><code>alt</code></td><td data-i18n-html="apid.fm.alt">Other titles in one string, separated by <code> | </code> (only in <code>/v1/media/{id}</code>)</td></tr>
+                  <tr><td><code>detail</code></td><td data-i18n-html="apid.fm.detail">The details card (only in <code>/v1/media/{id}</code>), see below</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 data-i18n="apid.fl.h4">Title card</h3>
+            <p data-i18n="apid.fl.p4">Every key is optional.</p>
+            <div class="doc-table-wrap">
+              <table class="doc-table">
+                <thead><tr><th data-i18n="apid.fl.field">Field</th><th data-i18n="apid.fl.meaning">Meaning</th></tr></thead>
+                <tbody>
+                  <tr><td><code>desc</code></td><td data-i18n-html="apid.fc.desc">Description <code>{t, l}</code>: text and its language</td></tr>
+                  <tr><td><code>gen</code></td><td data-i18n="apid.fc.gen">Genres and tags as text, in Russian and English mixed. The first few are the main genres; show those</td></tr>
+                  <tr><td><code>fr</code></td><td data-i18n-html="apid.fc.fr">Franchise <code>{t, i, n}</code>: its title, the position of this title and the size of the franchise</td></tr>
+                  <tr><td><code>ol</code></td><td data-i18n="apid.fc.ol">Original language</td></tr>
+                  <tr><td><code>seas</code>, <code>eps</code>, <code>dur</code></td><td data-i18n="apid.fc.n">Seasons, episodes, minutes per episode</td></tr>
+                  <tr><td><code>st</code></td><td data-i18n-html="apid.fc.st">Release status, for example <code>released</code></td></tr>
+                  <tr><td><code>ext</code></td><td data-i18n-html="apid.fc.ext">Ids in other databases: <code>mal</code>, <code>shikimori</code>, <code>anilist</code>, <code>kitsu</code>, <code>tmdb</code>, <code>imdb</code>, <code>tvmaze</code>, <code>tvdb</code>, <code>wikidata</code></td></tr>
+                  <tr><td><code>cover</code></td><td data-i18n-html="apid.fc.cover">Source and licence of the cover: <code>src</code>, <code>lic</code>, and <code>w</code>/<code>h</code>, the size of <code>large</code> in pixels</td></tr>
                 </tbody>
               </table>
             </div>
@@ -451,7 +585,7 @@
 
   <footer class="site-footer theme-red">
     <div class="wrap footer-grid">
-      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>BOOK API</b></span></a><p data-i18n="footer.api">A read-only API for a catalogue of books and audiobooks.</p></div>
+      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a><p data-i18n="footer.api">A read-only API for a catalogue of books, anime, movies and series.</p></div>
       <div><h4>Vetro</h4><a href="index.html">Studio</a><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a><a href="vap.html">VAP</a><a href="modules.html">Modules</a><a href="api.html">API</a></div>
       <div><h4 data-i18n="footer.project">Project</h4><a href="api.html" data-i18n="apid.foot.page">API page</a><a href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer">@VetroBook_API_bot</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></div>
     </div>

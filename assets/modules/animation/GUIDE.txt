@@ -1,0 +1,332 @@
+VETRO MOTION — manual guide
+===========================
+
+For people who write the code themselves. (With an AI coding agent, give it SKILL.md — same numbers, same rules.)
+
+Licence: GPL-3.0 (Vetro Modules).
+
+
+1. THE IDEA
+-----------
+
+One table of springs is the only source of truth for motion. UI code never writes spring(...) or tween(...) with
+numbers of its own; it asks the table. Everything else (a window that grows out of a dock icon, a "..." popover,
+a stack of notifications) is a composition of those tokens.
+
+Why bother: when every screen invents its own damping, the app feels like ten apps. With one table, a menu, a
+sheet and a toast feel like they obey the same physics.
+
+
+2. VERSIONS THE CODE WAS VERIFIED WITH
+--------------------------------------
+
+  Kotlin 2.4.21 · Compose BOM 2025.12.00 · androidx.compose.animation (SharedTransitionLayout, sharedBounds)
+  compileSdk/targetSdk 36 · minSdk 26
+
+
+3. SPRINGS: THE MATH
+--------------------
+
+SwiftUI-style (response, dampingFraction) maps to Compose exactly when mass = 1:
+
+    stiffness    = (2π / response)²
+    dampingRatio = dampingFraction
+
+So define every token as a (ζ, T) pair — damping ratio and period in seconds — and convert once:
+
+    k = (2π / T)²           T = 0.24 s  ->  k ≈ 685
+    overshoot (ζ < 1) = exp(−π ζ / √(1 − ζ²))      ζ 0.80 -> 1.5 %,  ζ 0.72 -> 4 %,  ζ 0.92 -> 0.1 %
+
+Bigger mass (large surfaces) is expressed by lowering stiffness, Compose has no separate mass parameter.
+
+
+4. THE TOKENS (copy this file)
+------------------------------
+
+```kotlin
+object MotionTokens {
+
+    // --- period-defined springs: (ζ, T), mass 1 --------------------------------------------------
+
+    /** Press squeeze: ζ 1.0, T 80 ms. */
+    fun <T> springPressIn(): SpringSpec<T> = specSpring(1.00f, 80)
+    /** Release, toggle, chevron: ζ 0.86, T 200 ms. */
+    fun <T> springSnappy(): SpringSpec<T> = specSpring(0.86f, 200)
+    /** Floating dock, scroll button, toast, popping card: ζ 0.88, T 240 ms. */
+    fun <T> springSurface(): SpringSpec<T> = specSpring(0.88f, 240)
+    /** New object appearing in a list: ζ 0.92, T 320 ms. */
+    fun <T> springObject(): SpringSpec<T> = specSpring(0.92f, 320)
+    /** Any close: ζ 1.0 (zero bounce), T 160 ms ≈ 65 % of enter. */
+    fun <T> springExit(): SpringSpec<T> = specSpring(1.00f, 160)
+
+    // --- menus and sheets --------------------------------------------------------------------------
+
+    /** Dropdown / context menus — slight overshoot. */
+    fun <T> menuPop(): SpringSpec<T> = spring(dampingRatio = 0.72f, stiffness = 503.6f)
+    /** Bottom sheet / dock window appearing. */
+    fun <T> sheetPresent(): SpringSpec<T> = spring(dampingRatio = 0.86f, stiffness = 380f)
+    /** Forced dismiss after a fling — critical damping, no bounce. */
+    fun <T> sheetDismissForced(): SpringSpec<T> = spring(dampingRatio = 1.0f, stiffness = 700f)
+    /** Rubber-band return after overscroll — critical damping. */
+    fun <T> overscrollReturn(): SpringSpec<T> = spring(dampingRatio = 1.0f, stiffness = 400f)
+    /** Floating bar returning when scrolling up. */
+    fun <T> barReveal(): SpringSpec<T> = spring(dampingRatio = 0.9f, stiffness = 500f)
+    /** Popup dialog "settling from the top" 1.15 -> 1.0 with a light impact. */
+    fun <T> dialogPop(): SpringSpec<T> = spring(dampingRatio = 0.75f, stiffness = 500f)
+
+    // --- large surfaces: windows and full-screen sheets (heavier: longer period) -------------------
+
+    /** Appear: T ≈ 0.46 s, ζ 0.92 — overshoot ≈ 0.1 %, invisible, but the motion is soft. */
+    fun <T> largeSurfaceEnter(): SpringSpec<T> = spring(dampingRatio = 0.92f, stiffness = 186.6f)
+    /** Leave: critical damping and ≈ 60-65 % of the enter time (T ≈ 0.30 s). */
+    fun <T> largeSurfaceExit(): SpringSpec<T> = spring(dampingRatio = 1f, stiffness = 438.6f)
+
+    /** The same for boundsTransform of a window that grows out of a button. */
+    val largeSurfaceEnterBounds: SpringSpec<Rect> =
+        spring(dampingRatio = 0.92f, stiffness = 186.6f, visibilityThreshold = Rect.VisibilityThreshold)
+    val largeSurfaceExitBounds: SpringSpec<Rect> =
+        spring(dampingRatio = 1f, stiffness = 438.6f, visibilityThreshold = Rect.VisibilityThreshold)
+
+    // --- easings for opacity of content ------------------------------------------------------------
+
+    /** Content appears when the shell already has area. */
+    val EaseEnter: Easing = CubicBezierEasing(0.16f, 1f, 0.3f, 1f)
+    const val EaseEnterMillis: Int = 140
+    /** Content fades before the edge of the shell passes through it. */
+    val EaseExit: Easing = CubicBezierEasing(0.32f, 0.72f, 0f, 1f)
+    const val EaseExitMillis: Int = 100
+
+    /**
+     * When the content of a window growing out of a button appears: by then the shell on
+     * [largeSurfaceEnterBounds] has covered ≈ 80 % of its path, so text shows almost in place instead
+     * of inside a tiny plate.
+     */
+    const val WindowContentRevealDelayMillis: Int = 200
+
+    // --- notification plates -------------------------------------------------------------------------
+
+    /** Arrival from the top: ζ 0.80, T 380 ms — overshoot ≈ 1.5 %, soft landing. */
+    fun <T> notificationArrive(): SpringSpec<T> = specSpring(0.80f, 380)
+    /** A half-swiped plate returns: ζ 0.78, T 300 ms — the rest of the throw dies in one wobble. */
+    fun <T> notificationRebound(): SpringSpec<T> = specSpring(0.78f, 300)
+    /** Fling off the edge: critical damping, T 220 ms — it neither returns nor wobbles. */
+    fun <T> notificationFling(): SpringSpec<T> = specSpring(1.00f, 220)
+    /** Neighbours take the freed slot: ζ 0.72, T 340 ms — overshoot ≈ 4 %. */
+    fun <T> notificationReflow(): SpringSpec<T> = specSpring(0.72f, 340)
+
+    /**
+     * Shift of a list item into the freed place. A cascade without timers: every next plate has a period 8 %
+     * longer, so the wave runs down by itself without cutting off anybody's velocity.
+     */
+    fun notificationReflowOffset(order: Int): SpringSpec<IntOffset> {
+        val stretch = 1f + 0.08f * order.coerceIn(0, StaggerMaxItems)
+        val omega = 2f * Math.PI.toFloat() / (0.340f * stretch)
+        return spring(
+            dampingRatio = 0.72f,
+            stiffness = omega * omega,
+            visibilityThreshold = IntOffset.VisibilityThreshold,
+        )
+    }
+
+    /** Fraction of the width after which a released plate leaves. */
+    const val NotificationDismissFraction: Float = 0.32f
+    /** A throw faster than this removes the plate even from a short travel (in the direction of the throw). */
+    const val NotificationFlingVelocityDpPerSec: Float = 1000f
+
+    /** Content cascade: shift per item and the cap of the queue. */
+    const val StaggerMillis: Int = 24
+    const val StaggerMaxItems: Int = 6
+    /** When content starts to appear relative to the start of the shell. */
+    const val ContentRevealDelayMillis: Int = 60
+
+    /** Stiffness from a period: k = (2π / T)² for mass 1. */
+    fun stiffnessForPeriod(periodMillis: Int): Float {
+        val omega = (2.0 * Math.PI / (periodMillis / 1000.0))
+        return (omega * omega).toFloat()
+    }
+
+    private fun <T> specSpring(dampingRatio: Float, periodMillis: Int): SpringSpec<T> =
+        spring(dampingRatio = dampingRatio, stiffness = stiffnessForPeriod(periodMillis))
+
+    // --- light and colour are short curves ---------------------------------------------------------
+
+    const val DurationFastMillis: Int = 160
+    const val DurationStandardMillis: Int = 220
+    const val DurationEmphasizedMillis: Int = 300
+    fun <T> tweenFast(): FiniteAnimationSpec<T> = tween(DurationFastMillis)
+    fun <T> tweenStandard(delayMillis: Int = 0): FiniteAnimationSpec<T> = tween(DurationStandardMillis, delayMillis = delayMillis)
+    fun <T> tweenEmphasized(): FiniteAnimationSpec<T> = tween(DurationEmphasizedMillis)
+
+    fun <T> easeEnter(durationMillis: Int = EaseEnterMillis, delayMillis: Int = 0): FiniteAnimationSpec<T> =
+        tween(durationMillis, delayMillis = delayMillis, easing = EaseEnter)
+    fun <T> easeExit(durationMillis: Int = EaseExitMillis): FiniteAnimationSpec<T> =
+        tween(durationMillis, easing = EaseExit)
+}
+```
+
+Imports: androidx.compose.animation.core.{CubicBezierEasing, Easing, FiniteAnimationSpec, SpringSpec,
+VisibilityThreshold, spring, tween}, androidx.compose.ui.geometry.Rect, androidx.compose.ui.unit.IntOffset.
+(`VisibilityThreshold` is needed for Rect.VisibilityThreshold / IntOffset.VisibilityThreshold.) This exact object is
+compiled and run in the demo app of the Vetro Modules repository; the numbers are untouched.
+
+
+5. PATTERN A — A WINDOW THAT GROWS OUT OF A DOCK ICON
+-----------------------------------------------------
+
+Source: a 36 dp node inside the dock. Destination: a whole screen. One shared key.
+
+```kotlin
+// destination screen (the window)
+with(sharedTransitionScope) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .sharedBounds(
+                rememberSharedContentState(key = "settings_container"),
+                animatedVisibilityScope = animatedVisibilityScope,
+                // scaleToBounds: the content is measured ONCE at final size and scaled while it grows.
+                // A long list is not re-laid-out every frame (that was the cause of an FPS drop 120 -> 105).
+                // Use RemeasureToBounds for light content.
+                resizeMode = SharedTransitionScope.ResizeMode.scaleToBounds(),
+                clipInOverlayDuringTransition = OverlayClip(RoundedCornerShape(28.dp)),
+                boundsTransform = { _, _ -> MotionTokens.largeSurfaceEnterBounds },
+            )
+            .clip(RoundedCornerShape(28.dp))
+            .background(surface),
+    ) { /* content */ }
+}
+
+// the dock icon (source) — same key; use largeSurfaceExitBounds for the way back
+Box(
+    Modifier.size(36.dp).sharedBounds(
+        rememberSharedContentState(key = "settings_container"),
+        animatedVisibilityScope = animatedVisibilityScope,
+        resizeMode = SharedTransitionScope.ResizeMode.scaleToBounds(),
+        boundsTransform = { _, _ -> MotionTokens.largeSurfaceExitBounds },
+    ),
+)
+```
+
+In the app the DESTINATION screens use the Enter spring and the DOCK side uses the Exit spring, so opening and
+closing run on different physics. The demo app gets the same result with one lambda picked by direction:
+
+    boundsTransform = { initial, target ->
+        if (target.width > initial.width) MotionTokens.largeSurfaceEnterBounds else MotionTokens.largeSurfaceExitBounds
+    }
+
+Also pass `enter = EnterTransition.None, exit = ExitTransition.None` to sharedBounds on both sides. By default it
+cross-fades (fadeIn / fadeOut) and the growing window looks half transparent.
+
+Content of the window:
+
+    enter = fadeIn(MotionTokens.easeEnter(delayMillis = MotionTokens.WindowContentRevealDelayMillis))   // 200 ms
+    rows  = stagger 24 ms per row, at most 6
+
+Press feedback on the icon itself: squeeze to 0.82-0.86 with springPressIn(), release with springSnappy().
+
+Caveat: never add or remove a modifier node above a layerBackdrop while this transition runs (see the frosted
+glass guide).
+
+
+6. PATTERN B — THE "..." POPOVER
+--------------------------------
+
+From the app's overflow menu, verbatim apart from names:
+
+```kotlin
+var expanded by remember { mutableStateOf(false) }
+val progress by animateFloatAsState(
+    targetValue = if (expanded) 1f else 0f,
+    animationSpec = if (expanded) MotionTokens.menuPop() else MotionTokens.sheetDismissForced(),
+    label = "overflow",
+)
+
+// invisible scrim catches taps outside; layer above content, below button and panel
+if (expanded) {
+    Box(Modifier.fillMaxSize().zIndex(3f).clickable(
+        interactionSource = remember { MutableInteractionSource() }, indication = null) { expanded = false })
+}
+
+// ... the "..." button toggles `expanded` ...
+
+// The glass is NEVER faded (no alpha, on open or on close): a half-transparent glass shows the SHARP backdrop
+// through it for a few frames and reads as the blur disappearing. The panel GROWS from its top-right corner and
+// SHRINKS back into it: its size follows `progress` in the layout phase. Rows keep their final size inside and
+// are clipped by the growing glass.
+val PanelWidth = 232.dp
+val PanelHeight = 204.dp                                        // 4 rows x 48 dp + 2 x 6 dp padding
+val shape = RoundedCornerShape(22.dp)
+
+if (progress > 0.001f) {                                        // render only while visible
+    Box(
+        Modifier
+            .align(Alignment.TopEnd)
+            .statusBarsPadding()
+            .padding(top = 12.dp + 48.dp + 8.dp, end = 16.dp)   // under the button: offset + height + gap
+            .zIndex(4f)
+            .layout { measurable, _ ->
+                val pr = progress.coerceAtLeast(0f)             // overshoot (ζ 0.72) makes it slightly bigger
+                val w = (PanelWidth.toPx() * pr).roundToInt().coerceAtLeast(1)
+                val h = (PanelHeight.toPx() * pr).roundToInt().coerceAtLeast(1)
+                val placeable = measurable.measure(Constraints.fixed(w, h))
+                layout(w, h) { placeable.place(0, 0) }
+            }
+            .clip(shape)
+            /* .frostedGlass(backdrop, shape, material) if you use the glass material */,
+        contentAlignment = Alignment.TopEnd,
+    ) {
+        Column(Modifier.requiredSize(PanelWidth, PanelHeight).padding(vertical = 6.dp)) { /* rows */ }
+    }
+}
+```
+
+Because ζ = 0.72, opening overshoots a few percent; closing uses ζ = 1.0 and does not. Add BackHandler to close.
+Rows: fade in with ContentRevealDelayMillis = 60 and StaggerMillis = 24 (e.g. row i alpha =
+((progress - 0.15 - 0.05 * i) / 0.4).coerceIn(0f, 1f)).
+
+We first tried keeping scale 0.82 -> 1 and letting alpha saturate in the first quarter of the motion. That fixes the
+opening, but the closing still fades the glass for 2-3 frames and the sharp backdrop flashes through it. Size-based
+grow / shrink has no such frame.
+
+Draw the panel inside the screen, not in DropdownMenu/Popup (separate window: no shared backdrop, no shared
+transition).
+
+
+7. PATTERN C — NOTIFICATION STACK
+---------------------------------
+
+Tokens in play: notificationArrive, notificationRebound, notificationFling, notificationReflowOffset(order),
+plus NotificationDismissFraction (32 % of width) and NotificationFlingVelocityDpPerSec (1000).
+
+  arrive    plate comes from above the screen to its slot on notificationArrive
+  drag      follows the finger; on release the finger velocity is the spring's initial velocity
+  release   past 32 % of the width, or faster than 1000 dp/s  -> fling away with notificationFling
+            otherwise -> notificationRebound
+  reflow    plates behind the leaving one move one slot forward on notificationReflowOffset(order),
+            order = distance behind the leaving plate. Each next period is 8 % longer -> a wave, no timers.
+
+The demo app uses (illustrative numbers, not taken from the app's tray): translateY = 12 dp × slot,
+scale = 1 − 0.045 × slot. Plates arrive oldest first; every new plate lands on top and pushes the others back one
+slot (slot = number of newer plates still in front). The material is the same glass for every plate and the text of
+plates behind is faded (1 − 1.4 × slot): swapping glass for an opaque fill while a plate moves back is visible as
+the glass popping out.
+
+
+8. WHAT THE DEMO VIDEO SHOWS
+----------------------------
+
+The videos in the project README were recorded on a real phone (Android 16, 120 Hz) with the demo app that uses
+exactly this code and these tokens. Captions inside the video name the token that runs at
+that moment.
+
+
+9. CHECKLIST
+------------
+
+  [ ] grep for "spring(" in your UI code: only the tokens file.
+  [ ] Window: shell grows first, content shows ≈200 ms later.
+  [ ] Closing is faster than opening and has no bounce.
+  [ ] Popover overshoots on open, not on close.
+  [ ] Removing a plate makes the others shift in a wave.
+  [ ] Reversing mid-flight (close during open) does not jump.
+  [ ] Long content uses scaleToBounds.

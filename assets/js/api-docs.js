@@ -1,4 +1,4 @@
-/* VetroBook API documentation page: copy buttons, current-section highlight in the side menu, locale number format. */
+/* Vetro API documentation page: copy buttons, current-section highlight in the side menu, locale number format. */
 (() => {
   'use strict';
 
