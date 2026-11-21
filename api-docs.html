@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
   <meta charset="utf-8">
+  <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#e1251b">
   <title data-i18n="apid.title">Vetro API documentation — keys, plans and endpoints</title>
@@ -11,12 +12,12 @@
   <meta property="og:description" content="Keys and plans, authentication, endpoints, response fields, errors and limits of the Vetro catalogue API: books, anime, movies and series.">
   <meta property="og:image" content="https://vetrostudio.bid/assets/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" type="image/png" href="vetro-studio-icon.png">
-  <link rel="apple-touch-icon" href="vetro-studio-icon.png">
+  <link rel="icon" type="image/png" href="vetro-studio-icon.png?v=3">
+  <link rel="apple-touch-icon" href="vetro-studio-icon.png?v=3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Roboto:wght@400;500;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261121">
 </head>
 <body class="page-api page-docs">
   <div class="bg-field" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -25,7 +26,7 @@
 
   <header class="site-header">
     <div class="header-pill glass">
-      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a>
+      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png?v=3" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="index.html">Studio</a>
         <a href="collection.html" data-i18n="nav.collection">Collection</a>
@@ -142,7 +143,7 @@
             <ol class="doc-steps">
               <li data-i18n-html="apid.k1">Open the Vetro API bot in Telegram, <a href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer">@VetroBook_API_bot</a>, and choose a language.</li>
               <li data-i18n="apid.k2">Tell the bot about your project: its name, a short description, the kind (website, mobile app, server, other), the domains (for websites), whether it is commercial and roughly how many requests a day you expect. The bot recommends a plan.</li>
-              <li data-i18n-html="apid.k3">Read and accept the <a href="#terms">terms of use</a>, then pay for the plan in Telegram Stars (30 days per payment).</li>
+              <li data-i18n-html="apid.k3">Read and accept the <a href="#terms">terms of use</a>, then pay for the plan on the <a href="api.html#buy">site</a> (US dollars) or in the bot in Telegram Stars (30 days per payment).</li>
               <li data-i18n-html="apid.k4">The bot shows your key <b>once</b>. The service stores only a hash of it. If you lose the key, <code>/rotate</code> issues a new one.</li>
             </ol>
             <a class="btn btn-ink" href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer" style="justify-self:start"><span>@VetroBook_API_bot</span> <b>↗</b></a>
@@ -166,21 +167,21 @@
           <!-- 03 plans -->
           <section class="doc-sec" id="plans">
             <h2><span>03</span><b data-i18n="apid.s.plans">Plans</b></h2>
-            <p data-i18n="apid.pl.p">Prices and limits below are the current ones; the bot always shows the live values before you pay.</p>
+            <p data-i18n="apid.pl.p">Prices are in US dollars for 30 days; in the Telegram bot the same plans cost the number of Stars shown next to them. Limits below are the current ones.</p>
             <div class="doc-table-wrap">
               <table class="doc-table">
                 <thead>
                   <tr><th data-i18n="apid.th.plan">Plan</th><th data-i18n="apid.th.sec">Per second</th><th data-i18n="api.pl.min">Per minute</th><th data-i18n="api.pl.day">Per day (UTC)</th><th data-i18n="api.pl.max">limit / ids max</th><th data-i18n="api.pl.covers">Covers</th><th data-i18n="api.pl.index">Offline index</th><th data-i18n="apid.th.price">Price per 30 days</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td>Basic</td><td class="num-cell">2</td><td class="num-cell" data-n="30">30</td><td class="num-cell" data-n="2000">2,000</td><td class="num-cell">20 / 10</td><td data-i18n="api.pl.no">no</td><td data-i18n="api.pl.no">no</td><td class="num-cell">100 ⭐</td></tr>
-                  <tr><td>Pro</td><td class="num-cell">5</td><td class="num-cell" data-n="120">120</td><td class="num-cell" data-n="20000">20,000</td><td class="num-cell">50 / 40</td><td data-i18n="api.pl.yes">yes</td><td data-i18n="api.pl.no">no</td><td class="num-cell">400 ⭐</td></tr>
-                  <tr><td>Ultra</td><td class="num-cell">20</td><td class="num-cell" data-n="600">600</td><td class="num-cell" data-n="200000">200,000</td><td class="num-cell">50 / 40</td><td data-i18n="api.pl.yes">yes</td><td data-i18n="api.pl.yes">yes</td><td class="num-cell"><span data-n="1500">1,500</span> ⭐</td></tr>
+                  <tr><td>Basic</td><td class="num-cell">2</td><td class="num-cell" data-n="30">30</td><td class="num-cell" data-n="2000">2,000</td><td class="num-cell">20 / 10</td><td data-i18n="api.pl.no">no</td><td data-i18n="api.pl.no">no</td><td class="num-cell">$3 <small>· 100 ⭐</small></td></tr>
+                  <tr><td>Pro</td><td class="num-cell">5</td><td class="num-cell" data-n="120">120</td><td class="num-cell" data-n="20000">20,000</td><td class="num-cell">50 / 40</td><td data-i18n="api.pl.yes">yes</td><td data-i18n="api.pl.no">no</td><td class="num-cell">$7 <small>· 400 ⭐</small></td></tr>
+                  <tr><td>Ultra</td><td class="num-cell">20</td><td class="num-cell" data-n="600">600</td><td class="num-cell" data-n="200000">200,000</td><td class="num-cell">50 / 40</td><td data-i18n="api.pl.yes">yes</td><td data-i18n="api.pl.yes">yes</td><td class="num-cell">$12 <small>· <span data-n="1500">1,500</span> ⭐</small></td></tr>
                 </tbody>
               </table>
             </div>
             <p data-i18n-html="apid.pl.n1">“Per second” is a burst size, not a bandwidth cap. Values above a plan’s <code>limit</code> or <code>ids</code> maximum are trimmed, not rejected.</p>
-            <p data-i18n="apid.pl.n2">A key issued to a website works only from the domains you gave the bot.</p>
+            <p data-i18n="apid.pl.n2">A key issued to a website works only from the domains you gave the bot or named on the site.</p>
           </section>
 
           <!-- 04 auth -->
@@ -549,11 +550,11 @@
               </details>
               <details class="term">
                 <summary data-i18n="apid.tm7.t">7. Payments and refunds</summary>
-                <div><p data-i18n="apid.tm7.p">Payment is made in Telegram Stars through Telegram, which processes it; the service does not see your payment details. A refund is possible only at the owner’s decision within 7 days of payment, and only if the key was not used abusively. The key is shown once.</p></div>
+                <div><p data-i18n="apid.tm7.p">Payment is made in Telegram Stars through Telegram, or, where the site offers it, by card, PayPal and similar methods through the payment provider Paddle, or in USDT through a crypto payment gateway. Prices on the site are in US dollars for 30 days. The payment provider processes the payment; the service does not see your payment details. A refund is possible only at the owner’s decision within 7 days of payment, and only if the key was not used abusively. The key is shown once.</p></div>
               </details>
               <details class="term">
                 <summary data-i18n="apid.tm8.t">8. Personal data</summary>
-                <div><p data-i18n="apid.tm8.p">The service does not log IP addresses or user agents. It stores your Telegram identifier and name, the description of your project that you gave the bot, your orders and per-key request counts, to run the service and to enforce these terms. For questions about your data, write to the owner.</p></div>
+                <div><p data-i18n="apid.tm8.p">The service does not log IP addresses or user agents. It stores your Telegram identifier and name (if you use the bot), the description of your project, your e-mail address and the domains you gave, the name, signature and time with which you accepted these terms together with the version of the terms, your orders and per-key request counts, to run the service, to send a receipt and to enforce these terms. For questions about your data, write to the owner.</p></div>
               </details>
               <details class="term">
                 <summary data-i18n="apid.tm9.t">9. Changes</summary>
@@ -585,17 +586,17 @@
 
   <footer class="site-footer theme-red">
     <div class="wrap footer-grid">
-      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a><p data-i18n="footer.api">A read-only API for a catalogue of books, anime, movies and series.</p></div>
+      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png?v=3" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a><p data-i18n="footer.api">A read-only API for a catalogue of books, anime, movies and series.</p></div>
       <div><h4>Vetro</h4><a href="index.html">Studio</a><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a><a href="vap.html">VAP</a><a href="modules.html">Modules</a><a href="api.html">API</a></div>
       <div><h4 data-i18n="footer.project">Project</h4><a href="api.html" data-i18n="apid.foot.page">API page</a><a href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer">@VetroBook_API_bot</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></div>
     </div>
   </footer>
 
-  <script src="assets/js/i18n.js"></script>
-  <script src="assets/js/screens.js"></script>
-  <script src="assets/js/mascot-core.js"></script>
-  <script src="assets/js/mascot.js"></script>
-  <script src="assets/js/site.js"></script>
-  <script src="assets/js/api-docs.js"></script>
+  <script src="assets/js/i18n.js?v=20261121"></script>
+  <script src="assets/js/screens.js?v=20261121"></script>
+  <script src="assets/js/mascot-core.js?v=20261121"></script>
+  <script src="assets/js/mascot.js?v=20261121"></script>
+  <script src="assets/js/site.js?v=20261121"></script>
+  <script src="assets/js/api-docs.js?v=20261121"></script>
 </body>
 </html>

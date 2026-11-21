@@ -1,23 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
   <meta charset="utf-8">
+  <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#e1251b">
   <title data-i18n="api.title">Vetro API — a catalogue API for books, anime, movies and series</title>
   <meta name="description" content="Vetro API is a read-only API for a catalogue of about 294,000 books and audiobooks and over 200,000 anime, movies and series: search, cards and covers. Access by key, three plans, CORS open." data-i18n-attr="content:api.desc">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Vetro API">
-  <meta property="og:description" content="One search across books, anime, movies and series: cards and covers. Access by key, from 100 Telegram Stars for 30 days.">
+  <meta property="og:description" content="One search across books, anime, movies and series: cards and covers. Access by key, from $3 for 30 days.">
   <meta property="og:image" content="https://vetrostudio.bid/assets/img/og-cover.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" type="image/png" href="vetro-studio-icon.png">
-  <link rel="apple-touch-icon" href="vetro-studio-icon.png">
+  <link rel="icon" type="image/png" href="vetro-studio-icon.png?v=3">
+  <link rel="apple-touch-icon" href="vetro-studio-icon.png?v=3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://api.vetrostudio.bid">
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Roboto:wght@400;500;700&display=swap&subset=cyrillic" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/site.css?v=20261121">
 </head>
 <body class="page-api">
   <div class="bg-field" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -26,7 +27,7 @@
 
   <header class="site-header">
     <div class="header-pill glass">
-      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a>
+      <a class="brand" href="index.html" aria-label="Vetro Studio"><img src="vetro-studio-icon.png?v=3" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="index.html">Studio</a>
         <a href="collection.html" data-i18n="nav.collection">Collection</a>
@@ -156,13 +157,15 @@
           <article class="bm glass-card reveal" data-chart>
             <header><div><p class="kicker" data-i18n="api.names.k">Titles</p><h3 data-i18n="api.names.t">Russian and English names</h3></div></header>
             <div class="donut-wrap">
-              <svg class="donut" viewBox="0 0 140 140" role="img" aria-label="32.9% of works have both a Russian and an English title, 67.1% only a Russian one" data-i18n-attr="aria-label:api.names.aria">
-                <circle class="donut-bg" cx="70" cy="70" r="54"/>
-                <circle class="donut-ru" cx="70" cy="70" r="54" pathLength="100" stroke-dasharray="100 100"/>
-                <circle class="donut-both" cx="70" cy="70" r="54" pathLength="100" stroke-dasharray="32.9 100"/>
-                <text x="70" y="66" text-anchor="middle" class="donut-n">33%</text>
-                <text x="70" y="84" text-anchor="middle" class="donut-s" data-i18n="api.names.bi">bilingual</text>
-              </svg>
+              <div class="donut-box">
+                <svg class="donut" viewBox="0 0 140 140" role="img" aria-label="32.9% of works have both a Russian and an English title, 67.1% only a Russian one" data-i18n-attr="aria-label:api.names.aria">
+                  <circle class="donut-bg" cx="70" cy="70" r="54"/>
+                  <circle class="donut-ru" cx="70" cy="70" r="54" pathLength="100" stroke-dasharray="100 100"/>
+                  <!-- 32.9 % of the ring; the round caps add 2 × 2.36 on their own, so the dash itself is 28.18 long and starts 2.36 in -->
+                  <circle class="donut-both" cx="70" cy="70" r="54" pathLength="100" stroke-dasharray="28.18 100"/>
+                </svg>
+                <div class="donut-center" aria-hidden="true"><b class="donut-n">33%</b><span class="donut-s" data-i18n="api.names.bi">bilingual</span></div>
+              </div>
               <ul class="donut-legend">
                 <li><i class="dl-both"></i><div><b><span data-n="88575">88,575</span></b><span data-i18n="api.names.l1">Russian and English title</span><small data-i18n-html="api.names.l1s">core of verified pairs: <span data-n="70280">70,280</span></small></div></li>
                 <li><i class="dl-ru"></i><div><b><span data-n="180695">180,695</span></b><span data-i18n="api.names.l2">Russian title only</span></div></li>
@@ -254,51 +257,95 @@
         <div class="section-head center reveal">
           <p class="eyebrow" data-i18n="api.a.eyebrow">Build with it</p>
           <h2 id="api-access-title" data-i18n-html="api.a.title">get the<br><em>API.</em></h2>
-          <p class="section-lede" data-i18n="api.a.lede">Open the Telegram bot, tell it about your project, pick a plan and pay in Telegram Stars. It shows you a key once; send it in an Authorization header.</p>
+          <p class="section-lede" data-i18n="api.a.lede">Pick a plan, describe your project, sign the terms and pay. The key is shown once; send it in an Authorization header. You can also get a key in the Telegram bot.</p>
           <div class="hero-actions">
             <a class="btn btn-cream btn-lg" href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer"><span>@VetroBook_API_bot</span> <b>↗</b></a>
             <a class="btn btn-glass btn-lg" href="api-docs.html"><span data-i18n="api.cta.docs">Documentation</span> <b>→</b></a>
           </div>
         </div>
-        <div class="plans reveal">
-          <article class="plan glass-card">
-            <p class="kicker">Basic</p>
-            <p class="plan-price"><b>100 ⭐</b><small data-i18n="api.pl.per">per 30 days</small></p>
-            <ul class="plan-list">
-              <li><span data-i18n="api.pl.sec">Burst per second</span><b>2</b></li>
-              <li><span data-i18n="api.pl.min">Per minute</span><b data-n="30">30</b></li>
-              <li><span data-i18n="api.pl.day">Per day (UTC)</span><b data-n="2000">2,000</b></li>
-              <li><span data-i18n="api.pl.max">limit / ids max</span><b>20 / 10</b></li>
-              <li><span data-i18n="api.pl.covers">Covers</span><b data-i18n="api.pl.no">no</b></li>
-              <li><span data-i18n="api.pl.index">Offline index</span><b data-i18n="api.pl.no">no</b></li>
-            </ul>
-          </article>
-          <article class="plan glass-card">
-            <p class="kicker">Pro</p>
-            <p class="plan-price"><b>400 ⭐</b><small data-i18n="api.pl.per">per 30 days</small></p>
-            <ul class="plan-list">
-              <li><span data-i18n="api.pl.sec">Burst per second</span><b>5</b></li>
-              <li><span data-i18n="api.pl.min">Per minute</span><b data-n="120">120</b></li>
-              <li><span data-i18n="api.pl.day">Per day (UTC)</span><b data-n="20000">20,000</b></li>
-              <li><span data-i18n="api.pl.max">limit / ids max</span><b>50 / 40</b></li>
-              <li><span data-i18n="api.pl.covers">Covers</span><b data-i18n="api.pl.yes">yes</b></li>
-              <li><span data-i18n="api.pl.index">Offline index</span><b data-i18n="api.pl.no">no</b></li>
-            </ul>
-          </article>
-          <article class="plan glass-card">
-            <p class="kicker">Ultra</p>
-            <p class="plan-price"><b>1,500 ⭐</b><small data-i18n="api.pl.per">per 30 days</small></p>
-            <ul class="plan-list">
-              <li><span data-i18n="api.pl.sec">Burst per second</span><b>20</b></li>
-              <li><span data-i18n="api.pl.min">Per minute</span><b data-n="600">600</b></li>
-              <li><span data-i18n="api.pl.day">Per day (UTC)</span><b data-n="200000">200,000</b></li>
-              <li><span data-i18n="api.pl.max">limit / ids max</span><b>50 / 40</b></li>
-              <li><span data-i18n="api.pl.covers">Covers</span><b data-i18n="api.pl.yes">yes</b></li>
-              <li><span data-i18n="api.pl.index">Offline index</span><b data-i18n="api.pl.yes">yes</b></li>
-            </ul>
-          </article>
+        <div class="buy reveal" id="buy">
+          <ol class="buy-steps" id="buySteps" aria-label="Steps" data-i18n-attr="aria-label:buy.steps">
+            <li data-s="1" class="is-on"><b>1</b><span data-i18n="buy.s1">Plan</span></li>
+            <li data-s="2"><b>2</b><span data-i18n="buy.s2">Project</span></li>
+            <li data-s="3"><b>3</b><span data-i18n="buy.s3">Terms</span></li>
+            <li data-s="4"><b>4</b><span data-i18n="buy.s4">Payment</span></li>
+          </ol>
+
+          <!-- 1. plan -->
+          <section class="buy-pane" data-pane="1">
+            <div class="pcard" id="pcard">
+              <div class="seg" role="radiogroup" aria-label="Plan" data-i18n-attr="aria-label:buy.plan">
+                <span class="hl" id="hl" aria-hidden="true"></span>
+                <button type="button" role="radio" aria-checked="false" data-plan="basic">Basic</button>
+                <button type="button" role="radio" aria-checked="true" data-plan="pro">Pro</button>
+                <button type="button" role="radio" aria-checked="false" data-plan="ultra">Ultra</button>
+              </div>
+              <div class="plan">
+                <div class="name"><span class="roll-line" id="pname"></span><span class="chip" id="pchip" aria-hidden="true"></span></div>
+                <div class="price"><span class="cur">$</span><span class="num" id="price" aria-hidden="true"></span><span class="per" data-i18n="api.pl.per">per 30 days</span></div>
+                <div class="bill roll-line" id="pbill" aria-live="polite"></div>
+              </div>
+              <ul class="feats" id="pfeats">
+                <li><span data-i18n="api.pl.sec">Burst per second</span><b class="roll-line" data-f="sec"></b></li>
+                <li><span data-i18n="api.pl.min">Per minute</span><b class="roll-line" data-f="min"></b></li>
+                <li><span data-i18n="api.pl.day">Per day (UTC)</span><b class="roll-line" data-f="day"></b></li>
+                <li><span data-i18n="api.pl.max">limit / ids max</span><b class="roll-line" data-f="max"></b></li>
+                <li><span data-i18n="api.pl.covers">Covers</span><b class="roll-line" data-f="covers"></b></li>
+                <li><span data-i18n="api.pl.index">Offline index</span><b class="roll-line" data-f="index"></b></li>
+              </ul>
+              <button class="cta" id="pcta" type="button"><span class="cta-in" id="pctaIn"></span></button>
+            </div>
+          </section>
+
+          <!-- 2. project -->
+          <section class="buy-pane" data-pane="2" hidden>
+            <form class="buy-form" id="fProject" novalidate>
+              <h3 data-i18n="buy.p2.t">About your project</h3>
+              <label class="fld"><span data-i18n="buy.name">Project name</span><input id="fName" maxlength="80" autocomplete="off"><i class="err"></i></label>
+              <label class="fld"><span data-i18n="buy.type">Type</span>
+                <select id="fType"><option value="site" data-i18n="buy.type.site">Website</option><option value="app" data-i18n="buy.type.app">Mobile app</option><option value="server" data-i18n="buy.type.server">Server</option><option value="other" data-i18n="buy.type.other">Other</option></select></label>
+              <label class="fld"><span data-i18n="buy.desc">What it does</span><textarea id="fDesc" rows="3" maxlength="400"></textarea><i class="err"></i></label>
+              <label class="fld" id="fDomainsWrap"><span data-i18n="buy.domains">Domains the key will work from</span><textarea id="fDomains" rows="2" spellcheck="false" placeholder="example.com&#10;www.example.com"></textarea><small data-i18n="buy.domains.h">One per line. A website key works only from these domains.</small><i class="err"></i></label>
+              <label class="fld"><span data-i18n="buy.email">E-mail for the receipt and key recovery</span><input id="fEmail" type="email" autocomplete="email" spellcheck="false"><i class="err"></i></label>
+              <div class="buy-nav"><button type="button" class="buy-back" data-back data-i18n="buy.back">Back</button><button class="btn btn-ink" type="submit"><span data-i18n="buy.next">Next</span> <b>→</b></button></div>
+            </form>
+          </section>
+
+          <!-- 3. terms and signature -->
+          <section class="buy-pane" data-pane="3" hidden>
+            <h3 data-i18n="buy.p3.t">Terms of use</h3>
+            <p class="buy-lede" data-i18n="buy.p3.d">Read the terms and sign them. This is the same text as on the documentation page; it is a working draft.</p>
+            <div class="terms-box" id="termsBox" tabindex="0" role="region" aria-label="Terms of use" data-i18n-attr="aria-label:apid.s.terms"><p data-i18n="buy.loading">Loading…</p></div>
+            <p class="terms-ver"><span data-i18n="buy.ver">Version</span> <code id="termsVer">…</code> · <a href="api-docs.html#terms" target="_blank" rel="noopener" data-i18n="buy.open">Open in a new tab ↗</a></p>
+            <label class="chk"><input type="checkbox" id="fAgree"><span data-i18n="buy.agree">I have read the terms of use and accept them</span></label>
+            <label class="fld"><span data-i18n="buy.signer">Full name</span><input id="fSigner" maxlength="80" autocomplete="name"></label>
+            <div class="sig" id="sigPad"></div>
+            <div class="buy-nav"><button type="button" class="buy-back" data-back data-i18n="buy.back">Back</button><button class="btn btn-ink" id="next3" type="button" disabled><span data-i18n="buy.next">Next</span> <b>→</b></button></div>
+          </section>
+
+          <!-- 4. payment -->
+          <section class="buy-pane" data-pane="4" hidden>
+            <h3 data-i18n="buy.p4.t">Payment</h3>
+            <dl class="buy-sum" id="buySum"></dl>
+            <div class="pay-list" role="group" aria-label="Payment method" data-i18n-attr="aria-label:buy.pay">
+              <button class="pay-opt" type="button" data-method="card"><span><b data-i18n="buy.m.card">Card, PayPal, Apple Pay, Google Pay</b><small data-i18n="buy.m.card.d">Worldwide, through Paddle</small></span><i class="tag" data-i18n="buy.soon">soon</i></button>
+              <button class="pay-opt" type="button" data-method="usdt"><span><b>USDT</b><small data-i18n="buy.m.usdt.d">Crypto, from any country</small></span><i class="tag" data-i18n="buy.soon">soon</i></button>
+              <button class="pay-opt" type="button" data-method="stars"><span><b data-i18n="buy.m.stars">Telegram Stars</b><small data-i18n="buy.m.stars.d">Pay in the bot; works now</small></span><i class="tag" hidden></i></button>
+            </div>
+            <p class="pay-msg" id="payMsg" role="status" aria-live="polite" hidden></p>
+            <div class="pay-extra" id="payExtra" hidden><button class="demo-btn" id="dlCopy" type="button" data-i18n="buy.dl">Download my signed copy</button></div>
+            <div class="buy-nav"><button type="button" class="buy-back" data-back data-i18n="buy.back">Back</button></div>
+          </section>
+
+          <!-- 5. result after a payment -->
+          <section class="buy-pane" data-pane="5" hidden>
+            <h3 id="ordT"></h3>
+            <p class="buy-lede" id="ordD"></p>
+            <div class="key-box" id="keyBox" hidden><code id="keyVal"></code><button class="btn btn-ink" id="keyCopy" type="button" data-i18n="buy.copy">Copy</button></div>
+          </section>
         </div>
-        <p class="fineprint reveal"><span data-i18n="api.pl.note">A key issued to a website works only from the domains you gave the bot. Prices and limits are current ones: the bot shows the live values before you pay.</span> <a class="inline-link" href="api-docs.html#terms" data-i18n="api.pl.terms">Terms of use ↗</a></p>
+
+<p class="fineprint reveal"><span data-i18n="api.pl.note">A key issued to a website works only from the domains you name in the form. Prices are in US dollars for 30 days; in Telegram the same plans cost 100, 400 and 1,500 Stars.</span> <a class="inline-link" href="api-docs.html#terms" data-i18n="api.pl.terms">Terms of use ↗</a></p>
         <div class="api-code glass-card reveal">
           <p class="kicker" data-i18n="api.a.quick">Quick start</p>
           <pre><code><b>Authorization:</b> Bearer vk_pro_…
@@ -334,17 +381,18 @@
 
   <footer class="site-footer theme-red">
     <div class="wrap footer-grid">
-      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a><p data-i18n="footer.api">A read-only API for a catalogue of books, anime, movies and series.</p></div>
+      <div class="footer-brand"><a class="brand" href="index.html"><img src="vetro-studio-icon.png?v=3" alt="" width="36" height="36"><span>VETRO<b>API</b></span></a><p data-i18n="footer.api">A read-only API for a catalogue of books, anime, movies and series.</p></div>
       <div><h4>Vetro</h4><a href="index.html">Studio</a><a href="collection.html" data-i18n="nav.collection">Collection</a><a href="look.html">VetroLook</a><a href="vap.html">VAP</a><a href="modules.html">Modules</a><a href="api.html">API</a></div>
       <div><h4 data-i18n="footer.project">Project</h4><a href="api-docs.html" data-i18n="api.nav.docs">Docs</a><a href="https://t.me/VetroBook_API_bot" target="_blank" rel="noopener noreferrer">@VetroBook_API_bot</a><a href="https://github.com/Phnem/Vetro-Studio" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://t.me/Vetro_chat" target="_blank" rel="noopener noreferrer">Telegram</a></div>
     </div>
   </footer>
 
-  <script src="assets/js/i18n.js"></script>
-  <script src="assets/js/screens.js"></script>
-  <script src="assets/js/mascot-core.js"></script>
-  <script src="assets/js/mascot.js"></script>
-  <script src="assets/js/site.js"></script>
-  <script src="assets/js/api.js"></script>
+  <script src="assets/js/i18n.js?v=20261121"></script>
+  <script src="assets/js/screens.js?v=20261121"></script>
+  <script src="assets/js/mascot-core.js?v=20261121"></script>
+  <script src="assets/js/mascot.js?v=20261121"></script>
+  <script src="assets/js/site.js?v=20261121"></script>
+  <script src="assets/js/api.js?v=20261121"></script>
+  <script src="assets/js/buy.js?v=20261121"></script>
 </body>
 </html>
