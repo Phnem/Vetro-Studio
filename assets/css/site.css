@@ -788,6 +788,74 @@ dialog.modal::backdrop { background: rgba(12, 4, 3, .6); -webkit-backdrop-filter
 @media (max-width: 1024px) { .file-cards { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 560px) { .demo-seg button { padding: 7px 10px; } }
 
+/* ---- the modules page: a compact grid of live cards (the layout of designbookmark.com/motion) ---- */
+.modules-hero.is-compact { min-height: 0; padding-bottom: 12px; }
+.modules-hero.is-compact .mod-stage { max-width: 300px; }
+.mc-sec { padding-block: clamp(24px, 4vw, 44px) clamp(48px, 6vw, 84px); }
+.mc-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 28px; margin-bottom: 18px; }
+.mc-filter { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+.mc-filter button { padding: 8px 16px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, .08); color: inherit; font: 700 13px var(--font-body); transition: background .25s, color .25s; }
+.mc-filter button:hover { background: rgba(255, 255, 255, .15); }
+.mc-filter button[aria-pressed="true"] { background: var(--cream); color: var(--ink); }
+.mc-note { max-width: 54ch; color: rgba(255, 241, 214, .62); font-size: 14px; }
+.mc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.mc { display: grid; align-content: start; gap: 12px; min-width: 0; padding: 10px; border-radius: 28px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .1); }
+.mc[hidden] { display: none; }
+.mc-wide { grid-column: 1 / -1; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: stretch; }
+.mc-stage { aspect-ratio: 5 / 4; border-radius: 20px; }
+.mc-video { display: grid; background: #0b0807; overflow: hidden; aspect-ratio: auto; min-height: 260px; }
+.mc-video video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mc-ctl { position: absolute; top: 10px; right: 10px; z-index: 6; display: flex; gap: 6px; }
+.mc-b { display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 50%; background: rgba(127, 127, 127, .3); color: inherit; font: 700 12px var(--font-body); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background .2s; cursor: pointer; }
+.mc-b:hover { background: rgba(127, 127, 127, .5); }
+.mc-b[aria-pressed="true"] { background: var(--cream); color: var(--ink); }
+.mc-b[data-act="slow"]::before { content: '¼'; }
+.mc-b[data-act="pause"]::before { content: '❚❚'; font-size: 9px; letter-spacing: -1px; }
+.gl-stage[data-theme="dark"] .mc-b[data-act="theme"]::before { content: '☀'; font-size: 15px; }
+.gl-stage[data-theme="light"] .mc-b[data-act="theme"]::before { content: '☾'; font-size: 15px; }
+.mc-foot { display: grid; align-content: start; gap: 10px; padding: 2px 8px 8px; }
+.mc-name { display: grid; gap: 2px; }
+.mc-name b { font: 800 16px var(--font-display); letter-spacing: -.01em; }
+.mc-name span { color: rgba(255, 241, 214, .62); font-size: 13.5px; line-height: 1.4; }
+.mc-token { min-height: 1.3em; color: var(--orange); font: 600 11.5px var(--font-mono); letter-spacing: .02em; }
+.mc-token:empty::before { content: '—'; opacity: .4; }
+.mc-btns { display: flex; gap: 8px; margin-top: auto; }
+.mc-btns a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 12px; border-radius: 14px; background: rgba(255, 255, 255, .08); color: inherit; font: 700 13px var(--font-body); transition: background .25s, transform .3s var(--ease); }
+.mc-btns a:hover { background: rgba(255, 255, 255, .16); transform: translateY(-2px); }
+.layer-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.layer-chips button { padding: 5px 10px; border: 0; border-radius: 999px; background: rgba(255, 255, 255, .08); color: inherit; font: 600 12px var(--font-body); cursor: pointer; transition: opacity .2s, background .2s; }
+.layer-chips button:hover { background: rgba(255, 255, 255, .16); }
+.layer-chips button[aria-pressed="false"] { opacity: .4; text-decoration: line-through; }
+.mc-stats { display: grid; gap: 6px; }
+.mc-stats li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; border-radius: 12px; background: rgba(255, 255, 255, .06); font-size: 13.5px; }
+.mc-stats li.is-hot { background: rgba(232, 80, 2, .22); }
+.mc-stats b { font-weight: 800; }
+.mc-stats small { font-size: inherit; opacity: .7; }
+.mc-fine { color: rgba(255, 241, 214, .5); font-size: 12.5px; line-height: 1.45; }
+.mc-end { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; margin-top: 22px; }
+.mc-end .fineprint { max-width: 70ch; margin: 0; }
+/* a calm stage: warm greys and sand with one orange accent, no rainbow */
+.gl-stage[data-theme="light"] { background: #efe7d9; }
+.gl-back i::after { opacity: .55; }
+.gl-back i::before { opacity: .7; }
+/* make room for the card controls in the top-right corner */
+.mc .gl-note { top: 56px; }
+.mc .gl-panel { top: 47%; }
+.mc .mo-win-in { padding-top: 54px; }
+.mc .mo-more { right: auto; left: 16px; }
+.mc .mo-pop { right: auto; left: 16px; }
+.mc .mo-pop-in { right: auto; left: 0; }
+.mc .mo-stack { top: 58px; }
+.gl-stage[data-theme="dark"] .mo-actions .demo-btn { background: rgba(20, 17, 16, .72); border-color: rgba(255, 255, 255, .2); color: var(--cream); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.gl-stage[data-theme="light"] .mo-actions .demo-btn { background: rgba(255, 255, 255, .82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+@media (max-width: 860px) {
+  .mc-grid { grid-template-columns: minmax(0, 1fr); }
+  .mc-wide { grid-template-columns: minmax(0, 1fr); }
+  .mc-stage { aspect-ratio: 1 / 1.02; }
+  .mc .gl-panel { top: 40%; width: 50%; }
+  .mc-video { aspect-ratio: 16 / 9; min-height: 0; }
+}
+
 /* ==========================================================================
    VetroBook API page
    ========================================================================== */

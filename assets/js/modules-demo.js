@@ -1,7 +1,7 @@
-/* Vetro Modules page: live demos of the frosted-glass and motion recipes.
+/* Vetro Modules page: a grid of live cards (the layout of designbookmark.com/motion) for the frosted-glass and motion recipes.
    Spring numbers are the module's own (animation/SKILL.md, section 2): a spring is (ζ damping ratio, T period), mass 1,
    stiffness = (2π / T)², and UI code only ever picks a token by name. Glass numbers are frostedglass/SKILL.md.
-   The demos run only while on screen, stop when the tab is hidden, and under prefers-reduced-motion every spring is
+   Every card runs only while on screen, stops when the tab is hidden, and under prefers-reduced-motion every spring is
    critically damped (ζ = 1: no overshoot) and the backdrop stands still. */
 (() => {
   'use strict';
@@ -54,18 +54,6 @@
     new IntersectionObserver((es) => es.forEach((e) => cb(e.isIntersecting)), { threshold: 0.1 }).observe(el);
   };
 
-  // <div class="demo-seg" data-for="stageId" data-attr="theme"><button data-v="dark" aria-pressed="true">…</button></div>
-  $$('.demo-seg[data-for]').forEach((seg) => {
-    const target = document.getElementById(seg.dataset.for);
-    if (!target) return;
-    seg.addEventListener('click', (e) => {
-      const b = e.target.closest('button[data-v]');
-      if (!b) return;
-      $$('button', seg).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      target.dataset[seg.dataset.attr] = b.dataset.v;
-    });
-  });
-
   // one frame loop per stage: runs while the stage is on screen and the tab is visible, sleeps when nothing moves
   function makeLoop(stage, tick) {
     let raf = 0; let last = 0; let vis = true;
@@ -81,45 +69,45 @@
     return kick;
   }
 
+  /* ---------- the controls of a card: theme, slow motion, a still backdrop ---------- */
+  $$('.mc').forEach((card) => {
+    const stage = $('.gl-stage', card);
+    if (!stage) return;
+    onScreen(stage, (v) => { stage.dataset.vis = v ? '1' : '0'; });
+    $$('.mc-b', card).forEach((b) => b.addEventListener('click', () => {
+      const act = b.dataset.act;
+      if (act === 'theme') stage.dataset.theme = stage.dataset.theme === 'dark' ? 'light' : 'dark';
+      if (act === 'slow') { const on = stage.dataset.slow !== '4'; stage.dataset.slow = on ? '4' : '1'; b.setAttribute('aria-pressed', String(on)); }
+      if (act === 'pause') { const on = stage.dataset.run !== 'still'; stage.dataset.run = on ? 'still' : 'on'; b.setAttribute('aria-pressed', String(on)); }
+    }));
+  });
+
+  // the filter chips of the grid
+  const filter = $('#mcFilter');
+  if (filter) {
+    filter.addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-f]');
+      if (!b) return;
+      $$('button', filter).forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      $$('.mc').forEach((c) => { c.hidden = b.dataset.f !== 'all' && c.dataset.cat !== b.dataset.f; });
+    });
+  }
+
   /* ==========================================================================
      Frosted glass: eight layers, each can be switched off
      ========================================================================== */
   const glass = $('#glassStage');
   if (glass) {
-    onScreen(glass, (v) => { glass.dataset.vis = v ? '1' : '0'; });
-    const items = $$('.layer-list li');
-    const setLayer = (li, i, on) => {
-      li.setAttribute('aria-checked', String(on)); li.classList.toggle('is-off', !on);
-      glass.style.setProperty(`--l${i + 1}`, on ? '1' : '0');
-    };
-    items.forEach((li, i) => {
-      li.setAttribute('role', 'switch'); li.tabIndex = 0; li.setAttribute('aria-checked', 'true');
-      const flip = () => setLayer(li, i, li.getAttribute('aria-checked') !== 'true');
-      li.addEventListener('click', flip);
-      li.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
-    });
-    const reset = $('#glassReset');
-    if (reset) reset.addEventListener('click', () => items.forEach((li, i) => setLayer(li, i, true)));
+    const chips = $$('.layer-chips button');
+    const setLayer = (b, i, on) => { b.setAttribute('aria-pressed', String(on)); glass.style.setProperty(`--l${i + 1}`, on ? '1' : '0'); };
+    chips.forEach((b, i) => b.addEventListener('click', () => setLayer(b, i, b.getAttribute('aria-pressed') !== 'true')));
   }
 
   /* ==========================================================================
-     Motion: three patterns built only from the tokens
+     Motion: three patterns built only from the tokens, one card each
      ========================================================================== */
-  const mo = $('#motionStage');
-  if (!mo) return;
-  const tokenName = $('#moTokenName'); const tokenVal = $('#moTokenVal');
-  const ctx = {
-    kick: () => {},
-    scale: () => (mo.dataset.slow === '4' ? 0.25 : 1),
-    note(name) {
-      const [z, t] = TOKENS[name];
-      tokenName.textContent = name;
-      tokenVal.textContent = `ζ ${z.toFixed(2)} · T ${t.toFixed(3)} s`;
-    },
-  };
-
   /* --- A. a window out of a dock icon (container transform) --- */
-  function dockPattern(pane) {
+  function dockPattern(pane, ctx) {
     const win = $('.mo-win', pane); const inner = $('.mo-win-in', pane);
     const icons = $$('.mo-icon', pane); const closeBtn = $('.mo-win-close', pane);
     const S = { l: new Spring(0), t: new Spring(0), w: new Spring(0), h: new Spring(0), r: new Spring(18) };
@@ -155,7 +143,7 @@
       icon.addEventListener('click', () => openFrom(icon));
     });
     closeBtn.addEventListener('click', close);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open && !pane.hidden) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) close(); });
 
     return {
       tick(dt) {
@@ -170,15 +158,12 @@
         }
         return busy;
       },
-      reset() {
-        clearTimeout(timer); open = false; showing = false; win.classList.remove('is-vis', 'is-in');
-        press.forEach((p, i) => { p.snap(1); icons[i].style.transform = ''; });
-      },
+      reset() {},
     };
   }
 
   /* --- B. the "…" popover: it grows out of the corner, nothing fades but the rows --- */
-  function popPattern(pane) {
+  function popPattern(pane, ctx) {
     const btn = $('.mo-more', pane); const panel = $('.mo-pop', pane);
     const W = 232; const H = 204;
     const P = new Spring(0, 0.0004);
@@ -197,7 +182,7 @@
     }
     btn.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
     pane.addEventListener('click', (e) => { if (open && !e.target.closest('.mo-pop')) toggle(false); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open && !pane.hidden) toggle(false); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && open) toggle(false); });
 
     return {
       tick(dt) {
@@ -207,16 +192,12 @@
         if (!open && p < 0.001 && P.rest) panel.classList.remove('is-vis', 'is-in');
         return !P.rest;
       },
-      reset() {
-        clearTimeout(timer); open = false; P.snap(0);
-        panel.classList.remove('is-vis', 'is-in'); btn.setAttribute('aria-expanded', 'false');
-        panel.style.width = '0px'; panel.style.height = '0px';
-      },
+      reset() { panel.style.width = '0px'; panel.style.height = '0px'; },
     };
   }
 
   /* --- C. a notification stack: arrive, fling, reflow as a wave (no timers) --- */
-  function stackPattern(pane) {
+  function stackPattern(pane, ctx) {
     const box = $('.mo-stack', pane); const addBtn = $('.mo-add', pane); const dismissBtn = $('.mo-dismiss', pane);
     const MSG = [
       ['mod.demo.n1', 'Download finished', 'mod.demo.n1d', 'The chunk queue verified the file.'],
@@ -309,28 +290,25 @@
         return busy;
       },
       reset() {
-        drag = null; seq = 0;
-        plates.concat(leaving).forEach((p) => p.el.remove());
-        plates.length = 0; leaving.length = 0;
         for (let i = 0; i < 3; i += 1) { const p = make(0); p.slot.snap(i); plates.push(p); render(p, i); }
       },
     };
   }
 
-  const panes = { dock: dockPattern($('[data-pat="dock"]', mo)), pop: popPattern($('[data-pat="pop"]', mo)), stack: stackPattern($('[data-pat="stack"]', mo)) };
-  let current = 'dock';
-  ctx.kick = makeLoop(mo, (dt) => panes[current].tick(dt));
-
-  const tabs = $('#moTabs');
-  function show(name) {
-    panes[current].reset(); current = name;
-    $$('[data-pat]', mo).forEach((n) => { n.hidden = n.dataset.pat !== name; });
-    $$('.demo-hint [data-hint]').forEach((n) => { n.hidden = n.dataset.hint !== name; });
-    $$('button', tabs).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === name)));
-    if (name === 'stack') panes.stack.reset();
-    tokenName.textContent = '—'; tokenVal.textContent = '';
+  const PATTERNS = { dock: dockPattern, pop: popPattern, stack: stackPattern };
+  $$('.gl-stage[data-demo]').forEach((stage) => {
+    const make = PATTERNS[stage.dataset.demo];
+    const pane = $('.mo-pane', stage);
+    if (!make || !pane) return;
+    const token = $('.mc-token', stage.closest('.mc'));
+    const ctx = {
+      kick: () => {},
+      scale: () => (stage.dataset.slow === '4' ? 0.25 : 1),
+      note(name) { const [z, t] = TOKENS[name]; if (token) token.textContent = `${name} · ζ ${z.toFixed(2)} · T ${t.toFixed(3)} s`; },
+    };
+    const pattern = make(pane, ctx);
+    ctx.kick = makeLoop(stage, (dt) => pattern.tick(dt));
+    pattern.reset();
     ctx.kick();
-  }
-  tabs.addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (b && b.dataset.v !== current) show(b.dataset.v); });
-  show('dock');
+  });
 })();
