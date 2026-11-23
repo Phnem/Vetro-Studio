@@ -970,11 +970,11 @@ dialog.book-dialog { width: min(980px, 100% - 24px); }
 .pcard .price { display: flex; align-items: flex-start; margin-top: 8px; font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
 .pcard .price .rs i, .pcard .price .cur, .pcard .price .num { color: var(--ink); }
 .pcard .cur { font: 800 22px/30px var(--font-display); margin-right: 3px; }
-.pcard .num { display: inline-flex; height: 48px; font: 800 46px/48px var(--font-display); font-variant-numeric: tabular-nums; }
+.pcard .num { display: inline-flex; height: 64px; font: 800 44px/64px var(--font-display); font-variant-numeric: tabular-nums; }
 .pcard .per { align-self: flex-end; margin: 0 0 8px 8px; font: 600 14px var(--font-body); letter-spacing: 0; color: var(--mute); }
-.rc { display: inline-block; height: 48px; width: .6em; overflow: hidden; will-change: width, opacity; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 14%, #000 86%, transparent 100%); }
+.rc { display: inline-block; height: 64px; width: .84em; overflow: hidden; will-change: width, opacity; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 92%, transparent 100%); }
 .rs { display: block; will-change: transform; }
-.rs i { display: block; height: 48px; line-height: 48px; font-style: normal; text-align: center; }
+.rs i { display: block; height: 64px; line-height: 64px; font-style: normal; text-align: center; }
 .roll-line { position: relative; height: 20px; overflow: hidden; }
 .roll-line span { position: absolute; left: 0; top: 0; line-height: 20px; white-space: nowrap; will-change: transform, opacity; }
 .pcard .bill { margin-top: 2px; font-size: 13px; color: var(--mute); }

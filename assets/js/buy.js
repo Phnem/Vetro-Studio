@@ -4,7 +4,7 @@
      of the highlight that leads is stiff, the one that trails is soft; the price rolls on digit drums.
    - Signature pad: rebuilt in plain JS from Kokonut UI's "signature-pad" (https://kokonutui.com, MIT, @dorianbaffier):
      the pen tip trails the pointer on a spring, the line width follows speed, strokes taper, clearing lifts the ink off.
-   - Payment: Telegram Stars opens the bot. Card (Paddle) and USDT call the billing routes of the API Worker, which do not
+   - Payment: card (Paddle) and USDT call the billing routes of the API Worker, which do not
      exist yet: BILLING.on stays false until they do. The contract of those routes is in docs/billing-front.md.
    Everything the user types or the server returns is written with textContent, never innerHTML. */
 (() => {
@@ -22,13 +22,12 @@
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
   const API = 'https://api.vetrostudio.bid';
-  const BOT = 'https://t.me/VetroBook_API_bot';
   const BILLING = { on: false };                                  // flips to true when POST /v1/billing/checkout exists
 
   const PLANS = {
-    basic: { usd: 3, stars: 100, sec: 2, min: 30, day: 2000, max: '20 / 10', covers: false, index: false },
-    pro: { usd: 7, stars: 400, sec: 5, min: 120, day: 20000, max: '50 / 40', covers: true, index: false },
-    ultra: { usd: 12, stars: 1500, sec: 20, min: 600, day: 200000, max: '50 / 40', covers: true, index: true },
+    basic: { usd: 3, sec: 2, min: 30, day: 2000, max: '20 / 10', covers: false, index: false },
+    pro: { usd: 7, sec: 5, min: 120, day: 20000, max: '50 / 40', covers: true, index: false },
+    ultra: { usd: 12, sec: 20, min: 600, day: 200000, max: '50 / 40', covers: true, index: true },
   };
   const ORDER = ['basic', 'pro', 'ultra'];
   const NAMES = { basic: 'Basic', pro: 'Pro', ultra: 'Ultra' };
@@ -73,6 +72,7 @@
   }
 
   // digit drums: every column rolls to its digit, one after another; a leading zero closes its column
+  const DIG = 0.84;                                                  // width of one digit column, in em: Unbounded digits are wide
   function roller(node, n, px) {
     const cols = [];
     for (let i = 0; i < n; i += 1) {
@@ -80,7 +80,7 @@
       [...'0123456789'].forEach((d) => s.appendChild(el('i', null, d)));
       c.appendChild(s); node.appendChild(c);
       const y = S(0); y.k = 260; y.c = reduce ? 2 * Math.sqrt(260) : 22 + i * 2;
-      const w = S(0.6); tune(w, SPR.soft);
+      const w = S(DIG); tune(w, SPR.soft);
       cols.push({ c, s, y, w });
     }
     let first = true;
@@ -89,13 +89,13 @@
         const str = String(v).padStart(n, '0');
         cols.forEach((col, i) => {
           const go = () => { col.y.t = Number(str[i]); kick(); };
-          col.w.t = (i === 0 && n > 1 && str[0] === '0') ? 0 : 0.6;
+          col.w.t = (i === 0 && n > 1 && str[0] === '0') ? 0 : DIG;
           if (first) { col.y.x = col.y.t = Number(str[i]); col.w.x = col.w.t; } else setTimeout(go, i * 45);
         });
         first = false; kick();
       },
       frame(dt) { cols.forEach((c) => { step(c.y, dt); step(c.w, dt); }); },
-      render() { cols.forEach((c) => { c.s.style.transform = `translateY(${(-c.y.x * px).toFixed(2)}px)`; const w = Math.max(0, c.w.x); c.c.style.width = `${w.toFixed(3)}em`; c.c.style.opacity = clamp(w / 0.6, 0, 1).toFixed(3); }); },
+      render() { cols.forEach((c) => { c.s.style.transform = `translateY(${(-c.y.x * px).toFixed(2)}px)`; const w = Math.max(0, c.w.x); c.c.style.width = `${w.toFixed(3)}em`; c.c.style.opacity = clamp(w / DIG, 0, 1).toFixed(3); }); },
       busy() { return cols.some((c) => !resting(c.y) || !resting(c.w)); },
     };
   }
@@ -104,11 +104,11 @@
      Step 1: the plan switch
      ========================================================================== */
   const seg = $('.seg'); const hl = $('#hl'); const btns = $$('.seg button');
-  const price = roller($('#price'), 2, 48);
-  const pname = line($('#pname'), 26); const pbill = line($('#pbill'), 20); const pcta = line($('#pctaIn'), 48);
+  const price = roller($('#price'), 2, 64);
+  const pname = line($('#pname'), 26); const pcta = line($('#pctaIn'), 48);
   const featLines = {}; $$('#pfeats [data-f]').forEach((n) => { featLines[n.dataset.f] = line(n, 22); });
-  const chip = $('#pchip'); const cta = $('#pcta');
-  const L = S(0); const R = S(0); const SV = S(1); const CP = S(1); tune(SV, SPR.pop); tune(CP, SPR.pop);
+  const cta = $('#pcta');
+  const L = S(0); const R = S(0); const CP = S(1); tune(CP, SPR.pop);
   let plan = null;
 
   const yesNo = (v) => (v ? T('api.pl.yes', 'yes') : T('api.pl.no', 'no'));
@@ -119,12 +119,9 @@
     return fmtN(d[key]);
   }
   function paint(p, snap) {
-    const d = PLANS[p];
     pname.set(`${p}${lang()}`, NAMES[p], snap);
-    pbill.set(`${p}${lang()}`, T('buy.bill', 'or {n} ⭐ in Telegram').replace('{n}', fmtN(d.stars)), snap);
     Object.keys(featLines).forEach((k) => featLines[k].set(`${k}${p}${lang()}`, featureText(k, p), snap));
     pcta.set(`cta${lang()}`, T('buy.cta', 'Continue'), snap);
-    chip.textContent = `${fmtN(d.stars)} ⭐`;
     kick();
   }
   function place(first) {
@@ -141,7 +138,6 @@
     tune(L, right ? SPR.trail : SPR.lead); tune(R, right ? SPR.lead : SPR.trail);
     place(first);
     price.set(PLANS[p].usd);
-    if (!first) { SV.x = 0.3; SV.t = 1; }
     paint(p);
   }
   btns.forEach((b) => b.addEventListener('click', () => pick(b.dataset.plan)));
@@ -156,16 +152,15 @@
   if ('ResizeObserver' in window) new ResizeObserver(() => place(true)).observe(seg);
 
   comps.push({
-    frame(dt) { [L, R, SV, CP].forEach((s) => step(s, dt)); price.frame(dt); pname.frame(dt); pbill.frame(dt); pcta.frame(dt); Object.values(featLines).forEach((f) => f.frame(dt)); },
+    frame(dt) { [L, R, CP].forEach((s) => step(s, dt)); price.frame(dt); pname.frame(dt); pcta.frame(dt); Object.values(featLines).forEach((f) => f.frame(dt)); },
     render() {
       hl.style.transform = `translateX(${L.x.toFixed(2)}px)`;
       hl.style.width = `${Math.max(36, R.x - L.x).toFixed(2)}px`;
-      price.render(); pname.render(); pbill.render(); pcta.render(); Object.values(featLines).forEach((f) => f.render());
-      const sv = Math.max(0, SV.x); chip.style.transform = `scale(${sv.toFixed(4)})`; chip.style.opacity = clamp(sv * 1.4, 0, 1).toFixed(3);
+      price.render(); pname.render(); pcta.render(); Object.values(featLines).forEach((f) => f.render());
       cta.style.transform = `scale(${CP.x.toFixed(4)})`;
     },
     busy() {
-      return [L, R, SV, CP].some((s) => !resting(s)) || price.busy() || pname.busy() || pbill.busy() || pcta.busy() || Object.values(featLines).some((f) => f.busy());
+      return [L, R, CP].some((s) => !resting(s)) || price.busy() || pname.busy() || pcta.busy() || Object.values(featLines).some((f) => f.busy());
     },
   });
 
@@ -390,8 +385,9 @@
     if (state.domains.length) row(T('buy.sum.dom', 'Domains'), state.domains.join(', '));
     row(T('buy.email.s', 'E-mail'), state.email);
     row(T('buy.sum.sign', 'Signed by'), `${state.signer} · ${new Date(state.signedAt).toLocaleString(lang() === 'ru' ? 'ru-RU' : 'en-GB')}`);
-    $$('.pay-opt').forEach((b) => { const m = b.dataset.method; const off = m !== 'stars' && !BILLING.on; b.disabled = off; $('.tag', b).hidden = !off; });
-    $('#payMsg').hidden = true; $('#payExtra').hidden = true;
+    $$('.pay-opt').forEach((b) => { const m = b.dataset.method; const off = !BILLING.on; b.disabled = off; $('.tag', b).hidden = !off; });
+    $('#payExtra').hidden = false;
+    if (BILLING.on) $('#payMsg').hidden = true; else msg('buy.pay.soon', 'Payment on the site is being connected: card and USDT will open here soon. Meanwhile you can keep a copy of what you signed.');
   }
   const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   function agreementFile() {
@@ -416,15 +412,10 @@
       const data = await r.json();
       if (typeof data.url !== 'string' || !/^https:\/\//i.test(data.url)) throw new Error('bad url');
       location.assign(data.url);
-    } catch (e) { msg('buy.pay.fail', 'The order could not be created. Try again in a moment, or pay in Telegram.', true); }
+    } catch (e) { msg('buy.pay.fail', 'The order could not be created. Try again in a moment.', true); }
   }
   $$('.pay-opt').forEach((b) => b.addEventListener('click', () => {
-    const m = b.dataset.method;
-    if (m === 'stars') {
-      window.open(`${BOT}?start=plan_${state.plan}`, '_blank', 'noopener');
-      msg('buy.pay.stars', 'The bot is open in a new tab: choose the plan there and pay in Stars. Keep a copy of what you signed here.');
-      $('#payExtra').hidden = false;
-    } else if (BILLING.on) checkout(m);
+    if (BILLING.on) checkout(b.dataset.method);
   }));
 
   /* ---------- the result: ?order=<id> after a payment ---------- */
